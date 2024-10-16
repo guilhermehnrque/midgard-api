@@ -10,9 +10,6 @@ class GroupsUsers extends Model<GroupUserAttributes, GroupsUsersCreationAttribut
     public id!: number;
     public groups_id!: number;
     public users_id!: number;
-
-    public readonly player?: User;
-    public readonly group?: Group;
 }
 
 GroupsUsers.init({

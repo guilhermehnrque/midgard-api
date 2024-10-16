@@ -10,7 +10,7 @@ class JwtToken extends Model<JwtTokenAttributes, JwtTokenCreationAttributes> imp
     public token!: string;
     public expires_at!: Date;
     public revoked!: boolean;
-    public revoked_at!: Date | null;
+    public revoked_at?: Date | null;
     public created_at!: Date;
     public updated_at!: Date;
 

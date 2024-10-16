@@ -39,9 +39,9 @@ export class JwtTokenEntity implements JwtTokenAttributes {
             users_id: this.users_id,
             token: this.token,
             revoked: this.revoked,
-            revoked_at: this.revoked_at,
             expires_at: this.expires_at,
             created_at: this.created_at,
+            updated_at: this.updated_at,
         };
     }
 }

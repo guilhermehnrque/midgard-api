@@ -10,8 +10,8 @@ class List extends Model<ListBaseAttributes, ListCreationAttributes> implements 
     public id!: number;
     public status!: boolean;
     public player_limit!: number;
-    public starting_time!: Date;
-    public ending_time!: Date;
+    public starting_time!: string;
+    public ending_time!: string;
     public day_of_week!: string;
     public groups_id!: number;
     public locals_id!: number;
