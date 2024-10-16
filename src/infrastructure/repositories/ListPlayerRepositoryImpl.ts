@@ -67,11 +67,25 @@ export class ListPlayerRepositoryImpl implements ListPlayerInterface {
         }
     }
 
-    async getPlayerInListByPlayerId(playerId: number): Promise<ListPlayer | null> {
+    async getPlayerInListByPlayerId(playerId: number): Promise<ListPlayer[] | null> {
+        try {
+            return await ListPlayer.findAll({
+                where: {
+                    users_id: playerId
+                },
+            });
+        } catch (error) {
+            const customError = error as CustomError
+            throw new DatabaseError(`[ListPlayerRepositoryImpl] getPlayerInListByPlayerId -> ${customError.message}`);
+        }
+    }
+
+    async getPlayerInListByPlayerIdAndListId(playerId: number, listIdPk: number): Promise<ListPlayer | null> {
         try {
             return await ListPlayer.findOne({
                 where: {
-                    users_id: playerId
+                    users_id: playerId,
+                    list_base_id: listIdPk
                 },
             });
         } catch (error) {

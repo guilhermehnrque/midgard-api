@@ -5,6 +5,7 @@ import { Local } from "../../domain/models/LocalModel";
 import { LocalRepositoryInterface } from "../../domain/repositories/LocalRepositoryInterface";
 
 export class LocalRepositoryImpl implements LocalRepositoryInterface {
+    
     async createLocal(localEntity: LocalEntity): Promise<Local> {
         try {
             return await Local.create(localEntity.createPayload());

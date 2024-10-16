@@ -7,6 +7,6 @@ export interface ListPlayerInterface {
     removePlayerFromList(listId: number, userIdPk: number): Promise<number>;
     removeGuestFromList(listId: number, guestIdPk: number): Promise<number>;
     getListPlayersByListId(listId: number): Promise<ListPlayer[]>;
-    getPlayerInListByPlayerId(playerId: number): Promise<ListPlayer | null>;
+    getPlayerInListByPlayerId(playerId: number): Promise<ListPlayer[] | null>;
     countPlayersInList(listId: number): Promise<number>;
 }
