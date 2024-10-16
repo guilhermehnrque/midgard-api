@@ -79,8 +79,8 @@ export class GroupEntity implements GroupAttributes {
             description: this.description,
             is_active: this.is_active,
             sport_type: this.sport_type.toString(),
-            users_id: this.users_id.toString(),
-            visibility: this.visibility,
+            users_id: this.users_id,
+            visibility: this.visibility.toString(),
             updated_at: this.updated_at
         };
     }

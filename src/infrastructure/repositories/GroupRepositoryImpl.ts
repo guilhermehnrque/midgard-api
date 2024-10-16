@@ -15,7 +15,7 @@ export class GroupRepositoryImpl implements GroupRepositoryInterface {
         }
     }
 
-    async updateGroupById(groupEntity: GroupEntity): Promise<number> {
+    async updateGroup(groupEntity: GroupEntity): Promise<number> {
         try {
             const [affectedCount] = await Group.update(groupEntity.toUpdatePayload(), {
                 where: {

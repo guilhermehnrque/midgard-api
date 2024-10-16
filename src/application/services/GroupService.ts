@@ -25,9 +25,9 @@ export class GroupService {
         }
     }
 
-    async updateGroupById(group: GroupEntity): Promise<number> {
+    async updateGroup(group: GroupEntity): Promise<number> {
         try {
-            return await this.groupRepository.updateGroupById(group);
+            return await this.groupRepository.updateGroup(group);
         } catch (error) {
             const customError = error as CustomError;
             this.logAndThrowError(new InternalError(), `[GroupService] updateGroupByI -> ${customError.message}`);
@@ -80,6 +80,14 @@ export class GroupService {
 
         if (!group || group != null) {
             this.logAndThrowError(new GroupAlreadyExists(), `[GroupService] ensureGroupNotExists -> ${description}`);
+        }
+    }
+
+    async ensureOrganizerIsGroupOwner(groupIdPk: number, userIdPk: number) {
+        const group = await this.groupRepository.getOrganizerGroupByUserIdPk(userIdPk, groupIdPk);
+        
+        if (!group || group == null) {
+            this.logAndThrowError(new GroupNotFoundError(), `[GroupService] ensureOrganizerIsGroupOwner -> userIdPk: ${userIdPk} -> groupIdPk: ${groupIdPk}`);
         }
     }
 

@@ -53,6 +53,10 @@ export class UserEntity implements UserAttributes {
         this.id = id;
     }
 
+    public getUserIdPk() {
+        return this.id!;
+    }
+
     static async fromUseCase(payload: Partial<UserEntity>): Promise<UserEntity> {
         return new UserEntity({
             ...payload
