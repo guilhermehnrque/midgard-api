@@ -18,7 +18,7 @@ export class UpdateGroupUseCase {
         this.userValidations(userId)
         const user = await this.userService.getUserByUserId(userId);
 
-        this.groupValidations(groupIdPk, user.getUserIdPk())
+        this.groupValidations(groupIdPk, user.getUserIdPk());
 
         const sportTypeEnum = SportTypeHelper.fromString(sportType);
         const visibilityEnum = GroupVisibilityHelper.fromString(visibility);
