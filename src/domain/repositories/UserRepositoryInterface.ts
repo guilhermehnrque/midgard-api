@@ -1,0 +1,11 @@
+import { UserEntity } from '../entity/UserEntity';
+import { User as UserModel } from '../models/UserModel';
+
+export interface UserRepositoryInterface {
+    createUser(user: UserEntity): Promise<UserModel>;
+    updateUser(user: UserEntity): Promise<number>;
+    getUserByUserId(userId: string): Promise<UserModel | null>;
+    getUserByPhone(phoneNumber: number): Promise<UserModel | null>;
+    getUserByPK(userId: number): Promise<UserModel | null>;
+    getUserByResetPasswordToken(token: string): Promise<UserModel | null>;
+}
