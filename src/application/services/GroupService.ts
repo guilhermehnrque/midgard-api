@@ -3,6 +3,7 @@ import { Group } from "../../domain/models/GroupModel";
 import { GroupRepositoryImpl } from "../../infrastructure/repositories/GroupRepositoryImpl";
 import { CustomError } from "../erros/CustomError";
 import { GroupNotFoundError } from "../erros/groups/GroupNotFoundError";
+import { InternalError } from "../erros/InternalError";
 
 export class GroupService {
 
@@ -10,6 +11,25 @@ export class GroupService {
 
     constructor() {
         this.groupRepository = new GroupRepositoryImpl();
+    }
+
+    async createGroup(group: GroupEntity): Promise<void> {
+        try {
+            await this.groupRepository.createGroup(group);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[GroupService] createGroup -> ${customError.message}`);
+        }
+    }
+
+    async updateGroupById(group: GroupEntity): Promise<number> {
+        try {
+            return await this.groupRepository.updateGroupById(group);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[GroupService] updateGroupByI -> ${customError.message}`);
+            return 0;
+        }
     }
 
     async getOrganizerGroupsByUserIdPk(userIdPk: number): Promise<GroupEntity[]> {

@@ -2,6 +2,7 @@ import { LocalEntity } from "../../domain/entity/LocalEntity";
 import { Local } from "../../domain/models/LocalModel";
 import { LocalRepositoryImpl } from "../../infrastructure/repositories/LocalRepositoryImpl";
 import { CustomError } from "../erros/CustomError";
+import { InternalError } from "../erros/InternalError";
 import { LocalNotFoundError } from "../erros/local/LocalNotFoundError";
 
 export class LocalService {
@@ -10,6 +11,24 @@ export class LocalService {
 
     constructor() {
         this.localRepository = new LocalRepositoryImpl();
+    }
+
+    public async createLocal(local: LocalEntity): Promise<void> {
+        try {
+            await this.localRepository.createLocal(local);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[LocalService] createLocal -> ${customError.message}`);
+        }
+    }
+
+    public async updateLocal(local: LocalEntity): Promise<void> { 
+        try {
+            await this.localRepository.updateLocal(local);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[LocalService] updateLocal -> ${customError.message}`);
+        }
     }
 
     public async getLocalByIdPk(idLocalPk: number): Promise<LocalEntity> {

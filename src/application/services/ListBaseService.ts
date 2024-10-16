@@ -2,6 +2,7 @@ import { ListBaseEntity } from "../../domain/entity/ListBaseEntity";
 import { List } from "../../domain/models/ListBaseModel";
 import { ListBaseRepositoryImpl } from "../../infrastructure/repositories/ListBaseRepositoryImpl";
 import { CustomError } from "../erros/CustomError";
+import { InternalError } from "../erros/InternalError";
 import { ListNotFoundError } from "../erros/list/ListBaseErrors";
 
 export class ListBaseService {
@@ -10,6 +11,15 @@ export class ListBaseService {
 
     constructor() {
         this.listBaseRepository = new ListBaseRepositoryImpl();
+    }
+
+    public async createList(list: ListBaseEntity): Promise<void> {
+        try {
+            await this.listBaseRepository.createList(list);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[ListBaseService] createList -> error creating lists -> ${customError.message}`);
+        }
     }
 
     public async getList(listIdPk: number): Promise<ListBaseEntity> {

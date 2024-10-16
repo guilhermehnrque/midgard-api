@@ -2,6 +2,7 @@ import { ListPlayerEntity } from "../../domain/entity/ListPlayerEntity";
 import { ListPlayer } from "../../domain/models/ListPlayerModel";
 import { ListPlayerRepositoryImpl } from "../../infrastructure/repositories/ListPlayerRepositoryImpl";
 import { CustomError } from "../erros/CustomError";
+import { InternalError } from "../erros/InternalError";
 import { PlayerAlreadyInListError } from "../erros/list/ListBaseErrors";
 
 export class PlayersListService {
@@ -13,15 +14,32 @@ export class PlayersListService {
     }
 
     public async addPlayerToList(playerEntity: ListPlayerEntity): Promise<void> {
-        await this.listPlayerRepository.registerPlayer(playerEntity);
+        try {
+            await this.listPlayerRepository.registerPlayer(playerEntity);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[PlayersListService] addPlayerToList -> ${customError.message}`);
+        }
     }
 
     public async updatePlayerStatus(playerEntity: ListPlayerEntity): Promise<number> {
-        return await this.listPlayerRepository.updatePlayerStatus(playerEntity.player_status, playerEntity.users_id!);
+        try {
+            return await this.listPlayerRepository.updatePlayerStatus(playerEntity.player_status, playerEntity.users_id!);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[PlayersListService] addPlayerToList -> ${customError.message}`);
+            return 0;
+        }
     }
 
     public async removePlayerFromList(playerEntity: ListPlayerEntity): Promise<number> {
-        return await this.listPlayerRepository.removePlayerFromList(playerEntity.id!, playerEntity.users_id!);
+        try {
+            return await this.listPlayerRepository.removePlayerFromList(playerEntity.id!, playerEntity.users_id!);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[PlayersListService] removePlayerFromList -> ${customError.message}`);
+            return 0;
+        }
     }
 
     public async getListPlayersByListId(listIdPk: number): Promise<ListPlayerEntity[]> {

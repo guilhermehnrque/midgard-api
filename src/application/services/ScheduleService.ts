@@ -2,6 +2,7 @@ import { ScheduleEntity } from "../../domain/entity/ScheduleEntity";
 import { Schedule } from "../../domain/models/ScheduleModel";
 import { ScheduleRepositoryImpl } from "../../infrastructure/repositories/ScheduleRepositoryImpl";
 import { CustomError } from "../erros/CustomError";
+import { InternalError } from "../erros/InternalError";
 import { ScheduleNotFoundError } from "../erros/schedules/ScheduleNotFoundError";
 
 export class SchedulesService {
@@ -10,6 +11,24 @@ export class SchedulesService {
 
     constructor() {
         this.scheduleRepository = new ScheduleRepositoryImpl();
+    }
+
+    async createSchedule(scheduleEntity: ScheduleEntity): Promise<void> {
+        try {
+            await this.scheduleRepository.createSchedule(scheduleEntity);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[SchedulesService] createSchedule -> ${customError.message}`);
+        }
+    }
+
+    async updateSchedule(scheduleEntity: ScheduleEntity): Promise<void> { 
+        try {
+            await this.scheduleRepository.updateSchedule(scheduleEntity);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[SchedulesService] updateSchedule -> ${customError.message}`);
+        }
     }
 
     async getScheduleById(scheduleId: number): Promise<ScheduleEntity> {
@@ -24,11 +43,11 @@ export class SchedulesService {
 
     async getScheduleByGroupId(groupId: number): Promise<ScheduleEntity[]> {
         const schedule = await this.scheduleRepository.getSchedulesGroupId(groupId);
-    
+
         if (!schedule) {
             return [];
         }
-    
+
         return await Promise.all(schedule.map(this.createEntityFromPersistence));
     }
 
