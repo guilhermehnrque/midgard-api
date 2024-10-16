@@ -3,6 +3,7 @@ import { User } from "../../domain/models/UserModel";
 import { UserRepositoryImpl } from "../../infrastructure/repositories/UserRepositoryImpl";
 import { UserTypes } from "../enums/UserTypes";
 import { CustomError } from "../erros/CustomError";
+import { InternalError } from "../erros/InternalError";
 import { InvalidUserTypeError } from "../erros/InvalidUserTypeError";
 import { LoginError } from "../erros/LoginError";
 import { UserAlreadyExistsError } from "../erros/UserAlreadyExistsError";
@@ -18,6 +19,25 @@ export class UserService {
         this.userRepository = new UserRepositoryImpl();
         this.jwtService = new JwtService();
     }
+
+    async createUser(user: UserEntity): Promise<void> {
+        try {
+            await this.userRepository.createUser(user);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[UserService] createUser -> ${customError.message}`);
+        }
+    }
+
+    async updateUser(user: UserEntity): Promise<number> {
+        try {
+            return await this.userRepository.updateUser(user);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[UserService] updateUser -> ${customError.message}`);
+            return 0;
+        }
+    } 
 
     async getUserByPhone(phone: number): Promise<UserEntity> {
         const user = await this.userRepository.getUserByPhone(phone);
@@ -73,7 +93,7 @@ export class UserService {
         }
 
     }
-    
+
     public async validateArrayOfUsers(users: Array<number>): Promise<void> {
         const usersPromises = users.map(async user => {
             const usr = await this.getUserByIdPk(user);
