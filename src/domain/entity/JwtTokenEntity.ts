@@ -69,4 +69,16 @@ export class JwtTokenEntity implements JwtTokenAttributes {
             updated_at: this.updated_at,
         };
     }
+
+    public updatePayload() {
+        return {
+            id: this.id,
+            users_id: this.users_id,
+            token: this.token,
+            expires_at: this.expires_at,
+            revoked: this.revoked,
+            revoked_at: this.revoked_at,
+            updated_at: this.updated_at,
+        }
+    }
 }

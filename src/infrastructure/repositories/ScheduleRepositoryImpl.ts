@@ -41,9 +41,9 @@ export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
         }
     }
 
-    async getSchedulesGroupId(groupId: number): Promise<Schedule | null> {
+    async getSchedulesGroupId(groupId: number): Promise<Schedule[] | null> {
         try {
-            return await Schedule.findOne({
+            return await Schedule.findAll({
                 where: {
                     groups_id: groupId,
                 }

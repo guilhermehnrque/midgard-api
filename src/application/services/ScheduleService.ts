@@ -1,0 +1,50 @@
+import { ScheduleEntity } from "../../domain/entity/ScheduleEntity";
+import { Schedule } from "../../domain/models/ScheduleModel";
+import { ScheduleRepositoryImpl } from "../../infrastructure/repositories/ScheduleRepositoryImpl";
+import { CustomError } from "../erros/CustomError";
+import { ScheduleNotFoundError } from "../erros/schedules/ScheduleNotFoundError";
+
+export class SchedulesService {
+
+    private readonly scheduleRepository: ScheduleRepositoryImpl;
+
+    constructor() {
+        this.scheduleRepository = new ScheduleRepositoryImpl();
+    }
+
+    async getScheduleById(scheduleId: number): Promise<ScheduleEntity> {
+        const schedule = await this.scheduleRepository.getScheduleById(scheduleId);
+
+        if (!schedule || schedule == null) {
+            this.logAndThrowError(new ScheduleNotFoundError(), `[SchedulesService] getScheduleById -> ${scheduleId}`);
+        }
+
+        return this.createEntityFromPersistence(schedule!);
+    }
+
+    async getScheduleByGroupId(groupId: number): Promise<ScheduleEntity[]> {
+        const schedule = await this.scheduleRepository.getSchedulesGroupId(groupId);
+    
+        if (!schedule) {
+            return [];
+        }
+    
+        return await Promise.all(schedule.map(this.createEntityFromPersistence));
+    }
+
+    async createEntityFromPersistence(schedule: Schedule): Promise<ScheduleEntity> {
+        return await ScheduleEntity.fromPersistence({
+            day_of_week: schedule.day_of_week,
+            starting_time: schedule.starting_time,
+            ending_time: schedule.ending_time,
+            groups_id: schedule.groups_id,
+            id: schedule.id
+        });
+    }
+
+    private logAndThrowError(error: CustomError, context: string): void {
+        console.error(`${context}: ${error.message}`);
+        throw error;
+    }
+
+}

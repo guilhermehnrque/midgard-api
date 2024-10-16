@@ -5,6 +5,7 @@ export interface GroupRepositoryInterface {
     createGroup(groupEntity: GroupEntity): Promise<Group>;
     updateGroupById(groupEntity: GroupEntity): Promise<number>;
     getOrganizerGroups(userIdPk: number): Promise<Group[]>;
+    getOrganizerGroupByUserIdPk(userIdPk: number, groupId: number): Promise<Group | null>
     getGroupById(groupId: number): Promise<Group | null>;
     getGroupByDescription(groupDescription: string): Promise<Group | null>;
 }

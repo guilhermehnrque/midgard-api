@@ -73,24 +73,19 @@ export class UserService {
         }
 
     }
-
     
     public async validateArrayOfUsers(users: Array<number>): Promise<void> {
-        if (users.length === 0) {
-            this.logAndThrowError(new UserNotFoundError(), '[UserService] validateArrayOfUsers -> Empty array');
-        }
-
         const usersPromises = users.map(async user => {
             const usr = await this.getUserByIdPk(user);
 
             if (!usr) {
-                this.logAndThrowError(new UserNotFoundError(), `[UserService] validateArrayOfUsers -> User not found ${user}`);
+                this.logAndThrowError(new UserNotFoundError(), `[UserService] validateArrayOfUsers -> ${user}`);
             }
+
         });
 
         await Promise.all(usersPromises);
     }
-
 
     private async createEntityFromPersistance(user: User): Promise<UserEntity> {
         return await UserEntity.fromUseCase({
@@ -115,7 +110,5 @@ export class UserService {
         console.error(`${context}: ${error.message}`);
         throw error;
     }
-
-
 
 }

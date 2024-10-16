@@ -1,7 +1,6 @@
 import { JwtTokenEntity } from "../../domain/entity/JwtTokenEntity";
 import { HashPassword } from '../utils/HashPassword';
 import { UserEntity } from "../../domain/entity/UserEntity";
-
 import { JwtUtils } from '../utils/JwtUtils';
 import { JwtTokensRepositoryImpl } from "../../infrastructure/repositories/JwtTokenRepositoryImpl";
 import { JwtToken } from "../../domain/models/JwtTokenModel";
@@ -28,7 +27,7 @@ export class JwtService {
             users_id, token
         });
 
-        await this.jwtRepository.saveToken(jwtEntity);
+        await this.jwtRepository.createToken(jwtEntity);
     }
 
     async checkPassword(password: string, hash: string): Promise<boolean> {
@@ -36,7 +35,15 @@ export class JwtService {
     }
 
     async expireLatestToken(userIdPk: number): Promise<void> {
-        return await this.jwtRepository.expireLatestToken(userIdPk);
+        const token = await this.jwtRepository.getLatestValidToken(userIdPk);
+
+        if (token) {
+            const jwtEntity = await JwtTokenEntity.createFromPayload(token);
+            jwtEntity.revoked = true;
+            jwtEntity.revoked_at = new Date();
+
+            await this.jwtRepository.updateToken(jwtEntity);
+        }
     }
 
     public async getLatestValidToken(userEntity: UserEntity): Promise<string | null> {

@@ -6,6 +6,6 @@ export interface ListBaseRepositoryInterface {
     updateList(listEntity: ListBaseEntity): Promise<number>;
     updateListStatus(idPk: number, status: boolean): Promise<number>;
     getList(idPk: number): Promise<List | null>;
-    getListByGroupId(groupsId: number): Promise<List | null>
+    getListByGroupId(groupId: number): Promise<List[] | null> 
     getListsByGroupsIds(groupsIds: number[]): Promise<List[]>
 }

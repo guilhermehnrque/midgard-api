@@ -4,7 +4,7 @@ import { ListBaseEntity } from "../../domain/entity/ListBaseEntity";
 import { CustomError } from "../../application/erros/CustomError";
 import { DatabaseError } from "../../application/erros/DatabaseError";
 
-export class ListRepositoryImpl implements ListBaseRepositoryInterface{
+export class ListBaseRepositoryImpl implements ListBaseRepositoryInterface{
 
     async createList(listEntity: ListBaseEntity): Promise<List> {
         try {
@@ -54,9 +54,9 @@ export class ListRepositoryImpl implements ListBaseRepositoryInterface{
         }
     }
 
-    async getListByGroupId(groupId: number): Promise<List | null> {
+    async getListByGroupId(groupId: number): Promise<List[] | null> {
         try {
-            return await List.findOne({
+            return await List.findAll({
                 where: {
                     groups_id: groupId
                 }

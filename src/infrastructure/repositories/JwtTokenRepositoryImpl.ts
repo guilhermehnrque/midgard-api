@@ -6,7 +6,7 @@ import { JwtTokensRepositoryInterface } from "../../domain/repositories/JwtToken
 
 export class JwtTokensRepositoryImpl implements JwtTokensRepositoryInterface {
 
-    async saveToken(jwtTokenEntity: JwtTokenEntity): Promise<JwtToken> {
+    async createToken(jwtTokenEntity: JwtTokenEntity): Promise<JwtToken> {
         try {
             return await JwtToken.create(jwtTokenEntity.registerPayload())
         } catch (error) {
@@ -42,30 +42,22 @@ export class JwtTokensRepositoryImpl implements JwtTokensRepositoryInterface {
         }
     }
 
-    // TODO: Migrar regra para service
-    async expireLatestToken(userIdPk: number): Promise<void> {
+    async updateToken(token: JwtTokenEntity): Promise<number> {
         try {
-            const latestToken = await JwtToken.findOne({
-                where: {
-                    revoked: false,
-                    users_id: userIdPk,
-                    revoked_at: null
-                },
-                order: [
-                    ['id', 'DESC']
-                ]
-            });
+            const [affectedCount] = await JwtToken.update(token.updatePayload(),
+                {
+                    where: {
+                        id: token.id!
+                    }
+                }
+            );
 
-            if (latestToken) {
-                latestToken.revoked = true;
-                latestToken.revoked_at = new Date();
-                await latestToken.save();
-            }
+            return affectedCount;
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[JwtTokensRepositoryImpl] expireLatestToken -> ${customError.message}`);
+            throw new DatabaseError(`[JwtTokensRepositoryImpl] updateToken -> ${customError.message}`);
         }
     }
 
-    
+
 }
