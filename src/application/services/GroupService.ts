@@ -1,7 +1,10 @@
 import { GroupEntity } from "../../domain/entity/GroupEntity";
 import { Group } from "../../domain/models/GroupModel";
 import { GroupRepositoryImpl } from "../../infrastructure/repositories/GroupRepositoryImpl";
+import { GroupVisibilityHelper } from "../enums/GroupVisibilitEnum";
+import { SportTypeHelper } from "../enums/SportTypeEnum";
 import { CustomError } from "../erros/CustomError";
+import { GroupAlreadyExists } from "../erros/groups/GroupAlreadyRegistered";
 import { GroupNotFoundError } from "../erros/groups/GroupNotFoundError";
 import { InternalError } from "../erros/InternalError";
 
@@ -72,13 +75,25 @@ export class GroupService {
         return await this.createEntityFromPersistante(group!);
     }
 
-    async createEntityFromPersistante(group: Group): Promise<GroupEntity> {
-        return new GroupEntity({
+    async ensureGroupNotExists(description: string): Promise<void> {
+        const group = await this.groupRepository.getGroupByDescription(description)
+
+        if (!group || group != null) {
+            this.logAndThrowError(new GroupAlreadyExists(), `[GroupService] ensureGroupNotExists -> ${description}`);
+        }
+    }
+
+    private async createEntityFromPersistante(group: Group): Promise<GroupEntity> {
+        const sportTypeEnum = SportTypeHelper.fromString(group.sport_type);
+        const visibilityEnum = GroupVisibilityHelper.fromString(group.visibility);
+
+        return GroupEntity.fromPersistence({
             id: group.id,
             description: group.description,
             is_active: group.is_active,
             users_id: group.users_id,
-            visibility: group.visibility,
+            sport_type: sportTypeEnum,
+            visibility: visibilityEnum,
             created_at: group.created_at,
             updated_at: group.updated_at,
         });
