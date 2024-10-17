@@ -61,6 +61,10 @@ export class GroupEntity implements GroupAttributes {
         this.is_active = status;
     }
 
+    public getGroupId(): number {
+        return this.id!;
+    }
+
     toCreatePayload() {
         return {
             description: this.description,

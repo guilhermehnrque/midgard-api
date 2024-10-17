@@ -75,6 +75,13 @@ export class ListBaseEntity implements ListBaseAttributes {
         return getDayOfWeekByString(dayOfWeek)!.toString().toUpperCase();
     }
 
+    public getGroupIdPk(): number {
+        return this.groups_id;
+    }
+
+    public getPlayerLimit(): number {
+        return this.player_limit;
+    }
 
     public createPayload() {
         return {

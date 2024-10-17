@@ -15,10 +15,13 @@ export class ListPlayerRepositoryImpl implements ListPlayerInterface {
         }
     }
 
-    async updatePlayerStatus(status: string, userIdPk: number): Promise<number> {
+    async updatePlayerStatus(listPlayerIdPk: number, status: string, userIdPk: number): Promise<number> {
         try {
             const [affectedCount] = await ListPlayer.update({ player_status: status }, {
-                where: { id: userIdPk }
+                where: {
+                    id: listPlayerIdPk,
+                    users_id: userIdPk
+                }
             });
 
             return affectedCount;
@@ -94,21 +97,17 @@ export class ListPlayerRepositoryImpl implements ListPlayerInterface {
         }
     }
 
-    async countPlayersInList(listId: number): Promise<number> {
+
+    async getGuestInListByGuestIdAndListId(guestId: number, listIdPk: number): Promise<ListPlayer | null> {
         try {
-            const result = await ListPlayer.count({
+            return await ListPlayer.findOne({
                 where: {
-                    list_base_id: listId
+                    guest_id: guestId
                 },
-                group: ['users_id', 'guests_id']
             });
-    
-            const total = Array.isArray(result) ? result.reduce((sum, group) => sum + group.count, 0) : 0;
-    
-            return total;
         } catch (error) {
-            const customError = error as CustomError;
-            throw new DatabaseError(`[ListPlayerRepositoryImpl] countPlayersInList -> ${customError.message}`);
+            const customError = error as CustomError
+            throw new DatabaseError(`[ListPlayerRepositoryImpl] getGuestInListByGuestId -> ${customError.message}`);
         }
     }
 
