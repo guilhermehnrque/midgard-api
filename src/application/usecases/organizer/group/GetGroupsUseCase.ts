@@ -1,4 +1,5 @@
 import { GroupEntity } from "../../../../domain/entity/GroupEntity";
+import { UserEntity } from "../../../../domain/entity/UserEntity";
 import { GroupOutputDTO } from "../../../dto/organizer/group/GroupOutputDTO";
 import { GroupService } from "../../../services/GroupService";
 import { UserService } from "../../../services/UserService";
@@ -14,8 +15,9 @@ export class GetGroupsUseCase {
     }
 
     async execute(userId: string): Promise<{ active: GroupOutputDTO[], inactive: GroupOutputDTO[] }> {
-        this.userValidations(userId)
         const user = await this.userService.getUserByUserId(userId);
+        
+        this.userValidations(user)
 
         const groups = await this.groupService.getOrganizerGroupsByUserIdPk(user.getUserIdPk());
 
@@ -33,13 +35,8 @@ export class GetGroupsUseCase {
 
     }
 
-    async stepGetOrganizerGroups(userIdPk: number): Promise<GroupEntity[]> {
-        return await this.groupService.getOrganizerGroupsByUserIdPk(userIdPk);
-    }
-
-    private async userValidations(userId: string) {
-        const user = await this.userService.getUserByUserId(userId);
-        await this.userService.ensureUserIsOrganizer(user)
+    private async userValidations(userEntity: UserEntity) {
+        await this.userService.ensureUserIsOrganizer(userEntity)
     }
 
 }

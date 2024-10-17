@@ -21,5 +21,9 @@ export class GroupOutputDTO {
     public static fromEntities(groups: GroupEntity[]): GroupOutputDTO[] {
         return groups.map(group => new GroupOutputDTO(group));
     }
+
+    public static fromEntity(entity: GroupEntity): GroupOutputDTO { 
+        return new GroupOutputDTO(entity);
+    }
     
 }

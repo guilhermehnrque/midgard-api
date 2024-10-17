@@ -1,4 +1,5 @@
 import { GroupEntity } from "../../../../domain/entity/GroupEntity";
+import { UserEntity } from "../../../../domain/entity/UserEntity";
 import { GroupVisibilityHelper } from "../../../enums/GroupVisibilitEnum";
 import { SportTypeHelper } from "../../../enums/SportTypeEnum";
 import { GroupService } from "../../../services/GroupService";
@@ -15,9 +16,9 @@ export class CreateGroupUseCase {
     }
 
     async execute(userId: string, description: string, visibility: string, sportType: string): Promise<void> {
-        this.userValidations(userId)
         const user = await this.userService.getUserByUserId(userId);
-
+        
+        this.userValidations(user)
         this.groupValidations(description)
 
         const sportTypeEnum = SportTypeHelper.fromString(sportType);
@@ -34,9 +35,8 @@ export class CreateGroupUseCase {
         await this.groupService.createGroup(groupEntity);
     }
 
-    private async userValidations(userId: string) {
-        const user = await this.userService.getUserByUserId(userId);
-        await this.userService.ensureUserIsOrganizer(user)
+    private async userValidations(userEntity: UserEntity) {
+        await this.userService.ensureUserIsOrganizer(userEntity)
     }
 
     private async groupValidations(description: string) {
