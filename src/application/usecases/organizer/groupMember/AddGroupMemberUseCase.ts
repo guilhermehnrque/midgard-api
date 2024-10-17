@@ -1,31 +1,17 @@
 import { GroupUserEntity } from "../../../../domain/entity/GroupUserEntity";
 import { AddMemberToGroupError } from "../../../erros/groupUser/AddMemberToGroupError";
-import { GroupService } from "../../../services/GroupService";
 import { GroupUserService } from "../../../services/GroupUserService";
-import { UserService } from "../../../services/UserService";
-import { OrganizerValidationService } from "../../../services/validation/OrganizerValidationService";
 
 export class AddGroupMemberUseCase {
 
-    private readonly userService: UserService;
-    private readonly groupService: GroupService;
     private readonly groupUsersService: GroupUserService;
-    private readonly organizerValidationService: OrganizerValidationService;
 
     constructor() {
-        this.userService = new UserService();
-        this.groupService = new GroupService();
         this.groupUsersService = new GroupUserService();
-        this.organizerValidationService = new OrganizerValidationService();
     }
 
-    public async execute(userId: string, groupIdPk: number, membersId: Array<number>): Promise<void> {
-        const user = await this.userService.getUserByUserId(userId);
-        const group = await this.groupService.getGroupById(groupIdPk);
-
-        await this.organizerValidationService.groupManagerAccess(user, group);
-
-        await this.validations(membersId, groupIdPk, user.getUserIdPk());
+    public async execute(groupIdPk: number, membersId: Array<number>): Promise<void> {
+        await this.validations(membersId, groupIdPk);
 
         const members = await Promise.all(membersId.map(async membersId => await GroupUserEntity.fromData({
             groups_id: groupIdPk,
@@ -36,7 +22,7 @@ export class AddGroupMemberUseCase {
         await this.groupUsersService.registerUserToGroup(members);
     }
 
-    private async validations(membersId: Array<number>, groupIdPk: number, userIdPk: number): Promise<void> {
+    private async validations(membersId: Array<number>, groupIdPk: number): Promise<void> {
 
         if ((membersId.length <= 0)) {
             console.error(`[AddMemberToGroupUseCase] -> empty array of members`);

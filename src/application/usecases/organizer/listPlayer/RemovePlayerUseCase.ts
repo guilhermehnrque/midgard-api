@@ -23,13 +23,6 @@ export class RemovePlayerUseCase {
     }
 
     public async execute(userId: string, memberIdPk: number, listIdPk: number, playerListIdPk: number): Promise<void> {
-        const user = await this.userService.getUserByUserId(userId);
-        const list = await this.listBaseService.getList(listIdPk);
-        const group = await this.groupService.getGroupById(list.getGroupIdPk())
-
-        await this.organizerValidationService.groupManagerAccess(user, group);
-        await this.organizerValidationService.listAccessPermissition(list, group.getGroupId())
-
         await this.isPlayertOnTheList(memberIdPk, listIdPk)
 
         const listPlayer = await ListPlayerEntity.fromUpdateUseCase({

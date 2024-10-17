@@ -1,23 +1,15 @@
 import { ScheduleEntity } from "../../../../domain/entity/ScheduleEntity";
 import { SchedulesService } from "../../../services/ScheduleService";
-import { UserService } from "../../../services/UserService";
-import { OrganizerValidationService } from "../../../services/validation/OrganizerValidationService";
 
 export class CreateScheduleUseCase {
 
-    private readonly userService: UserService;
     private readonly scheduleService: SchedulesService;
-    private readonly organizerValidationService: OrganizerValidationService;
 
     constructor() {
-        this.userService = new UserService();
         this.scheduleService = new SchedulesService();
-        this.organizerValidationService = new OrganizerValidationService(); 
     }
 
-    public async execute(userId: string, startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number): Promise<void> {
-        const user = await this.userService.getUserByUserId(userId);
-        await this.organizerValidationService.validationOrganizerIsGroupOwner(user, groupIdPk);
+    public async execute(startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number): Promise<void> {
 
         this.scheduleValidation(startingTime, endingTime, dayOfWeek, groupIdPk);
 
