@@ -1,25 +1,25 @@
 import { GroupEntity } from "../../../../domain/entity/GroupEntity";
-import { UserEntity } from "../../../../domain/entity/UserEntity";
 import { GroupVisibilityHelper } from "../../../enums/GroupVisibilitEnum";
 import { SportTypeHelper } from "../../../enums/SportTypeEnum";
 import { GroupService } from "../../../services/GroupService";
 import { UserService } from "../../../services/UserService";
+import { OrganizerValidationService } from "../../../services/validation/OrganizerValidationService";
 
 export class UpdateGroupUseCase {
 
     private readonly userService: UserService;
     private readonly groupService: GroupService;
+    private readonly organizerValidationService: OrganizerValidationService;
 
     constructor() {
         this.userService = new UserService();
         this.groupService = new GroupService();
+        this.organizerValidationService = new OrganizerValidationService();
     }
 
     async execute(groupIdPk: number, userId: string, description: string, status: boolean, visibility: string, sportType: string): Promise<void> {
         const user = await this.userService.getUserByUserId(userId);
-        
-        this.userValidations(user)
-        this.groupValidations(groupIdPk, user.getUserIdPk());
+        await this.organizerValidationService.validationOrganizerIsGroupOwner(user, groupIdPk);
 
         const sportTypeEnum = SportTypeHelper.fromString(sportType);
         const visibilityEnum = GroupVisibilityHelper.fromString(visibility);
@@ -35,12 +35,5 @@ export class UpdateGroupUseCase {
         await this.groupService.updateGroup(groupEntity);
     }
 
-    private async userValidations(userEntity: UserEntity) {
-        await this.userService.ensureUserIsOrganizer(userEntity)
-    }
 
-    private async groupValidations(groupIdPk: number, userIdPk: number) {
-        await this.groupService.ensureOrganizerIsGroupOwner(groupIdPk, userIdPk);
-    }
-    
 }

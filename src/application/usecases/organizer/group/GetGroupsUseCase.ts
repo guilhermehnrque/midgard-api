@@ -1,23 +1,25 @@
 import { GroupEntity } from "../../../../domain/entity/GroupEntity";
-import { UserEntity } from "../../../../domain/entity/UserEntity";
 import { GroupOutputDTO } from "../../../dto/organizer/group/GroupOutputDTO";
 import { GroupService } from "../../../services/GroupService";
 import { UserService } from "../../../services/UserService";
+import { OrganizerValidationService } from "../../../services/validation/OrganizerValidationService";
 
 export class GetGroupsUseCase {
 
     private readonly userService: UserService;
     private readonly groupService: GroupService;
+    private readonly organizerValidationService: OrganizerValidationService;
 
     constructor() {
         this.userService = new UserService();
         this.groupService = new GroupService();
+        this.organizerValidationService = new OrganizerValidationService();
     }
 
     async execute(userId: string): Promise<{ active: GroupOutputDTO[], inactive: GroupOutputDTO[] }> {
         const user = await this.userService.getUserByUserId(userId);
-        
-        this.userValidations(user)
+
+        await this.organizerValidationService.validationOrganizerIsGroupOwner(user, user.getUserIdPk());
 
         const groups = await this.groupService.getOrganizerGroupsByUserIdPk(user.getUserIdPk());
 
@@ -33,10 +35,6 @@ export class GetGroupsUseCase {
             inactive: GroupOutputDTO.fromEntities(inactiveGroups)
         };
 
-    }
-
-    private async userValidations(userEntity: UserEntity) {
-        await this.userService.ensureUserIsOrganizer(userEntity)
     }
 
 }

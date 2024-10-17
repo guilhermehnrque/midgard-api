@@ -1,23 +1,26 @@
 import { LocalEntity } from "../../../../domain/entity/LocalEntity";
-import { UserEntity } from "../../../../domain/entity/UserEntity";
 import { LocalDTO } from "../../../dto/organizer/local/LocalDTO";
 import { LocalService } from "../../../services/LocalService";
 import { UserService } from "../../../services/UserService";
+import { OrganizerValidationService } from "../../../services/validation/OrganizerValidationService";
 
 export class UpdateLocalUseCase {
 
     private readonly userService: UserService;
     private readonly localService: LocalService;
+    private readonly organizerValidationService: OrganizerValidationService;
 
     constructor() {
         this.userService = new UserService();
         this.localService = new LocalService();
+        this.organizerValidationService = new OrganizerValidationService();
     }
 
     async execute(localDTO: LocalDTO, userId: string): Promise<void> {
         const user = await this.userService.getUserByUserId(userId);
 
-        this.userValidations(user)
+        await this.organizerValidationService.validationOrganizerIsGroupOwner(user, localDTO.getGroupId());
+
         this.localValidation(localDTO.getDescription(), localDTO.getGroupId())
 
         const localEntity = await LocalEntity.fromUseCase({
@@ -32,10 +35,6 @@ export class UpdateLocalUseCase {
         })
 
         await this.localService.updateLocal(localEntity);
-    }
-
-    private async userValidations(userEntity: UserEntity) {
-        await this.userService.ensureUserIsOrganizer(userEntity)
     }
 
     private async localValidation(description: string, groupIdPk: number) {

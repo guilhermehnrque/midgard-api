@@ -1,3 +1,5 @@
+import { InternalError } from "../erros/InternalError";
+
 export enum DayOfWeekEnum {
     SUNDAY = "SUNDAY",
     MONDAY = "MONDAY",
@@ -20,4 +22,16 @@ export function getDayOfWeekByString(dayOfWeekAsString: string): DayOfWeekEnum |
     };
 
     return dayOfWeekMap[dayOfWeekAsString.toLowerCase()];
+}
+
+export class DayOfWeekHelper {
+
+    public static fromString(dayOfWeek: string): DayOfWeekEnum {
+
+        if (Object.values(dayOfWeek).includes(dayOfWeek as DayOfWeekEnum)) {
+            return dayOfWeek as DayOfWeekEnum;
+        }
+
+        throw new InternalError(`InvalidDayOfWeek "${dayOfWeek}"`);
+    }
 }

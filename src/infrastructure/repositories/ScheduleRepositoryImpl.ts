@@ -5,7 +5,7 @@ import { DatabaseError } from "../../application/erros/DatabaseError";
 import { ScheduleRepositoryInterface } from "../../domain/repositories/ScheduleRepositoryInterface";
 
 export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
-    
+
     async createSchedule(scheduleEntity: ScheduleEntity): Promise<Schedule> {
         try {
             const schedule = Schedule.build(scheduleEntity);
@@ -38,6 +38,36 @@ export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[ScheduleRepositoryImpl] getScheduleById -> ${customError.message}`);
+        }
+    }
+
+    async getScheduleByIdAndGroupId(scheduleId: number, groupIdPk: number): Promise<Schedule | null> {
+        try {
+            return await Schedule.findOne({
+                where: {
+                    id: scheduleId,
+                    groups_id: groupIdPk
+                }
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[ScheduleRepositoryImpl] getScheduleById -> ${customError.message}`);
+        }
+    }
+
+    async getScheduleByTimesAndGroupId(startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number): Promise<Schedule | null> {
+        try {
+            return await Schedule.findOne({
+                where: {
+                    starting_time: startingTime,
+                    ending_time: endingTime,
+                    day_of_week: dayOfWeek,
+                    groups_id: groupIdPk,
+                }
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[ScheduleRepositoryImpl] getScheduleByTimesAndGroupId -> ${customError.message}`);
         }
     }
 
