@@ -8,7 +8,7 @@ export class LocalRepositoryImpl implements LocalRepositoryInterface {
     
     async createLocal(localEntity: LocalEntity): Promise<Local> {
         try {
-            return await Local.create(localEntity.createPayload());
+            return await Local.create(await localEntity.createPayload());
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[LocalRepositoryImpl] createLocal -> Error creating group: ${customError.message}`);

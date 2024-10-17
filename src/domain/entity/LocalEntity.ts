@@ -43,7 +43,7 @@ export class LocalEntity implements LocalAttributes {
         });
     }
 
-    public createPayload() {
+    public async createPayload() {
         return {
             description: this.description,
             country: this.country,
@@ -53,8 +53,6 @@ export class LocalEntity implements LocalAttributes {
             zip_code: this.zip_code,
             number: this.number,
             groups_id: this.groups_id,
-            created_at: this.created_at,
-            updated_at: this.updated_at,
         }
     }
 

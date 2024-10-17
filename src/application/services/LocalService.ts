@@ -3,6 +3,7 @@ import { Local } from "../../domain/models/LocalModel";
 import { LocalRepositoryImpl } from "../../infrastructure/repositories/LocalRepositoryImpl";
 import { CustomError } from "../erros/CustomError";
 import { InternalError } from "../erros/InternalError";
+import { LocalAlreadyExistsError } from "../erros/local/LocalAlreadyExistsError";
 import { LocalNotFoundError } from "../erros/local/LocalNotFoundError";
 
 export class LocalService {
@@ -50,7 +51,6 @@ export class LocalService {
 
         return this.createLocalEntityFromPersistence(local!);
     }
-
     
     public async getLocalByDescriptionAndGroupId(description: string, groupIdPk: number): Promise<LocalEntity> {
         const local = await this.localRepository.getLocalByDescriptionAndGroupId(description, groupIdPk);
@@ -60,6 +60,24 @@ export class LocalService {
         }
 
         return this.createLocalEntityFromPersistence(local!);
+    }
+
+    public async ensureLocalNotExists(description: string, groupIdPk: number) {
+        const local = await this.localRepository.getLocalByDescriptionAndGroupId(description, groupIdPk);
+
+        if (local || local != null) {
+            this.logAndThrowError(new LocalAlreadyExistsError(), `[LocalService] ensureLocalNotExists -> ${description}`);
+        }
+
+    }
+    
+    public async ensureLocalExists(description: string, groupIdPk: number) {
+        const local = await this.localRepository.getLocalByDescriptionAndGroupId(description, groupIdPk);
+
+        if (!local || local == null) {
+            this.logAndThrowError(new LocalNotFoundError(), `[LocalService] ensureLocalNotExists -> ${description}`);
+        }
+
     }
 
     public async getLocalsByGroupId(groupId: number): Promise<LocalEntity[]> {
