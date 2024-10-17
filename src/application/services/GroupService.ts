@@ -78,8 +78,16 @@ export class GroupService {
     async ensureGroupNotExists(description: string): Promise<void> {
         const group = await this.groupRepository.getGroupByDescription(description)
 
-        if (!group || group != null) {
+        if (group || group != null) {
             this.logAndThrowError(new GroupAlreadyExists(), `[GroupService] ensureGroupNotExists -> ${description}`);
+        }
+    }
+
+    async ensureGroupExists(groupIdPk: number): Promise<void> {
+        const group = await this.groupRepository.getGroupById(groupIdPk)
+
+        if (!group || group == null) {
+            this.logAndThrowError(new GroupNotFoundError(), `[GroupService] ensureGroupExists -> ${groupIdPk}`);
         }
     }
 

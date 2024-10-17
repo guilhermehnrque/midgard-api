@@ -18,7 +18,17 @@ export class ListBaseService {
             await this.listBaseRepository.createList(list);
         } catch (error) {
             const customError = error as CustomError;
-            this.logAndThrowError(new InternalError(), `[ListBaseService] createList -> error creating lists -> ${customError.message}`);
+            this.logAndThrowError(new InternalError(), `[ListBaseService] createList -> ${customError.message}`);
+        }
+    }
+
+    public async updateList(list: ListBaseEntity): Promise<number> {
+        try {
+            return await this.listBaseRepository.updateList(list);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[ListBaseService] updateList -> ${customError.message}`);
+            return 0;
         }
     }
 
