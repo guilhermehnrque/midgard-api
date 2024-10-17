@@ -36,14 +36,6 @@ export class UserEntity implements UserAttributes {
         this.reset_password_token = payload.reset_password_token;
     }
 
-    public async setPassword(password: string) {
-        this.password = await HashPassword.hashPassword(password);
-    }
-
-    public async setUserId() {
-        this.user_id = uuidv4();
-    }
-
     public async cleanTokens() {
         this.reset_password_token = null;
         this.reset_password_expires = null;
@@ -69,10 +61,33 @@ export class UserEntity implements UserAttributes {
         return `${this.name} ${this.surname}`;
     }
 
+    public setPassword(password: string) {
+        this.password = password;
+    }
+
     static async fromUseCase(payload: Partial<UserEntity>): Promise<UserEntity> {
         return new UserEntity({
             ...payload
         });
+    }
+
+    static async fromRegisterDTO(payload: Partial<UserEntity>): Promise<UserEntity> {
+        const userEntity = new UserEntity();
+
+        userEntity.user_id = uuidv4();
+        userEntity.name = payload.name!;
+        userEntity.surname = payload.surname!;
+        userEntity.type = payload.type!;
+        userEntity.status = payload.status!;
+        userEntity.phone_number = payload.phone_number!;
+        userEntity.login = payload.login!;
+        userEntity.password = payload.password!;
+        userEntity.created_at = new Date();
+        userEntity.updated_at = new Date();
+        userEntity.reset_password_expires = null;
+        userEntity.reset_password_token = null;
+
+        return userEntity;
     }
 
     public registerPayload() {
@@ -98,6 +113,16 @@ export class UserEntity implements UserAttributes {
             login: this.login,
             password: this.password,
             updated_at: new Date()
+        }
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            user_id: this.user_id,
+            name: this.name,
+            type: this.type,
+            login: this.login,
         }
     }
 

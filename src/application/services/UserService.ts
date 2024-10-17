@@ -19,6 +19,8 @@ export class UserService {
     }
 
     async createUser(user: UserEntity): Promise<void> {
+        await this.ensureUserNotExists(user.phone_number);
+
         try {
             await this.userRepository.createUser(user);
         } catch (error) {
@@ -28,6 +30,8 @@ export class UserService {
     }
 
     async updateUser(user: UserEntity): Promise<number> {
+        await this.ensureUserExists(user.phone_number)
+
         try {
             return await this.userRepository.updateUser(user);
         } catch (error) {
@@ -35,13 +39,13 @@ export class UserService {
             this.logAndThrowError(new InternalError(), `[UserService] updateUser -> ${customError.message}`);
             return 0;
         }
-    } 
+    }
 
-    async getUserByPhone(phone: number): Promise<UserEntity> {
+    async getUserByPhone(phone: number): Promise<UserEntity | null> {
         const user = await this.userRepository.getUserByPhone(phone);
 
-        if (!user) {
-            this.logAndThrowError(new UserNotFoundError(), `[UserService] getUserByLogin -> ${phone}`);
+        if (!user || user == null) {
+            return null;
         }
 
         return await this.createEntityFromPersistance(user!);
@@ -68,14 +72,45 @@ export class UserService {
         return await this.createEntityFromPersistance(user!);
     }
 
-    public async ensureUserExists(login: string, phoneNumber: number): Promise<void> {
-        const user = await this.userRepository.getUserByPhone(phoneNumber);
+    public async getUserByLogin(login: string): Promise<UserEntity | null> {
+        const user = await this.userRepository.getUserByLogin(login);
+
+        if (!user || user == null) {
+            return null;
+        }
+
+        return await this.createEntityFromPersistance(user);
+    }
+
+    public async getUserByResetToken(token: string): Promise<UserEntity | null> {
+        const user = await this.userRepository.getUserByResetPasswordToken(token);
+
+        if (!user || user == null) {
+            return null;
+        }
+
+        return await this.createEntityFromPersistance(user);
+    }
+
+    private async getUserByPhoneNumber(phoneNumber: number): Promise<User | null> {
+        return await this.userRepository.getUserByPhone(phoneNumber);
+    }
+
+    private async ensureUserNotExists(phoneNumber: number): Promise<void> {
+        const user = await this.getUserByPhoneNumber(phoneNumber);
 
         if (user || user != null) {
-            this.logAndThrowError(new UserAlreadyExistsError(), `[UserService] ensureUserExists -> ${login}`);
+            this.logAndThrowError(new UserAlreadyExistsError(), `[UserService] ensureUserExists -> ${phoneNumber}`);
         }
     }
 
+    private async ensureUserExists(phoneNumber: number): Promise<void> {
+        const user = await this.getUserByPhoneNumber(phoneNumber);
+
+        if (!user || user == null) {
+            this.logAndThrowError(new UserNotFoundError(), `[UserService] ensureUserExists -> ${phoneNumber}`);
+        }
+    }
 
     public async validateUserPassword(password: string, hash: string, login: string): Promise<void> {
         const isValid = await this.jwtService.checkPassword(password, hash);

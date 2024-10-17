@@ -69,6 +69,19 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
 
     }
 
+    public async getUserByLogin(login: string): Promise<UserModel | null> {
+        try {
+            return await UserModel.findOne({
+                where: {
+                    login: login
+                },
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[UserRepository] getUserByLogin -> ${customError.message}`);
+        }
+    }
+
     async getUserByResetPasswordToken(token: string): Promise<UserModel | null> {
         try {
             return UserModel.findOne({

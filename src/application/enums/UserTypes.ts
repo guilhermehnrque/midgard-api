@@ -1,3 +1,5 @@
+import { InternalError } from "../erros/InternalError";
+
 export enum UserTypes {
     ADMIN = 'ADMIN',
     PLAYER = 'PLAYER',
@@ -6,9 +8,21 @@ export enum UserTypes {
 }
 
 export function allowedUserTypes(): UserTypes[] {
-   return [UserTypes.PLAYER, UserTypes.ORGANIZER, UserTypes.GUEST];
-}   
+    return [UserTypes.PLAYER, UserTypes.ORGANIZER, UserTypes.GUEST];
+}
 
-export function allowUserToCreateGroup (userType: string): boolean {
+export function allowUserToCreateGroup(userType: string): boolean {
     return userType === UserTypes.ORGANIZER.toString();
+}
+
+export class UserTypesHelper {
+    public static fromString(userType: string): UserTypes {
+
+        if (Object.values(UserTypes).includes(userType as UserTypes)) {
+            return userType as UserTypes;
+        }
+
+        throw new InternalError(`InvalidUserType "${userType}"`);
+    }
+
 }

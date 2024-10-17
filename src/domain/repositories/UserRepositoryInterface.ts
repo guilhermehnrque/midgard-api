@@ -7,5 +7,6 @@ export interface UserRepositoryInterface {
     getUserByUserId(userId: string): Promise<UserModel | null>;
     getUserByPhone(phoneNumber: number): Promise<UserModel | null>;
     getUserByPK(userId: number): Promise<UserModel | null>;
+    getUserByLogin(login: string): Promise<UserModel | null>;
     getUserByResetPasswordToken(token: string): Promise<UserModel | null>;
 }
