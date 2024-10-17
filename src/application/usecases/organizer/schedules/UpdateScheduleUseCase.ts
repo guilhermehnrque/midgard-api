@@ -20,7 +20,7 @@ export class UpdateScheduleUseCase {
             groups_id: groupIdPk
         });
 
-        await this.scheduleService.createSchedule(schedule);
+        await this.scheduleService.updateSchedule(schedule);
     }
 
     private async scheduleValidation(scheduleId: number, groupIdPk: number) {

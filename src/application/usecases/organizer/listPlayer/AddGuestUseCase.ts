@@ -4,7 +4,7 @@ import { LimitOfPlayersError } from "../../../erros/listPlayer/LimitOfPlayersErr
 import { ListBaseService } from "../../../services/ListBaseService";
 import { ListPlayerService } from "../../../services/ListPlayerService";
 
-export class AddPlayerUseCase {
+export class AddGuestUseCase {
 
     private readonly listBaseService: ListBaseService;
     private readonly listPlayerService: ListPlayerService;

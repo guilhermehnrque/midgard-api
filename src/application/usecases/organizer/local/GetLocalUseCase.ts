@@ -1,7 +1,7 @@
 import { LocalOutputDTO } from "../../../dto/organizer/local/LocalOutputDTO";
 import { LocalService } from "../../../services/LocalService";
 
-export class GetLocalsUseCase {
+export class GetLocalUseCase {
 
     private readonly localService: LocalService;
 

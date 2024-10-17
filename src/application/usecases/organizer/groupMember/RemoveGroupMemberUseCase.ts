@@ -1,7 +1,7 @@
 import { GroupUserEntity } from "../../../../domain/entity/GroupUserEntity";
 import { GroupUserService } from "../../../services/GroupUserService";
 
-export class AddGroupMemberUseCase {
+export class RemoveGroupMemberUseCase {
 
     private readonly groupUsersService: GroupUserService;
 

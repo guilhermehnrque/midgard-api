@@ -2,7 +2,7 @@ import { ListPlayerEntity } from "../../../../domain/entity/ListPlayerEntity";
 import { PlayerNotFoundInListError } from "../../../erros/list/ListBaseErrors";
 import { ListPlayerService } from "../../../services/ListPlayerService";
 
-export class RemovePlayerUseCase {
+export class RemoveGuestUseCase {
 
     private readonly listPlayerService: ListPlayerService;
 
@@ -10,10 +10,11 @@ export class RemovePlayerUseCase {
         this.listPlayerService = new ListPlayerService();
     }
 
-    public async execute(guestIdPk: number, listIdPk: number): Promise<void> {
+    public async execute(guestIdPk: number, listIdPk: number, playerListIdPk: number): Promise<void> {
         await this.isPlayertOnTheList(guestIdPk, listIdPk)
 
         const listPlayer = await ListPlayerEntity.fromUpdateUseCase({
+            id: playerListIdPk,
             list_base_id: listIdPk,
             player_status: 'declined',
             guest_id: guestIdPk
