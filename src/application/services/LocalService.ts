@@ -51,6 +51,17 @@ export class LocalService {
         return this.createLocalEntityFromPersistence(local!);
     }
 
+    
+    public async getLocalByDescriptionAndGroupId(description: string, groupIdPk: number): Promise<LocalEntity> {
+        const local = await this.localRepository.getLocalByDescriptionAndGroupId(description, groupIdPk);
+
+        if (!local || local == null) {
+            this.logAndThrowError(new LocalNotFoundError(), `[LocalService] getLocalByDescription -> ${description}`);
+        }
+
+        return this.createLocalEntityFromPersistence(local!);
+    }
+
     public async getLocalsByGroupId(groupId: number): Promise<LocalEntity[]> {
         const locals = await this.localRepository.getLocalsByGroupId(groupId);
 

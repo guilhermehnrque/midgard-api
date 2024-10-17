@@ -49,6 +49,15 @@ export class LocalRepositoryImpl implements LocalRepositoryInterface {
         }
     }
 
+    async getLocalByDescriptionAndGroupId(description: string, groupIdPk: number): Promise<Local | null> {
+        try {
+            return await Local.findOne({ where: { description, groups_id: groupIdPk } });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[LocalRepositoryImpl] getLocalByDescription -> Error getting local by description: ${customError.message}`);
+        }
+    }
+
     async getLocalsByGroupId(groupId: number): Promise<Local[] | null | undefined> {
         try {
             return await Local.findAll({ where: { groups_id: groupId } });

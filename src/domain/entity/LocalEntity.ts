@@ -1,5 +1,4 @@
 import { LocalAttributes } from "../interfaces/attributes/LocalAttributes";
-import { LocalDTO } from "../../application/dto/organizer/local/LocalDTO";
 
 export class LocalEntity implements LocalAttributes {
 
@@ -29,10 +28,11 @@ export class LocalEntity implements LocalAttributes {
         this.id = payload.id;
     }
 
-    static async fromUseCase(payload: LocalDTO): Promise<LocalEntity> {
+    static async fromUseCase(payload: Partial<LocalEntity>): Promise<LocalEntity> {
         return new LocalEntity({
             ...payload,
             created_at: new Date(),
+            updated_at: new Date(),
         });
     }
 

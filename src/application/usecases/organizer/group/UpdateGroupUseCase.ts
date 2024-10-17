@@ -42,4 +42,5 @@ export class UpdateGroupUseCase {
     private async groupValidations(groupIdPk: number, userIdPk: number) {
         await this.groupService.ensureOrganizerIsGroupOwner(groupIdPk, userIdPk);
     }
+    
 }
