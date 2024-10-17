@@ -21,7 +21,9 @@ export class AddGroupMemberUseCase {
 
     public async execute(userId: string, groupIdPk: number, membersId: Array<number>): Promise<void> {
         const user = await this.userService.getUserByUserId(userId);
-        await this.organizerValidationService.validationOrganizerIsGroupOwner(user, groupIdPk);
+        const group = await this.groupService.getGroupById(groupIdPk);
+
+        await this.organizerValidationService.groupManagerAccess(user, group);
 
         await this.validations(membersId, groupIdPk, user.getUserIdPk());
 
@@ -35,7 +37,6 @@ export class AddGroupMemberUseCase {
     }
 
     private async validations(membersId: Array<number>, groupIdPk: number, userIdPk: number): Promise<void> {
-        await this.groupService.ensureOrganizerIsGroupOwner(groupIdPk, userIdPk);
 
         if ((membersId.length <= 0)) {
             console.error(`[AddMemberToGroupUseCase] -> empty array of members`);

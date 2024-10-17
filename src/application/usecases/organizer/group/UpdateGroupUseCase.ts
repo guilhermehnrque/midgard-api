@@ -19,7 +19,9 @@ export class UpdateGroupUseCase {
 
     async execute(groupIdPk: number, userId: string, description: string, status: boolean, visibility: string, sportType: string): Promise<void> {
         const user = await this.userService.getUserByUserId(userId);
-        await this.organizerValidationService.validationOrganizerIsGroupOwner(user, groupIdPk);
+        const group = await this.groupService.getGroupById(groupIdPk);
+
+        await this.organizerValidationService.groupManagerAccess(user, group);
 
         const sportTypeEnum = SportTypeHelper.fromString(sportType);
         const visibilityEnum = GroupVisibilityHelper.fromString(visibility);

@@ -91,6 +91,7 @@ export class GroupUserService {
                 `[GroupUserService] ensureUserIsInGroup -> userId: ${userId} groupId: ${groupId}: User not in group`);
         }
     }
+    
     private async createGroupUserEntityFromPersitence(groupUser: GroupsUsers): Promise<GroupUserEntity> {
         return await GroupUserEntity.fromData({
             id: groupUser.id,

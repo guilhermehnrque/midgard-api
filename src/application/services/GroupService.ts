@@ -17,6 +17,8 @@ export class GroupService {
     }
 
     async createGroup(group: GroupEntity): Promise<void> {
+        await this.ensureGroupNotExists(group.description);
+
         try {
             await this.groupRepository.createGroup(group);
         } catch (error) {
@@ -26,6 +28,7 @@ export class GroupService {
     }
 
     async updateGroup(group: GroupEntity): Promise<number> {
+        await this.ensureGroupExists(group.id!)
         try {
             return await this.groupRepository.updateGroup(group);
         } catch (error) {
@@ -38,21 +41,11 @@ export class GroupService {
     async getOrganizerGroupsByUserIdPk(userIdPk: number): Promise<GroupEntity[]> {
         const group = await this.groupRepository.getOrganizerGroups(userIdPk);
 
-        if (!group) {
+        if (!group || group == null) {
             return [];
         }
 
         return Promise.all(group.map(this.createEntityFromPersistante));
-    }
-
-    async getOrganizerGroupByUserIdPk(userIdPk: number, groupIdPk: number): Promise<GroupEntity> {
-        const group = await this.groupRepository.getOrganizerGroupByUserIdPk(userIdPk, groupIdPk);
-
-        if (!group || group == null) {
-            this.logAndThrowError(new GroupNotFoundError(), `[GroupService] getOrganizerGroupByUserIdPk -> userIdPk: ${userIdPk} -> groupIdPk: ${groupIdPk}`)
-        }
-
-        return this.createEntityFromPersistante(group!);
     }
 
     async getGroupByDescription(description: string): Promise<GroupEntity> {
@@ -88,14 +81,6 @@ export class GroupService {
 
         if (!group || group == null) {
             this.logAndThrowError(new GroupNotFoundError(), `[GroupService] ensureGroupExists -> ${groupIdPk}`);
-        }
-    }
-
-    async ensureOrganizerIsGroupOwner(groupIdPk: number, userIdPk: number) {
-        const group = await this.groupRepository.getOrganizerGroupByUserIdPk(userIdPk, groupIdPk);
-        
-        if (!group || group == null) {
-            this.logAndThrowError(new GroupNotFoundError(), `[GroupService] ensureOrganizerIsGroupOwner -> userIdPk: ${userIdPk} -> groupIdPk: ${groupIdPk}`);
         }
     }
 

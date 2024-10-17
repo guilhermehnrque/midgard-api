@@ -1,10 +1,8 @@
 import { UserEntity } from "../../domain/entity/UserEntity";
 import { User } from "../../domain/models/UserModel";
 import { UserRepositoryImpl } from "../../infrastructure/repositories/UserRepositoryImpl";
-import { UserTypes } from "../enums/UserTypes";
 import { CustomError } from "../erros/CustomError";
 import { InternalError } from "../erros/InternalError";
-import { InvalidUserTypeError } from "../erros/InvalidUserTypeError";
 import { LoginError } from "../erros/LoginError";
 import { UserAlreadyExistsError } from "../erros/UserAlreadyExistsError";
 import { UserNotFoundError } from "../erros/UserNotFoundError";
@@ -78,12 +76,6 @@ export class UserService {
         }
     }
 
-    public async ensureUserIsOrganizer(user: UserEntity): Promise<void> {
-        if (!user || user.type != UserTypes.ORGANIZER.toString()) {
-            this.logAndThrowError(new InvalidUserTypeError('Usuário não permitido para executar essa operação', 401),
-                `[UserService] getUserByIdPk ->  ${user.type}`);
-        }
-    }
 
     public async validateUserPassword(password: string, hash: string, login: string): Promise<void> {
         const isValid = await this.jwtService.checkPassword(password, hash);

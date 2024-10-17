@@ -17,10 +17,9 @@ export class GetGroupDetailsUseCase {
 
     async execute(groupId: number, userIdPk: string): Promise<GroupOutputDTO> {
         const user = await this.userService.getUserByUserId(userIdPk);
+        const group = await this.groupService.getGroupById(groupId);
 
-        await this.organizerValidationService.validationOrganizerIsGroupOwner(user, groupId);
-
-        const group = await this.groupService.getOrganizerGroupByUserIdPk(groupId, user.getUserIdPk());
+        await this.organizerValidationService.groupManagerAccess(user, group);
 
         return GroupOutputDTO.fromEntity(group);
     }

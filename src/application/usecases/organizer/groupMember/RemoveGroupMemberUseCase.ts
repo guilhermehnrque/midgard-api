@@ -20,7 +20,9 @@ export class AddGroupMemberUseCase {
 
     public async execute(userId: string, groupIdPk: number, memberIdPK: number): Promise<void> {
         const user = await this.userService.getUserByUserId(userId);
-        await this.organizerValidationService.validationOrganizerIsGroupOwner(user, groupIdPk);
+        const group = await this.groupService.getGroupById(groupIdPk);
+
+        await this.organizerValidationService.groupManagerAccess(user, group);
 
         await this.validations(memberIdPK, groupIdPk, user.getUserIdPk());
 
@@ -34,8 +36,6 @@ export class AddGroupMemberUseCase {
     }
 
     private async validations(memberIdPK: number, groupIdPk: number, userIdPk: number): Promise<void> {
-        await this.groupService.ensureOrganizerIsGroupOwner(groupIdPk, userIdPk);
-
         await this.groupUsersService.ensureUserIsInGroup(memberIdPK, groupIdPk)
     }
 

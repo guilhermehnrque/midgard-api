@@ -42,18 +42,6 @@ export class GroupRepositoryImpl implements GroupRepositoryInterface {
         }
     }
 
-    async getOrganizerGroupByUserIdPk(userIdPk: number, groupId: number): Promise<Group | null> {
-        try {
-            return await Group.findOne({
-                where: { users_id: userIdPk, id: groupId },
-            });
-        }
-        catch (error) {
-            const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] getOrganizerGroups -> Error getting organizer groups: ${customError.message}`);
-        }
-    }
-
     async getGroupByDescription(groupDescription: string): Promise<Group | null> {
         try {
             return await Group.findOne({ where: { description: groupDescription } });

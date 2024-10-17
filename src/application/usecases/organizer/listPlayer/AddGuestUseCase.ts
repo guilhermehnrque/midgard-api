@@ -28,7 +28,7 @@ export class AddPlayerUseCase {
         const list = await this.listBaseService.getList(listIdPk);
         const group = await this.groupService.getGroupById(list.getGroupIdPk())
 
-        await this.organizerValidationService.validationOrganizerIsGroupOwner(user, group.getGroupId());
+        await this.organizerValidationService.groupManagerAccess(user, group);
         await this.organizerValidationService.listAccessPermissition(list, group.getGroupId())
 
         await this.isGuestAlreadyOnList(guestIdPk, listIdPk)

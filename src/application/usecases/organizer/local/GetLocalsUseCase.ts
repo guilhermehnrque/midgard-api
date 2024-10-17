@@ -18,7 +18,7 @@ export class GetLocalsUseCase {
     async execute(userId: string, groupIdPk: number): Promise<LocalOutputDTO[]> {
         const user = await this.userService.getUserByUserId(userId);
 
-        await this.organizerValidationService.validationOrganizerIsGroupOwner(user, groupIdPk);
+        await this.organizerValidationService.managerAccess(user);
 
         const locals = await this.localService.getLocalsByGroupId(groupIdPk);
 
