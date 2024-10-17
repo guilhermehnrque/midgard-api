@@ -19,7 +19,7 @@ export class CreateGroupUseCase {
 
     async execute(userId: string, description: string, visibility: string, sportType: string): Promise<void> {
         const user = await this.userService.getUserByUserId(userId);
-        await this.organizerValidationService.validationOrganizerHasNoGroup(user, description);
+        await this.organizerValidationService.validationOrganizerAlreadyExists(user, description);
         
         const sportTypeEnum = SportTypeHelper.fromString(sportType);
         const visibilityEnum = GroupVisibilityHelper.fromString(visibility);

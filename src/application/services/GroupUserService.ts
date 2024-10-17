@@ -5,6 +5,8 @@ import { CustomError } from "../erros/CustomError";
 import { RegisterToGroupError } from "../erros/groupUser/RegisterToGroupError";
 import { GroupNotFoundError } from "../erros/groups/GroupNotFoundError";
 import sequelize from "../../infrastructure/database/index";
+import { UserAlreadyInGroupError } from "../erros/groupUser/UserAlreadyInGroupError";
+import { UsertNotGroupMember } from "../erros/groupUser/UsertNotGroupMember";
 
 
 export class GroupUserService {
@@ -45,7 +47,7 @@ export class GroupUserService {
     public async getGroupUserByUserId(userIdPk: number): Promise<GroupUserEntity[]> {
         const groupUsers = await this.groupUserRepository.getGroupByUserId(userIdPk);
 
-        if (groupUsers == null || groupUsers.length == 0 ) {
+        if (groupUsers == null || groupUsers.length == 0) {
             return [];
         }
 
@@ -54,8 +56,8 @@ export class GroupUserService {
 
     public async getGroupMembersByGroupId(groupIdPk: number): Promise<GroupUserEntity[]> {
         const groupMembers = await this.groupUserRepository.getGroupMembersByGroupId(groupIdPk);
-        
-        if (groupMembers == null || groupMembers.length == 0 ) {
+
+        if (groupMembers == null || groupMembers.length == 0) {
             return [];
         }
 
@@ -66,7 +68,7 @@ export class GroupUserService {
         const groupUser = await this.groupUserRepository.getGroupUserByGroupIdAndUserIdPk(groupId, userId);
 
         if (groupUser == null) {
-            this.logAndThrowError(new GroupNotFoundError() ,`[GroupUserService] getGroupUsersByGroupIdAndUserIdPk -> userId: ${userId} groupId: ${groupId}` )
+            this.logAndThrowError(new GroupNotFoundError(), `[GroupUserService] getGroupUsersByGroupIdAndUserIdPk -> userId: ${userId} groupId: ${groupId}`)
         }
 
         return this.createGroupUserEntityFromPersitence(groupUser!);
@@ -74,21 +76,21 @@ export class GroupUserService {
 
     public async ensureUserIsNotInGroup(userId: number, groupId: number): Promise<void> {
         const groupUser = await this.groupUserRepository.getGroupUserByGroupIdAndUserIdPk(groupId, userId);
-        
-        if (groupUser == null){
-            this.logAndThrowError(new GroupNotFoundError() ,`[GroupUserService] ensureUserIsNotInGroup -> userId: ${userId} groupId: ${groupId}` )
-        }
 
+        if (groupUser !== null) {  
+            this.logAndThrowError(new UserAlreadyInGroupError(),
+                `[GroupUserService] ensureUserIsNotInGroup -> userId: ${userId} groupId: ${groupId}: User already in group`);
+        }
     }
 
-    public async ensureUserIsInGroup(userId: number, groupId: number): Promise<void>{ 
+    public async ensureUserIsInGroup(userId: number, groupId: number): Promise<void> {
         const groupUser = await this.groupUserRepository.getGroupUserByGroupIdAndUserIdPk(groupId, userId);
-        
-        if (groupUser == null){
-            this.logAndThrowError(new GroupNotFoundError() ,`[GroupUserService] ensureUserIsInGroup -> userId: ${userId} groupId: ${groupId}` )
+
+        if (groupUser === null) {  
+            this.logAndThrowError(new UsertNotGroupMember(),
+                `[GroupUserService] ensureUserIsInGroup -> userId: ${userId} groupId: ${groupId}: User not in group`);
         }
     }
-
     private async createGroupUserEntityFromPersitence(groupUser: GroupsUsers): Promise<GroupUserEntity> {
         return await GroupUserEntity.fromData({
             id: groupUser.id,

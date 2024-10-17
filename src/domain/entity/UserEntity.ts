@@ -57,6 +57,18 @@ export class UserEntity implements UserAttributes {
         return this.id!;
     }
 
+    public getUserName() {
+        return this.name;
+    }
+
+    public getSurname() {
+        return this.surname;
+    }
+
+    public getFullname() {
+        return `${this.name} ${this.surname}`;
+    }
+
     static async fromUseCase(payload: Partial<UserEntity>): Promise<UserEntity> {
         return new UserEntity({
             ...payload

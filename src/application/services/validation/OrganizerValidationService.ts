@@ -17,7 +17,7 @@ export class OrganizerValidationService {
         await this.groupService.ensureOrganizerIsGroupOwner(groupIdPk, userEntity.getUserIdPk());
     }
 
-    public async validationOrganizerHasNoGroup(userEntity: UserEntity, description: string): Promise<void> {
+    public async validationOrganizerAlreadyExists(userEntity: UserEntity, description: string): Promise<void> {
         await this.userService.ensureUserIsOrganizer(userEntity);
         await this.groupService.ensureGroupNotExists(description);
     }
