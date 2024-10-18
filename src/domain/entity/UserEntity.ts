@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { HashPassword } from '../../application/utils/HashPassword';
 import { UserAttributes } from '../interfaces/attributes/UserAttributes';
 
 export class UserEntity implements UserAttributes {
@@ -19,7 +18,7 @@ export class UserEntity implements UserAttributes {
     public reset_password_expires: Date | null | undefined;
     public reset_password_token: string | null | undefined;
 
-    constructor(payload: Partial<UserEntity>) {
+    constructor(payload: Partial<UserEntity> = {}) {
         this.user_id = payload.user_id!;
         this.name = payload.name!;
         this.surname = payload.surname!;
@@ -36,14 +35,6 @@ export class UserEntity implements UserAttributes {
         this.reset_password_token = payload.reset_password_token;
     }
 
-    public async setPassword(password: string) {
-        this.password = await HashPassword.hashPassword(password);
-    }
-
-    public async setUserId() {
-        this.user_id = uuidv4();
-    }
-
     public async cleanTokens() {
         this.reset_password_token = null;
         this.reset_password_expires = null;
@@ -53,10 +44,49 @@ export class UserEntity implements UserAttributes {
         this.id = id;
     }
 
+    public getUserIdPk() {
+        return this.id!;
+    }
+
+    public getUserName() {
+        return this.name;
+    }
+
+    public getSurname() {
+        return this.surname;
+    }
+
+    public getFullname() {
+        return `${this.name} ${this.surname}`;
+    }
+
+    public setPassword(password: string) {
+        this.password = password;
+    }
+
     static async fromUseCase(payload: Partial<UserEntity>): Promise<UserEntity> {
         return new UserEntity({
             ...payload
         });
+    }
+
+    static async fromRegisterDTO(payload: Partial<UserEntity>): Promise<UserEntity> {
+        const userEntity = new UserEntity();
+
+        userEntity.user_id = uuidv4();
+        userEntity.name = payload.name!;
+        userEntity.surname = payload.surname!;
+        userEntity.type = payload.type!;
+        userEntity.status = payload.status!;
+        userEntity.phone_number = payload.phone_number!;
+        userEntity.login = payload.login!;
+        userEntity.password = payload.password!;
+        userEntity.created_at = new Date();
+        userEntity.updated_at = new Date();
+        userEntity.reset_password_expires = null;
+        userEntity.reset_password_token = null;
+
+        return userEntity;
     }
 
     public registerPayload() {
@@ -81,7 +111,19 @@ export class UserEntity implements UserAttributes {
             phone_number: this.phone_number,
             login: this.login,
             password: this.password,
+            reset_password_token: this.reset_password_token,
+            reset_password_expires: this.reset_password_expires,
             updated_at: new Date()
+        }
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            user_id: this.user_id,
+            name: this.name,
+            type: this.type,
+            login: this.login,
         }
     }
 

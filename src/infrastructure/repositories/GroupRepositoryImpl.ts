@@ -15,18 +15,17 @@ export class GroupRepositoryImpl implements GroupRepositoryInterface {
         }
     }
 
-    async updateGroupById(groupEntity: GroupEntity): Promise<number> {
+    async updateGroup(groupEntity: GroupEntity): Promise<number> {
         try {
             const [affectedCount] = await Group.update(groupEntity.toUpdatePayload(), {
                 where: {
-                    id: groupEntity.id!,
                     users_id: groupEntity.users_id
                 }
             });
             return affectedCount;
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] updateGroupById -> Error updating group by id: ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] updateGroup -> Error updating group by id: ${customError.message}`);
         }
     }
 

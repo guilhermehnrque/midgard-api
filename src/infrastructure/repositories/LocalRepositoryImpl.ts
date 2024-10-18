@@ -5,9 +5,10 @@ import { Local } from "../../domain/models/LocalModel";
 import { LocalRepositoryInterface } from "../../domain/repositories/LocalRepositoryInterface";
 
 export class LocalRepositoryImpl implements LocalRepositoryInterface {
+    
     async createLocal(localEntity: LocalEntity): Promise<Local> {
         try {
-            return await Local.create(localEntity.createPayload());
+            return await Local.create(await localEntity.createPayload());
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[LocalRepositoryImpl] createLocal -> Error creating group: ${customError.message}`);
@@ -42,6 +43,15 @@ export class LocalRepositoryImpl implements LocalRepositoryInterface {
     async getLocalByDescription(description: string): Promise<Local | null | undefined> {
         try {
             return await Local.findOne({ where: { description } });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[LocalRepositoryImpl] getLocalByDescription -> Error getting local by description: ${customError.message}`);
+        }
+    }
+
+    async getLocalByDescriptionAndGroupId(description: string, groupIdPk: number): Promise<Local | null> {
+        try {
+            return await Local.findOne({ where: { description, groups_id: groupIdPk } });
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[LocalRepositoryImpl] getLocalByDescription -> Error getting local by description: ${customError.message}`);

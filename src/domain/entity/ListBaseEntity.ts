@@ -1,4 +1,5 @@
-import { getDayOfWeekByString } from "../../application/enums/DayOfWeekEnum";
+import { ListDTO } from "../../application/dto/organizer/list/ListDTO";
+import { DayOfWeekHelper } from "../../application/enums/DayOfWeekEnum";
 import { ListBaseAttributes } from "../interfaces/attributes/ListBaseAttributes";
 
 export class ListBaseEntity implements ListBaseAttributes {
@@ -14,34 +15,56 @@ export class ListBaseEntity implements ListBaseAttributes {
     public created_at: Date;
     public updated_at: Date;
 
-    constructor(payload: Partial<ListBaseEntity>) {
+    constructor(payload: Partial<ListBaseEntity> = {}) {
         this.status = payload.status!;
-        this.starting_time = this.addSecondsToHour(payload.starting_time!);
-        this.ending_time = this.addSecondsToHour(payload.ending_time!);
-        this.day_of_week = this.dayOfWeekByString(payload.day_of_week!);
+        this.starting_time = payload.starting_time!;
+        this.ending_time = payload.ending_time!;
+        this.day_of_week = payload.day_of_week!;
         this.player_limit = payload.player_limit!;
         this.locals_id = payload.locals_id!;
         this.created_at = payload.created_at!;
         this.updated_at = payload.updated_at!;
         this.groups_id = payload.groups_id!;
         this.id = payload.id;
-
-        this.validations();
     }
 
-    static async fromCreateUseCase(payload: Partial<ListBaseEntity>): Promise<ListBaseEntity> {
-        return new ListBaseEntity({
-            ...payload,
-            created_at: new Date(),
-            updated_at: new Date(),
-        });
+    static fromCreateUseCase(payload: ListDTO): ListBaseEntity {
+        const entity = new ListBaseEntity();
+
+        entity.validateTimeFormat(payload.startingTime)
+        entity.validateTimeFormat(payload.endingTime)
+
+        entity.status = true;
+        entity.player_limit = payload.playerLimit;
+        entity.starting_time = entity.addSecondsToHour(payload.startingTime);
+        entity.ending_time = entity.addSecondsToHour(payload.endingTime);
+        entity.day_of_week = entity.dayOfWeekByString(payload.dayOfWeek.toLowerCase());
+        entity.groups_id = payload.groupId;
+        entity.locals_id = payload.localId;
+        entity.created_at = new Date();
+        entity.updated_at = new Date();
+
+        return entity;
     }
 
-    static async fromUpdateUseCase(payload: Partial<ListBaseEntity>): Promise<ListBaseEntity> {
-        return new ListBaseEntity({
-            ...payload,
-            updated_at: new Date(),
-        });
+    static fromUpdateUseCase(payload: ListDTO, listIdPk: number): ListBaseEntity {
+        const entity = new ListBaseEntity();
+
+        entity.validateTimeFormat(payload.startingTime)
+        entity.validateTimeFormat(payload.endingTime)
+
+        entity.id = listIdPk;
+        entity.status = payload.status;
+        entity.player_limit = payload.playerLimit;
+        entity.starting_time = entity.addSecondsToHour(payload.startingTime);
+        entity.ending_time = entity.addSecondsToHour(payload.endingTime);
+        entity.day_of_week = entity.dayOfWeekByString(payload.dayOfWeek.toLowerCase());
+        entity.groups_id = payload.groupId;
+        entity.locals_id = payload.localId;
+
+        entity.updated_at = new Date();
+
+        return entity;
     }
 
     static async fromPersistence(payload: Partial<ListBaseEntity>): Promise<ListBaseEntity> {
@@ -50,17 +73,13 @@ export class ListBaseEntity implements ListBaseAttributes {
         });
     }
 
-    public validations(): void {
-        const validateHour = this.validateTimeFormat(this.starting_time) && this.validateTimeFormat(this.ending_time);
+    private validateTimeFormat(hour: string): void {
+        const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
-        if (!validateHour) {
+        if (!(regex.test(hour))) {
+            console.error(`[ListBaseEntity] -> Invalid hour format: ${hour}`);
             throw new Error('Invalid hour format');
         }
-    }
-
-    private validateTimeFormat(hour: string): boolean {
-        const regex = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
-        return regex.test(hour);
     }
 
     public addSecondsToHour(hour: string): string {
@@ -72,9 +91,16 @@ export class ListBaseEntity implements ListBaseAttributes {
     }
 
     private dayOfWeekByString(dayOfWeek: string): string {
-        return getDayOfWeekByString(dayOfWeek)!.toString().toUpperCase();
+        return DayOfWeekHelper.fromString(dayOfWeek.toUpperCase()).toString().toUpperCase();
     }
 
+    public getGroupIdPk(): number {
+        return this.groups_id;
+    }
+
+    public getPlayerLimit(): number {
+        return this.player_limit;
+    }
 
     public createPayload() {
         return {

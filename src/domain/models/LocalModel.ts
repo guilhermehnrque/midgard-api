@@ -18,8 +18,6 @@ class Local extends Model<LocalAttributes, LocalCreationAttributes> implements L
     public created_at!: Date;
     public updated_at!: Date;
 
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
 }
 
 Local.init({

@@ -55,7 +55,7 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
             });
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[UserRepository] getUserByLoginEmailOrPhone -> Error getting user by phone: ${customError.message}`);
+            throw new DatabaseError(`[UserRepository] getUserByPhone -> ${customError.message}`);
         }
     }
 
@@ -67,6 +67,20 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
             throw new DatabaseError(`[UserRepository] getUserByPK -> Error getting user: ${customError.message}`);
         }
 
+    }
+
+    public async getUserByLogin(login: string): Promise<UserModel | null> {
+        const parsedLogin = parseInt(login);
+        try {
+            return await UserModel.findOne({
+                where: {
+                    phone_number: parsedLogin
+                },
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[UserRepository] getUserByLogin -> ${customError.message}`);
+        }
     }
 
     async getUserByResetPasswordToken(token: string): Promise<UserModel | null> {

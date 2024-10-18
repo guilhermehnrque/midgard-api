@@ -6,5 +6,6 @@ export interface LocalRepositoryInterface {
     updateLocal(localEntity: LocalEntity): Promise<number>;
     getLocalByIdPk(id: number): Promise<Local | null>;
     getLocalByDescription(description: string): Promise<Local | null | undefined>;
+    getLocalByDescriptionAndGroupId(description: string, groupIdPk: number): Promise<Local | null>
     getLocalsByGroupId(groupId: number): Promise<Local[] | null | undefined>
 }

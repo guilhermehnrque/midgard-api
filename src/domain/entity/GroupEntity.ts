@@ -1,3 +1,5 @@
+import { GroupVisibilityEnum } from "../../application/enums/GroupVisibilitEnum";
+import { SportTypesEnum } from "../../application/enums/SportTypeEnum";
 import { GroupAttributes } from "../interfaces/attributes/GroupAttributes";
 
 export class GroupEntity implements GroupAttributes {
@@ -6,8 +8,8 @@ export class GroupEntity implements GroupAttributes {
     public description: string;
     public is_active: boolean;
     public users_id: number;
-    public sport_type: string;
-    public visibility: string;
+    public sport_type: SportTypesEnum;
+    public visibility: GroupVisibilityEnum;
     public created_at: Date;
     public updated_at: Date;
 
@@ -59,13 +61,17 @@ export class GroupEntity implements GroupAttributes {
         this.is_active = status;
     }
 
+    public getGroupId(): number {
+        return this.id!;
+    }
+
     toCreatePayload() {
         return {
             description: this.description,
             is_active: this.is_active,
             users_id: this.users_id,
-            sport_type: this.sport_type,
-            visibility: this.visibility,
+            sport_type: this.sport_type.toString(),
+            visibility: this.visibility.toString(),
             created_at: this.created_at,
             updated_at: this.updated_at
         };
@@ -76,9 +82,9 @@ export class GroupEntity implements GroupAttributes {
             id: this.id!,
             description: this.description,
             is_active: this.is_active,
-            sport_type: this.sport_type,
+            sport_type: this.sport_type.toString(),
             users_id: this.users_id,
-            visibility: this.visibility,
+            visibility: this.visibility.toString(),
             updated_at: this.updated_at
         };
     }

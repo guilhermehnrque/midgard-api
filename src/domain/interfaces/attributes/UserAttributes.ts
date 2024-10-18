@@ -5,7 +5,6 @@ export interface UserAttributes {
     surname: string;
     type: string;
     status: boolean;
-    login: string;
     password: string;
     phone_number: number;
     created_at: Date;
