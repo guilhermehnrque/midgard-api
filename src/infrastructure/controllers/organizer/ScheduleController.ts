@@ -19,7 +19,7 @@ export class ScheduleController {
 
             await this.scheduleFacade.createSchedule(createScheduleRequest, userId!);
 
-            return response.status(201).json({ message: "Schedule created successfully" });
+            return response.status(201).json();
 
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -35,7 +35,7 @@ export class ScheduleController {
 
             await this.scheduleFacade.updateSchedule(updateScheduleRequest, userId!, Number(scheduleId));
 
-            return response.status(204).json({ message: "Schedule updated successfully" });
+            return response.status(204).json();
 
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;

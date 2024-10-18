@@ -10,9 +10,7 @@ export class UpdateLocalUseCase {
         this.localService = new LocalService();
     }
 
-    async execute(localDTO: LocalDTO): Promise<void> {
-        this.localValidation(localDTO.getDescription(), localDTO.getGroupId())
-
+    public async execute(localDTO: LocalDTO): Promise<void> {
         const localEntity = await LocalEntity.fromUseCase({
             description: localDTO.getDescription(),
             country: localDTO.getCountry(),
@@ -27,7 +25,4 @@ export class UpdateLocalUseCase {
         await this.localService.updateLocal(localEntity);
     }
 
-    private async localValidation(description: string, groupIdPk: number) {
-        await this.localService.ensureLocalNotExists(description, groupIdPk)
-    }
 }

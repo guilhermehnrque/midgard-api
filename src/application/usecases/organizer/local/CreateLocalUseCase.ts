@@ -1,5 +1,6 @@
 import { LocalEntity } from "../../../../domain/entity/LocalEntity";
 import { LocalDTO } from "../../../dto/organizer/local/LocalDTO";
+import { LocalAlreadyExistsError } from "../../../erros/local/LocalAlreadyExistsError";
 import { LocalService } from "../../../services/LocalService";
 
 export class CreateLocalUseCase {
@@ -28,6 +29,11 @@ export class CreateLocalUseCase {
     }
 
     private async localValidation(description: string, groupIdPk: number) {
-        await this.localService.getLocalByDescriptionAndGroupId(description, groupIdPk)
+        const local = await this.localService.getLocalByDescriptionAndGroupId(description, groupIdPk)
+        
+        if (local) {
+            console.error(`[CreateLocalUseCase] -> Local already exists`);
+            throw new LocalAlreadyExistsError('Local already exists');
+        }
     }
 }

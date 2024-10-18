@@ -16,7 +16,7 @@ export class LocalDTO {
         street: string;
         number: number;
         zipCode: number;
-        description: string;
+        description: string ;
         groupsId: number;
     }) {
         this.country = payload.country;

@@ -15,6 +15,8 @@ export class LocalService {
     }
 
     public async createLocal(local: LocalEntity): Promise<void> {
+        await this.ensureLocalNotExists(local.description, local.groups_id);
+
         try {
             await this.localRepository.createLocal(local);
         } catch (error) {
@@ -23,7 +25,9 @@ export class LocalService {
         }
     }
 
-    public async updateLocal(local: LocalEntity): Promise<void> { 
+    public async updateLocal(local: LocalEntity): Promise<void> {
+        await this.ensureLocalExists(local.description, local.groups_id);
+
         try {
             await this.localRepository.updateLocal(local);
         } catch (error) {
@@ -32,37 +36,37 @@ export class LocalService {
         }
     }
 
-    public async getLocalByIdPk(idLocalPk: number): Promise<LocalEntity> {
+    public async getLocalByIdPk(idLocalPk: number): Promise<LocalEntity | null> {
         const local = await this.localRepository.getLocalByIdPk(idLocalPk);
 
         if (!local || local == null) {
-            this.logAndThrowError(new LocalNotFoundError(), `[LocalService] getLocalByIdPk -> ${idLocalPk}`);
+            return null;
         }
 
-        return this.createLocalEntityFromPersistence(local!); //
+        return this.createLocalEntityFromPersistence(local!); 
     }
 
-    public async getLocalByDescription(description: string): Promise<LocalEntity> {
+    public async getLocalByDescription(description: string): Promise<LocalEntity | null> {
         const local = await this.localRepository.getLocalByDescription(description);
 
-        if (!local || local == null) {
-            this.logAndThrowError(new LocalNotFoundError(), `[LocalService] getLocalByDescription -> ${description}`);
+        if (local == null) {
+            return null;
         }
 
         return this.createLocalEntityFromPersistence(local!);
     }
-    
-    public async getLocalByDescriptionAndGroupId(description: string, groupIdPk: number): Promise<LocalEntity> {
+
+    public async getLocalByDescriptionAndGroupId(description: string, groupIdPk: number): Promise<LocalEntity | null> {
         const local = await this.localRepository.getLocalByDescriptionAndGroupId(description, groupIdPk);
 
         if (!local || local == null) {
-            this.logAndThrowError(new LocalNotFoundError(), `[LocalService] getLocalByDescription -> ${description}`);
+            return null;
         }
 
         return this.createLocalEntityFromPersistence(local!);
     }
 
-    public async ensureLocalNotExists(description: string, groupIdPk: number) {
+    private async ensureLocalNotExists(description: string, groupIdPk: number) {
         const local = await this.localRepository.getLocalByDescriptionAndGroupId(description, groupIdPk);
 
         if (local || local != null) {
@@ -70,12 +74,12 @@ export class LocalService {
         }
 
     }
-    
-    public async ensureLocalExists(description: string, groupIdPk: number) {
+
+    private async ensureLocalExists(description: string, groupIdPk: number) {
         const local = await this.localRepository.getLocalByDescriptionAndGroupId(description, groupIdPk);
 
         if (!local || local == null) {
-            this.logAndThrowError(new LocalNotFoundError(), `[LocalService] ensureLocalNotExists -> ${description}`);
+            this.logAndThrowError(new LocalNotFoundError(), `[LocalService] ensureLocalExists -> ${description}`);
         }
 
     }

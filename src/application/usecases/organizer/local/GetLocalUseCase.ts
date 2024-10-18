@@ -1,4 +1,6 @@
+import { LocalEntity } from "../../../../domain/entity/LocalEntity";
 import { LocalOutputDTO } from "../../../dto/organizer/local/LocalOutputDTO";
+import { LocalNotFoundError } from "../../../erros/local/LocalNotFoundError";
 import { LocalService } from "../../../services/LocalService";
 
 export class GetLocalUseCase {
@@ -12,7 +14,12 @@ export class GetLocalUseCase {
     async execute(localIdPk: number): Promise<LocalOutputDTO> {
         const local = await this.localService.getLocalByIdPk(localIdPk);
 
-        return LocalOutputDTO.fromEntity(local);
+        if (!local || local == null) {
+            console.error(`[GetLocalUseCase] -> Local not found ${localIdPk}`);
+            throw new LocalNotFoundError();
+        }
+        
+        return LocalOutputDTO.fromEntity(local!);
     }
 
 }

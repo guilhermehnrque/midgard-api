@@ -26,9 +26,6 @@ const schemas = {
         param('scheduleId')
             .isNumeric().withMessage('Id deve ser um número')
             .notEmpty().withMessage('Id deve ser declarado no param'),
-        param('groupId')
-            .isNumeric().withMessage('GroupId deve ser um número')
-            .notEmpty().withMessage('GroupId deve ser declarado no param'),
 
         body('dayOfWeek')
             .notEmpty().withMessage('Dia da semana é obrigatório')
@@ -46,8 +43,18 @@ const schemas = {
     detail: [
         param('scheduleId')
             .isString().withMessage('groupId should be a type of text')
+            .notEmpty().withMessage('GroupId should be declared Path Variable'),
+
+        param('groupId')
+            .isString().withMessage('groupId should be a type of text')
             .notEmpty().withMessage('GroupId should be declared Path Variable')
     ],
+
+    getSchedules: [
+        param('groupId')
+            .isString().withMessage('groupId should be a type of text')
+            .notEmpty().withMessage('GroupId should be declared Path Variable')
+    ]
 }
 
 export { schemas, handleValidationErrors };

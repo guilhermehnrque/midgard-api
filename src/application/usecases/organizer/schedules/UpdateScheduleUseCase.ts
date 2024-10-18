@@ -13,7 +13,8 @@ export class UpdateScheduleUseCase {
 
         this.scheduleValidation(scheduleId, groupIdPk);
 
-        const schedule = await ScheduleEntity.fromCreateUseCase({
+        const schedule = await ScheduleEntity.fromUpdateUseCase({
+            id: scheduleId,
             starting_time: startingTime,
             ending_time: endingTime,
             day_of_week: dayOfWeek,
