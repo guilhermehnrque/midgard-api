@@ -1,5 +1,4 @@
 import { ScheduleEntity } from "../../../../domain/entity/ScheduleEntity";
-import { DayOfWeekHelper } from "../../../enums/DayOfWeekEnum"
 
 export class ScheduleOutputDTO {
 
@@ -12,7 +11,7 @@ export class ScheduleOutputDTO {
     constructor(payload: ScheduleEntity) {
         this.startingTime = payload.starting_time;
         this.endingTime = payload.ending_time;
-        this.dayOfWeek = DayOfWeekHelper.fromString(payload.day_of_week);
+        this.dayOfWeek = payload.day_of_week;
         this.createdAt = payload.created_at.toISOString();
         this.id = payload.id!;
     }

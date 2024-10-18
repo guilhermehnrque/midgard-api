@@ -1,4 +1,5 @@
 import { ScheduleEntity } from "../../../../domain/entity/ScheduleEntity";
+import { ScheduleAlreadyExistsError } from "../../../erros/schedules/ScheduleAlreadyExistsError";
 import { SchedulesService } from "../../../services/ScheduleService";
 
 export class CreateScheduleUseCase {
@@ -11,7 +12,7 @@ export class CreateScheduleUseCase {
 
     public async execute(startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number): Promise<void> {
 
-        this.scheduleValidation(startingTime, endingTime, dayOfWeek, groupIdPk);
+        await this.scheduleValidation(startingTime, endingTime, dayOfWeek, groupIdPk);
 
         const schedule = await ScheduleEntity.fromCreateUseCase({
             starting_time: startingTime,
@@ -25,7 +26,12 @@ export class CreateScheduleUseCase {
     }
 
     private async scheduleValidation(startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number) {
-        await this.scheduleService.getScheduleByTimesAndGroupId(startingTime, endingTime, dayOfWeek, groupIdPk)
+        const schedule = await this.scheduleService.getScheduleByTimesAndGroupId(startingTime, endingTime, dayOfWeek, groupIdPk)
+
+        if (schedule) {
+            console.error(`[CreateScheduleUseCase] -> Schedule already exists`);
+            throw new ScheduleAlreadyExistsError();
+        }
     }
 
 }

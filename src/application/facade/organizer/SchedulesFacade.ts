@@ -1,3 +1,5 @@
+import { CreateScheduleRequest } from "../../../infrastructure/requests/organizer/schedule/CreateScheduleRequest";
+import { UpdateScheduleRequest } from "../../../infrastructure/requests/organizer/schedule/UpdateScheduleRequest";
 import { ScheduleOutputDTO } from "../../dto/organizer/schedule/ScheduleOutputDTO";
 import { OrganizerAccessService } from "../../services/validation/OrganizerAccessService";
 import { CreateScheduleUseCase } from "../../usecases/organizer/schedules/CreateScheduleUseCase";
@@ -21,22 +23,21 @@ export class SchedulesFacade {
         this.getSchedulesUseCase = new GetSchedulesUseCase();
     }
 
-    public async createSchedule(request: any, userId: string): Promise<void> {
-        const { startingTime, endingTime, dayOfWeek, groupId } = request;
+    public async createSchedule(request: CreateScheduleRequest, userId: string): Promise<void> {
+        const { startTime, endTime, dayOfWeek, groupId } = request;
         await this.organizerAccessService.validateAccess({ userId, groupId });
 
-        await this.createScheduleUseCase.execute(startingTime, endingTime, dayOfWeek, groupId);
+        await this.createScheduleUseCase.execute(startTime, endTime, dayOfWeek, groupId);
     }
 
-    public async updateSchedule(request: any, userId: string, scheduleIdPk: number): Promise<void> {
-        const { startingTime, endingTime, dayOfWeek, groupId } = request;
+    public async updateSchedule(request: UpdateScheduleRequest, userId: string, scheduleIdPk: number): Promise<void> {
+        const { startTime, endTime, dayOfWeek, groupId } = request;
         await this.organizerAccessService.validateAccess({ userId, groupId });
 
-        await this.updateScheduleUseCase.execute(scheduleIdPk, startingTime, endingTime, dayOfWeek, groupId);
+        await this.updateScheduleUseCase.execute(scheduleIdPk, startTime, endTime, dayOfWeek, groupId);
     }
 
-    public async getSchedules(request: any, userId: string): Promise<ScheduleOutputDTO[]> {
-        const { groupId } = request;
+    public async getSchedules(userId: string, groupId: number): Promise<ScheduleOutputDTO[]> {
         await this.organizerAccessService.validateAccess({ userId, groupId });
 
         return await this.getSchedulesUseCase.execute(groupId);

@@ -3,7 +3,6 @@ import { Schedule } from "../../domain/models/ScheduleModel";
 import { ScheduleRepositoryImpl } from "../../infrastructure/repositories/ScheduleRepositoryImpl";
 import { CustomError } from "../erros/CustomError";
 import { InternalError } from "../erros/InternalError";
-import { ScheduleAlreadyExistsError } from "../erros/schedules/ScheduleAlreadyExistsError";
 import { ScheduleNotFoundError } from "../erros/schedules/ScheduleNotFoundError";
 
 export class SchedulesService {
@@ -63,15 +62,9 @@ export class SchedulesService {
         return await Promise.all(schedule.map(this.createEntityFromPersistence));
     }
 
-    async getScheduleByTimesAndGroupId(startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number): Promise<ScheduleEntity> {
+    async getScheduleByTimesAndGroupId(startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number): Promise<boolean> {
         const schedule = await this.scheduleRepository.getScheduleByTimesAndGroupId(startingTime, endingTime, dayOfWeek, groupIdPk);
-
-        if (!schedule || schedule == null) {
-            this.logAndThrowError(new ScheduleAlreadyExistsError(), `[SchedulesService] getScheduleByTimesAndGroupId -> 
-            ${startingTime}, ${endingTime}, ${dayOfWeek}, ${groupIdPk} `);
-        }
-
-        return this.createEntityFromPersistence(schedule!);
+        return schedule !== null;
     }
 
     private async createEntityFromPersistence(schedule: Schedule): Promise<ScheduleEntity> {
@@ -80,7 +73,8 @@ export class SchedulesService {
             starting_time: schedule.starting_time,
             ending_time: schedule.ending_time,
             groups_id: schedule.groups_id,
-            id: schedule.id
+            id: schedule.id,
+            created_at: schedule.created_at,
         });
     }
 

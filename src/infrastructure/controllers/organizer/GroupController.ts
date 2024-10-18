@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { GroupFacade } from "../../../application/facade/organizer/GroupFacade";
-import { CreateGroupRequest } from "../../requests/organizer/CreateGroupRequest";
+import { CreateGroupRequest } from "../../requests/organizer/groups/CreateGroupRequest";
 import { CustomError } from "../../../application/erros/CustomError";
-import { UpdateGroupRequest } from "./UpdateGroupRequest";
+import { UpdateGroupRequest } from "../../requests/organizer/groups/UpdateGroupRequest";
 
 export class GroupController {
 

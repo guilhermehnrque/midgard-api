@@ -1,5 +1,5 @@
-import { UpdateGroupRequest } from "../../../infrastructure/controllers/organizer/UpdateGroupRequest";
-import { CreateGroupRequest } from "../../../infrastructure/requests/organizer/CreateGroupRequest";
+import { UpdateGroupRequest } from "../../../infrastructure/requests/organizer/groups/UpdateGroupRequest";
+import { CreateGroupRequest } from "../../../infrastructure/requests/organizer/groups/CreateGroupRequest";
 import { GroupOutputDTO } from "../../dto/organizer/group/GroupOutputDTO";
 import { OrganizerAccessService } from "../../services/validation/OrganizerAccessService";
 import { CreateGroupUseCase } from "../../usecases/organizer/group/CreateGroupUseCase";
