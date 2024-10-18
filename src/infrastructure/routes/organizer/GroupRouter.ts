@@ -1,14 +1,31 @@
-import { Router, Request, Response } from 'express';
-import { handleValidationErrors, schemas } from '../../middlewares/validators/organizer/GroupValidator';
-import { GroupController } from '../../controllers/organizer/GroupController';
+import { Router, Request, Response } from "express";
+import { GroupController } from "../../controllers/organizer/GroupController";
+import { schemas } from "../../middlewares/validators/organizer/GroupValidator";
+import ValidationErrorHandler from "../../middlewares/validators/ValidatorHandler";
 
-const router = Router();
+export class GroupRouter {
 
-const groupController = new GroupController();
+    public readonly router: Router;
+    private readonly groupController: GroupController;
 
-router.get('', async (req: Request, res: Response) => { groupController.getGroups(req, res); });
-router.post('', schemas.register, handleValidationErrors, async (req: Request, res: Response) => { groupController.createGroup(req, res); });
-router.get('/:groupId', schemas.detail, handleValidationErrors, async (req: Request, res: Response) => { groupController.getGroup(req, res); });
-router.put('/:groupId', schemas.update, handleValidationErrors, async (req: Request, res: Response) => { groupController.updateGroup(req, res); });
+    constructor() {
+        this.router = Router();
+        this.groupController = new GroupController();
+        this.initializeRoutes();
+    }
 
-export default router;
+    private initializeRoutes(): void {
+        this.router.get('', (req: Request, res: Response) =>
+            this.groupController.getGroups(req, res)
+        );
+        this.router.post('', [...schemas.register, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+            this.groupController.createGroup(req, res)
+        );
+        this.router.get('/:groupId', [...schemas.detail, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+            this.groupController.getGroup(req, res)
+        );
+        this.router.put('/:groupId', [...schemas.update, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+            this.groupController.updateGroup(req, res)
+        );
+    }
+}

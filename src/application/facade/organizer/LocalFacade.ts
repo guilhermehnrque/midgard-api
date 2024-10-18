@@ -31,12 +31,12 @@ export class LocalFacade {
         await this.createLocalUseCase.execute(localDTO);
     }
 
-    public async updateLocal(request: UpdateLocalRequest, userId: string): Promise<void> {
+    public async updateLocal(request: UpdateLocalRequest, userId: string, localIdPk: number): Promise<void> {
         const { description, country, state, city, street, zipCode, number, groupId } = request;
         const localDTO = new LocalDTO({ description, country, state, city, street, zipCode, number, groupsId: groupId });
 
         await this.organizerAccessService.validateAccess({ userId, groupId });
-        await this.updateLocalUseCase.execute(localDTO);
+        await this.updateLocalUseCase.execute(localDTO, localIdPk);
     }
 
     public async getLocals(groupIdPk: number, userId: string): Promise<any[]> {

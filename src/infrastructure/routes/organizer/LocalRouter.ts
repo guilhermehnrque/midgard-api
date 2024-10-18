@@ -1,14 +1,33 @@
 import { Router, Request, Response } from 'express';
-import { handleValidationErrors, schemas } from '../../middlewares/validators/organizer/LocalValidator';
+import { schemas, handleValidationErrors } from '../../middlewares/validators/organizer/LocalValidator';
 import { LocalController } from '../../controllers/organizer/LocalController';
 
-const router = Router();
+export class LocalRouter {
+    public readonly router: Router;
+    private readonly localController: LocalController;
+    constructor() {
+        this.router = Router();
+        this.localController = new LocalController();
+        this.initializeRoutes();
+    }
 
-const localController = new LocalController();
+    private initializeRoutes(): void {
+        this.router.post('/', [...schemas.register, handleValidationErrors.handle], (req: Request, res: Response) =>
+            this.localController.createLocal(req, res)
+        );
 
-router.post('', [...schemas.register, handleValidationErrors], async (req: Request, res: Response) => { localController.createLocal(req, res); });
-router.put('/:localId', [...schemas.update, handleValidationErrors], async (req: Request, res: Response) => { localController.updateLocal(req, res); });
-router.get('/:groupId', [...schemas.getLocals, handleValidationErrors], async (req: Request, res: Response) => { localController.getLocals(req, res); });
-router.get('/:localId/group-id/:groupId', [...schemas.detail, handleValidationErrors], async (req: Request, res: Response) => { localController.getLocal(req, res); });
+        this.router.put('/:localId', [...schemas.update, handleValidationErrors.handle], (req: Request, res: Response) =>
+            this.localController.updateLocal(req, res)
+        );
 
-export default router;
+        this.router.get('/:groupId', [...schemas.getLocals, handleValidationErrors.handle], (req: Request, res: Response) =>
+            this.localController.getLocals(req, res)
+        );
+
+        this.router.get('/:localId/group-id/:groupId', [...schemas.detail, handleValidationErrors.handle], (req: Request, res: Response) =>
+            this.localController.getLocal(req, res)
+        );
+    }
+}
+
+export default LocalRouter;

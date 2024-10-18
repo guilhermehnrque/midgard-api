@@ -29,7 +29,7 @@ export class AddGroupMemberUseCase {
             throw new AddMemberToGroupError();
         }
 
-        this.isUserAlreadyInGroup(membersId, groupIdPk);
+        await this.isUserAlreadyInGroup(membersId, groupIdPk);
     }
 
     private async isUserAlreadyInGroup(membersId: Array<number>, groupIdPk: number): Promise<void> {

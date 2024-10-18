@@ -65,9 +65,7 @@ export class ListBaseEntity implements ListBaseAttributes {
         entity.updated_at = new Date();
 
         return entity;
-
     }
-    
 
     static async fromPersistence(payload: Partial<ListBaseEntity>): Promise<ListBaseEntity> {
         return new ListBaseEntity({

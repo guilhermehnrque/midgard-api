@@ -36,6 +36,7 @@ export class GroupUserService {
 
         try {
             await this.groupUserRepository.removeGroupUser(userGroupEntity.groups_id, userGroupEntity.users_id, { transaction })
+            transaction.commit();
         } catch (error) {
             transaction.rollback();
             const customError = error as CustomError;

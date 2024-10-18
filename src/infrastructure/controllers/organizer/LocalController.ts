@@ -28,9 +28,10 @@ export class LocalController {
     public async updateLocal(request: Request, response: Response) {
         try {
             const { userId } = request;
+            const { localId } = request.params;
             const updateLocalRequest = request.body as UpdateLocalRequest;
 
-            await this.localFacade.updateLocal(updateLocalRequest, userId!);
+            await this.localFacade.updateLocal(updateLocalRequest, userId!, Number(localId));
             return response.status(200).json({ message: "Local atualizado com sucesso!" });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;

@@ -2,13 +2,34 @@ import { Router, Request, Response } from 'express';
 import { schemas, handleValidationErrors } from '../../middlewares/validators/organizer/ListValidator';
 import { ListController } from '../../controllers/organizer/ListController';
 
-const router = Router();
+export class ListRouter {
 
-const listController = new ListController();
+    public readonly router: Router;
+    private readonly listController: ListController;
+    
+    constructor() {
+        this.router = Router();
+        this.listController = new ListController();
+        this.initializeRoutes();
+    }
 
-router.post('', [...schemas.register, handleValidationErrors], async (req: Request, res: Response) => { listController.createList(req, res) });
-router.get('/:groupId', [...schemas.get, handleValidationErrors], async (req: Request, res: Response) => { listController.getLists(req, res) });
-router.get('/:listId/group-id/:groupId', [...schemas.details, handleValidationErrors], async (req: Request, res: Response) => { listController.getList(req, res) });
-router.put('/:listId', [...schemas.update, handleValidationErrors], async (req: Request, res: Response) => { listController.updateList(req, res) });
+    private initializeRoutes(): void {
+        this.router.post('/', [...schemas.register, handleValidationErrors.handle], (req: Request, res: Response) => 
+            this.listController.createList(req, res)
+        );
 
-export default router;
+        this.router.get('/:groupId', [...schemas.get, handleValidationErrors.handle], (req: Request, res: Response) => 
+            this.listController.getLists(req, res)
+        );
+
+        this.router.get('/:listId/group-id/:groupId', [...schemas.details, handleValidationErrors.handle], (req: Request, res: Response) => 
+            this.listController.getList(req, res)
+        );
+
+        this.router.put('/:listId', [...schemas.update, handleValidationErrors.handle], (req: Request, res: Response) => 
+            this.listController.updateList(req, res)
+        );
+    }
+}
+
+export default ListRouter;

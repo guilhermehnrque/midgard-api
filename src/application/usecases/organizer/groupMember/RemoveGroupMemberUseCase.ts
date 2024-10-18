@@ -17,7 +17,6 @@ export class RemoveGroupMemberUseCase {
             users_id: memberIdPK,
         });
 
-
         await this.groupUsersService.removeUserFromGroup(member);
     }
 

@@ -1,3 +1,5 @@
+import { RegisterGroupMemberRequest } from "../../../infrastructure/requests/organizer/groupMember/RegisterGroupMemberRequest";
+import { UpdateGroupMemberRequest } from "../../../infrastructure/requests/organizer/groupMember/UpdateGroupMemberRequest";
 import { GroupMemberOutputDTO } from "../../dto/organizer/groupMember/GroupMemberOutputDTO";
 import { OrganizerAccessService } from "../../services/validation/OrganizerAccessService";
 import { AddGroupMemberUseCase } from "../../usecases/organizer/groupMember/AddGroupMemberUseCase";
@@ -18,24 +20,23 @@ export class GroupMemberFacade {
         this.organizerAccessService = new OrganizerAccessService();
     }
 
-    public async addGroupMember(request: any, userId: string): Promise<void> {
+    public async addGroupMember(request: RegisterGroupMemberRequest, userId: string): Promise<void> {
         const { groupId, membersId } = request;
 
         await this.organizerAccessService.validateAccess({ userId });
         await this.addGroupMemberUseCase.execute(groupId, membersId);
     }
 
-    public async removeGroupMember(request: any, userId: string): Promise<void> {
-        const { groupId, membersId } = request;
+    public async removeGroupMember(request: UpdateGroupMemberRequest, userId: string): Promise<void> {
+        const { groupId, memberId } = request;
 
         await this.organizerAccessService.validateAccess({ userId });
-        await this.removeGroupMemberUseCase.execute(groupId, membersId);
+        await this.removeGroupMemberUseCase.execute(groupId, memberId);
     }
 
-    public async getGroupMembers(request: any, userId: string): Promise<GroupMemberOutputDTO> {
-        const { groupId } = request;
-
+    public async getGroupMembers(groupId: number, userId: string): Promise<GroupMemberOutputDTO> {
         await this.organizerAccessService.validateAccess({ userId });
+        
         return await this.getGroupMembersUseCase.execute(groupId);
     }
 

@@ -2,13 +2,33 @@ import { Router, Request, Response } from 'express';
 import { AuthController } from '../../controllers/auth/AuthController';
 import { schemas, handleValidationErrors } from '../../middlewares/validators/auth/AuthValidator';
 
-const router = Router();
+export class AuthRouter {
+    public readonly router: Router;
+    private readonly authController: AuthController;
 
-const authController = new AuthController();
+    constructor() {
+        this.router = Router();
+        this.authController = new AuthController();
+        this.initializeRoutes();
+    }
 
-router.post('/', [...schemas.register, handleValidationErrors], (request: Request, response: Response) => authController.createUser(request, response));
-router.post('/login', [...schemas.login, handleValidationErrors], (request: Request, response: Response) => authController.loginUser(request, response));
-router.post('/forgot-password', [...schemas.forgotPassword, handleValidationErrors], (request: Request, response: Response) => authController.forgotPassword(request, response));
-router.post('/reset-password/:token', [...schemas.resetPassword, handleValidationErrors], (request: Request, response: Response) => authController.resetPassword(request, response));
+    private initializeRoutes(): void {
+        this.router.post('/', schemas.register, handleValidationErrors.handle, (request: Request, response: Response) => 
+            this.authController.createUser(request, response)
+        );
 
-export default router;
+        this.router.post('/login', [...schemas.login, handleValidationErrors.handle], (request: Request, response: Response) => 
+            this.authController.loginUser(request, response)
+        );
+
+        this.router.post('/forgot-password', [...schemas.forgotPassword, handleValidationErrors.handle], (request: Request, response: Response) => 
+            this.authController.forgotPassword(request, response)
+        );
+
+        this.router.post('/reset-password/:token', [...schemas.resetPassword, handleValidationErrors.handle], (request: Request, response: Response) => 
+            this.authController.resetPassword(request, response)
+        );
+    }
+}
+
+export default AuthRouter;

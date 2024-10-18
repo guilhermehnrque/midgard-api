@@ -1,5 +1,4 @@
 import { body, param } from 'express-validator';
-import handleValidationErrors from '../ValidatorHandler';
 
 const schemas = {
     register: [
@@ -57,4 +56,4 @@ const schemas = {
     ]
 }
 
-export { schemas, handleValidationErrors };
+export { schemas };

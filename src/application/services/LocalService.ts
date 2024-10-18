@@ -43,7 +43,7 @@ export class LocalService {
             return null;
         }
 
-        return this.createLocalEntityFromPersistence(local!); 
+        return this.createLocalEntityFromPersistence(local); 
     }
 
     public async getLocalByDescription(description: string): Promise<LocalEntity | null> {
@@ -53,7 +53,7 @@ export class LocalService {
             return null;
         }
 
-        return this.createLocalEntityFromPersistence(local!);
+        return this.createLocalEntityFromPersistence(local);
     }
 
     public async getLocalByDescriptionAndGroupId(description: string, groupIdPk: number): Promise<LocalEntity | null> {
@@ -63,7 +63,7 @@ export class LocalService {
             return null;
         }
 
-        return this.createLocalEntityFromPersistence(local!);
+        return this.createLocalEntityFromPersistence(local);
     }
 
     private async ensureLocalNotExists(description: string, groupIdPk: number) {
@@ -78,7 +78,7 @@ export class LocalService {
     private async ensureLocalExists(description: string, groupIdPk: number) {
         const local = await this.localRepository.getLocalByDescriptionAndGroupId(description, groupIdPk);
 
-        if (!local || local == null) {
+        if (local == null) {
             this.logAndThrowError(new LocalNotFoundError(), `[LocalService] ensureLocalExists -> ${description}`);
         }
 
