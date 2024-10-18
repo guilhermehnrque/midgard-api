@@ -11,7 +11,7 @@ export class UpdateGroupUseCase {
         this.groupService = new GroupService();
     }
 
-    async execute(groupIdPk: number, description: string, status: boolean, visibility: string, sportType: string): Promise<void> {
+    async execute(groupIdPk: number, description: string, status: boolean, visibility: string, sportType: string, userIdPk: number): Promise<void> {
         const sportTypeEnum = SportTypeHelper.fromString(sportType);
         const visibilityEnum = GroupVisibilityHelper.fromString(visibility);
 
@@ -19,6 +19,7 @@ export class UpdateGroupUseCase {
             id: groupIdPk,
             description,
             is_active: status,
+            users_id: userIdPk,
             sport_type: sportTypeEnum,
             visibility: visibilityEnum,
         })

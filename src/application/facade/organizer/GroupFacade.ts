@@ -1,3 +1,5 @@
+import { UpdateGroupRequest } from "../../../infrastructure/controllers/organizer/UpdateGroupRequest";
+import { CreateGroupRequest } from "../../../infrastructure/requests/organizer/CreateGroupRequest";
 import { GroupOutputDTO } from "../../dto/organizer/group/GroupOutputDTO";
 import { OrganizerAccessService } from "../../services/validation/OrganizerAccessService";
 import { CreateGroupUseCase } from "../../usecases/organizer/group/CreateGroupUseCase";
@@ -21,30 +23,31 @@ export class GroupFacade {
         this.getGroupsUseCase = new GetGroupDetailsUseCase();
     }
 
-    async createGroup(request: any, userId: string): Promise<void> {
+    async createGroup(request: CreateGroupRequest, userId: string): Promise<void> {
         const userIdPk = await this.organizerAccessService.validateAccess({ userId });
 
         const { description, visibility, sportType } = request;
         await this.createGroupUseCase.execute(userIdPk, description, visibility, sportType);
     }
 
-    async updateGroup(request: any, userId: string, groupIdPk: number): Promise<void> {
-        await this.organizerAccessService.validateAccess({ userId, groupId: groupIdPk });
-
-        const { description, visibility, sportType, status } = request;
-        await this.updateGroupUseCase.execute(groupIdPk, description, status, visibility, sportType);
-    }
-
-    async getGroup(userId: string, groupIdPk: number): Promise<{ active: GroupOutputDTO[], inactive: GroupOutputDTO[] }> {
+    async updateGroup(request: UpdateGroupRequest, userId: string, groupIdPk: number): Promise<void> {
         const userIdPk = await this.organizerAccessService.validateAccess({ userId, groupId: groupIdPk });
 
-        return await this.getGroupUseCase.execute(userIdPk);
+        const { description, visibility, sportType, status } = request;
+        await this.updateGroupUseCase.execute(groupIdPk, description, status, visibility, sportType, userIdPk);
     }
 
-    async getGroups(userId: string, groupIdPk: number): Promise<GroupOutputDTO> {
+    async getGroup(userId: string, groupIdPk: number): Promise<GroupOutputDTO> {
         await this.organizerAccessService.validateAccess({ userId });
 
         return await this.getGroupsUseCase.execute(groupIdPk);
     }
+
+    async getGroups(userId: string): Promise<{ active: GroupOutputDTO[], inactive: GroupOutputDTO[] }> {
+        const userIdPk = await this.organizerAccessService.validateAccess({ userId });
+
+        return await this.getGroupUseCase.execute(userIdPk);
+    }
+
 
 }
