@@ -6,8 +6,8 @@ import { HashPassword } from '../../utils/HashPassword';
 
 export class ResetPasswordUseCase {
 
-    private userService: UserService;
-    private jwtService: JwtService;
+    private readonly userService: UserService;
+    private readonly jwtService: JwtService;
 
     constructor() {
         this.userService = new UserService();
