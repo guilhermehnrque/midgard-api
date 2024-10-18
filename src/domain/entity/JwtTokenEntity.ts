@@ -27,11 +27,12 @@ export class JwtTokenEntity implements JwtTokenAttributes {
 
     static async createFromPayload(payload: Partial<JwtTokenEntity>): Promise<JwtTokenEntity> {
         const jwtTokenEntityInstance = new JwtTokenEntity();
+        const expirationDate = await jwtTokenEntityInstance.createDayToExpire();
 
         return new JwtTokenEntity({
             users_id: payload.users_id!,
             token: payload.token!,
-            expires_at: await jwtTokenEntityInstance.createDayToExpire(),
+            expires_at: expirationDate,
             revoked: false,
             revoked_at: null,
             created_at: new Date(),

@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { AuthController } from '../../controllers/AuthController';
-import { schemas, handleValidationErrors } from '../../middlewares/auth/AuthValidator';
+import { AuthController } from '../../controllers/auth/AuthController';
+import { schemas, handleValidationErrors } from '../../middlewares/validators/auth/AuthValidator';
 
 const router = Router();
 

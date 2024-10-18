@@ -3,19 +3,15 @@ import { User } from "../../domain/models/UserModel";
 import { UserRepositoryImpl } from "../../infrastructure/repositories/UserRepositoryImpl";
 import { CustomError } from "../erros/CustomError";
 import { InternalError } from "../erros/InternalError";
-import { LoginError } from "../erros/LoginError";
 import { UserAlreadyExistsError } from "../erros/UserAlreadyExistsError";
 import { UserNotFoundError } from "../erros/UserNotFoundError";
-import { JwtService } from "./JwtService";
 
 export class UserService {
 
     private readonly userRepository: UserRepositoryImpl;
-    private readonly jwtService: JwtService;
 
     constructor() {
         this.userRepository = new UserRepositoryImpl();
-        this.jwtService = new JwtService();
     }
 
     async createUser(user: UserEntity): Promise<void> {
@@ -48,7 +44,7 @@ export class UserService {
             return null;
         }
 
-        return await this.createEntityFromPersistance(user!);
+        return await this.createEntityFromPersistance(user);
     }
 
     async getUserByUserId(userId: string): Promise<UserEntity> {
@@ -70,16 +66,6 @@ export class UserService {
         }
 
         return await this.createEntityFromPersistance(user!);
-    }
-
-    public async getUserByLogin(login: string): Promise<UserEntity | null> {
-        const user = await this.userRepository.getUserByLogin(login);
-
-        if (!user || user == null) {
-            return null;
-        }
-
-        return await this.createEntityFromPersistance(user);
     }
 
     public async getUserByResetToken(token: string): Promise<UserEntity | null> {
@@ -112,15 +98,6 @@ export class UserService {
         }
     }
 
-    public async validateUserPassword(password: string, hash: string, login: string): Promise<void> {
-        const isValid = await this.jwtService.checkPassword(password, hash);
-
-        if (!isValid) {
-            this.logAndThrowError(new LoginError(), `[UserService] validateUserPassword -> ${login}`);
-        }
-
-    }
-
     public async validateArrayOfUsers(users: Array<number>): Promise<void> {
         const usersPromises = users.map(async user => {
             const usr = await this.getUserByIdPk(user);
@@ -142,7 +119,6 @@ export class UserService {
             user_id: user.user_id,
             status: user.status,
             phone_number: user.phone_number,
-            login: user.login,
             password: user.password,
             created_at: user.created_at,
             updated_at: user?.updated_at,

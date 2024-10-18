@@ -5,25 +5,25 @@ import { UserService } from "../../services/UserService";
 
 export class LoginUserUseCase {
 
-    private jwtService: JwtService
-    private userService: UserService
+    private readonly jwtService: JwtService
+    private readonly userService: UserService
 
     constructor() {
         this.jwtService = new JwtService();
         this.userService = new UserService();
     }
 
-    async execute(login: string, password: string): Promise<string> {
-        const user = await this.validateUserLoginAndReturnUser(login);
-        await this.validateUserPassword(password, user.password!);
+    async execute(phoneNumber: string, password: string): Promise<string> {
+        const user = await this.validateUserLoginAndReturnUser(parseInt(phoneNumber));
+        await this.validateUserPassword(password, user.password);
 
         const latestToken = await this.retriveLatestToken(user);
 
         return latestToken?.toString() ?? await this.createTokenAndGetNewToken(user);
     }
 
-    private async validateUserLoginAndReturnUser(login: string): Promise<UserEntity> {
-        const user = await this.userService.getUserByLogin(login);
+    private async validateUserLoginAndReturnUser(login: number): Promise<UserEntity> {
+        const user = await this.userService.getUserByPhone(login);
 
         if (user == null) {
             console.error(`User not found: ${login}`);

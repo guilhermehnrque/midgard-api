@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { HashPassword } from '../../application/utils/HashPassword';
 import { UserAttributes } from '../interfaces/attributes/UserAttributes';
 
 export class UserEntity implements UserAttributes {
@@ -112,6 +111,8 @@ export class UserEntity implements UserAttributes {
             phone_number: this.phone_number,
             login: this.login,
             password: this.password,
+            reset_password_token: this.reset_password_token,
+            reset_password_expires: this.reset_password_expires,
             updated_at: new Date()
         }
     }

@@ -5,7 +5,7 @@ import { LoginError } from '../../erros/LoginError';
 
 export class ForgotPasswordUseCase {
 
-    private userService: UserService;
+    private readonly userService: UserService;
 
     constructor() {
         this.userService = new UserService();
