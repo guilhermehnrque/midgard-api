@@ -11,7 +11,7 @@ export class UpdateScheduleUseCase {
 
     public async execute(scheduleId: number, startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number): Promise<void> {
 
-        this.scheduleValidation(scheduleId, groupIdPk);
+        await this.scheduleValidation(scheduleId, groupIdPk);
 
         const schedule = await ScheduleEntity.fromUpdateUseCase({
             id: scheduleId,
