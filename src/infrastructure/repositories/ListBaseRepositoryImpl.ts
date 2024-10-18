@@ -4,7 +4,7 @@ import { ListBaseEntity } from "../../domain/entity/ListBaseEntity";
 import { CustomError } from "../../application/erros/CustomError";
 import { DatabaseError } from "../../application/erros/DatabaseError";
 
-export class ListBaseRepositoryImpl implements ListBaseRepositoryInterface{
+export class ListBaseRepositoryImpl implements ListBaseRepositoryInterface {
 
     async createList(listEntity: ListBaseEntity): Promise<List> {
         try {
@@ -77,6 +77,22 @@ export class ListBaseRepositoryImpl implements ListBaseRepositoryInterface{
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[GroupRepositoryImpl] getListsByGroupsIds -> error getting lists -> ${customError.message}`);
+        }
+    }
+
+    public async getListByGroupIdAndTimes(groupId: number, startTime: string, endTime: string, dayOfWeek: string): Promise<List | null> {
+        try {
+            return await List.findOne({
+                where: {
+                    groups_id: groupId,
+                    starting_time: startTime,
+                    ending_time: endTime,
+                    day_of_week: dayOfWeek
+                }
+            })
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] getListByGroupIdAndTimes -> ${customError.message}`);
         }
     }
 

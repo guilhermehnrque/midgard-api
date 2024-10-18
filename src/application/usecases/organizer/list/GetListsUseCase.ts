@@ -15,5 +15,4 @@ export class GetListsUseCase {
         return ListOutputDTO.fromEntities(lists);
     }
 
-
 }

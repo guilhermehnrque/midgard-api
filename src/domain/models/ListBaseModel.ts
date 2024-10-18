@@ -86,7 +86,6 @@ List.init({
     updatedAt: 'updated_at',
 });
 
-List.belongsTo(Schedule, { foreignKey: 'schedules_id', as: 'schedule' });
 List.belongsTo(Group, { foreignKey: 'groups_id', as: 'group' });
 
 export { List };

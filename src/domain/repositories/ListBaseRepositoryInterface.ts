@@ -7,5 +7,6 @@ export interface ListBaseRepositoryInterface {
     updateListStatus(idPk: number, status: boolean): Promise<number>;
     getList(idPk: number): Promise<List | null>;
     getListByGroupId(groupId: number): Promise<List[] | null> 
-    getListsByGroupsIds(groupsIds: number[]): Promise<List[]>
+    getListsByGroupsIds(groupsIds: number[]): Promise<List[]>;
+    getListByGroupIdAndTimes(groupId: number, startTime: string, endTime: string, dayOfWeek: string): Promise<List | null>
 }

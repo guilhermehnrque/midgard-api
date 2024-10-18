@@ -1,3 +1,5 @@
+import { CreateListRequest } from "../../../infrastructure/requests/organizer/list/CreateListRequest";
+import { UpdateListRequest } from "../../../infrastructure/requests/organizer/list/UpdateListRequest";
 import { ListDTO } from "../../dto/organizer/list/ListDTO";
 import { ListOutputDTO } from "../../dto/organizer/list/ListOutputDTO";
 import { OrganizerAccessService } from "../../services/validation/OrganizerAccessService";
@@ -22,38 +24,36 @@ export class ListBaseFacade {
         this.organizerAccessService = new OrganizerAccessService();
     }
 
-    public async createList(request: any, userId: string): Promise<void> {
-        const { groupId, status, playerLimit, startingTime, endingTime, dayOfWeek, localId } = request;
+    public async createList(request: CreateListRequest, userId: string): Promise<void> {
+        const { groupId, status, limitOfPlayers, startingTime, endingTime, dayOfWeek, localId } = request;
 
         await this.organizerAccessService.validateAccess({ groupId, userId });
 
-        const listDTO = new ListDTO(status, playerLimit, startingTime, endingTime, dayOfWeek, groupId, localId);
+        const listDTO = new ListDTO(status, limitOfPlayers, startingTime, endingTime, dayOfWeek, groupId, localId);
 
         await this.createListUseCase.execute(listDTO);
     }
 
-    public async updateList(request: any, userId: string): Promise<void> {
-        const { listIdPk, groupId, status, playerLimit, startingTime, endingTime, dayOfWeek, localId } = request;
+    public async updateList(request: UpdateListRequest, listIdPk: number, userId: string): Promise<void> {
+        const { groupId, status, limitOfPlayers, startingTime, endingTime, dayOfWeek, localId } = request;
 
         await this.organizerAccessService.validateAccess({ userId, groupId });
 
-        const listDTO = new ListDTO(status, playerLimit, startingTime, endingTime, dayOfWeek, groupId, localId);
+        const listDTO = new ListDTO(status, limitOfPlayers, startingTime, endingTime, dayOfWeek, groupId, localId);
 
         await this.updateListUseCase.execute(listIdPk, listDTO);
     }
 
-    public async getLists(request: any, userId: string): Promise<ListOutputDTO[]> {
-        const { groupId } = request;
+    public async getLists(groupId: number, userId: string): Promise<ListOutputDTO[]> {
         await this.organizerAccessService.validateAccess({ userId, groupId });
 
         return await this.getListsUseCase.execute(groupId);
     }
 
-    public async getList(request: any, userId: string): Promise<ListOutputDTO> {
-        const { listIdPk, groupId } = request;
+    public async getList(listId: number, groupId: number, userId: string): Promise<ListOutputDTO> {
         await this.organizerAccessService.validateAccess({ userId, groupId });
 
-        return await this.getListUseCase.execute(listIdPk);
+        return await this.getListUseCase.execute(listId);
     }
 
 }

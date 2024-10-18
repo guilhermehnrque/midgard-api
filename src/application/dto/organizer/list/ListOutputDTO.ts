@@ -1,15 +1,14 @@
 import { ListBaseEntity } from "../../../../domain/entity/ListBaseEntity";
-
 export class ListOutputDTO {
-    private readonly _id: number;
-    private readonly _status: boolean;
-    private readonly _playerLimit: number;
-    private readonly _startingTime: string;
-    private readonly _endingTime: string;
-    private readonly _dayOfWeek: string;
-    private readonly _groupId: number;
-    private readonly _localId: number;
-    private readonly _createdAt: Date;
+    private readonly id: number;
+    private readonly status: boolean;
+    private readonly playerLimit: number;
+    private readonly startingTime: string;
+    private readonly endingTime: string;
+    private readonly dayOfWeek: string;
+    private readonly groupId: number;
+    private readonly localId: number;
+    private readonly createdAt: Date;
 
     constructor(
         id: number,
@@ -22,57 +21,57 @@ export class ListOutputDTO {
         localId: number,
         createdAt: Date
     ) {
-        this._id = id;
-        this._status = status;
-        this._playerLimit = playerLimit;
-        this._startingTime = startingTime;
-        this._endingTime = endingTime;
-        this._dayOfWeek = dayOfWeek;
-        this._groupId = groupId;
-        this._localId = localId;
-        this._createdAt = createdAt;
+        this.id = id;
+        this.status = status;
+        this.playerLimit = playerLimit;
+        this.startingTime = startingTime;
+        this.endingTime = endingTime;
+        this.dayOfWeek = dayOfWeek;
+        this.groupId = groupId;
+        this.localId = localId;
+        this.createdAt = createdAt;
     }
 
     // Getters
-    public get id(): number {
-        return this._id;
+    public getId(): number {
+        return this.id;
     }
 
-    public get status(): boolean {
-        return this._status;
+    public getStatus(): boolean {
+        return this.status;
     }
 
-    public get playerLimit(): number {
-        return this._playerLimit;
+    public getPlayerLimit(): number {
+        return this.playerLimit;
     }
 
-    public get startingTime(): string {
-        return this._startingTime;
+    public getStartingTime(): string {
+        return this.startingTime;
     }
 
-    public get endingTime(): string {
-        return this._endingTime;
+    public getEndingTime(): string {
+        return this.endingTime;
     }
 
-    public get dayOfWeek(): string {
-        return this._dayOfWeek;
+    public getDayOfWeek(): string {
+        return this.dayOfWeek;
     }
 
-    public get groupId(): number {
-        return this._groupId;
+    public getGroupId(): number {
+        return this.groupId;
     }
 
-    public get localId(): number {
-        return this._localId;
+    public getLocalId(): number {
+        return this.localId;
     }
 
-    public get createdAt(): Date {
-        return this._createdAt;
+    public getCreatedAt(): Date {
+        return this.createdAt;
     }
 
     public static fromEntity(entity: ListBaseEntity): ListOutputDTO {
         return new ListOutputDTO(
-             entity.id!,
+            entity.id!,
             entity.status,
             entity.player_limit,
             entity.starting_time,

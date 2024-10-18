@@ -15,7 +15,7 @@ export class ListDTO {
         endingTime: string,
         dayOfWeek: string,
         groupId: number,
-        localId: number
+        localId: number,
     ) {
         this._status = status;
         this._playerLimit = playerLimit;

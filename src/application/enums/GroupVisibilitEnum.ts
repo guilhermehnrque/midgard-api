@@ -1,4 +1,4 @@
-import { InternalError } from "../erros/InternalError";
+import { EnumValidatorError } from "../erros/ValidatorError";
 
 export enum GroupVisibilityEnum {
     PUBLIC = 'PUBLIC',
@@ -21,6 +21,6 @@ export class GroupVisibilityHelper {
             return visibility as GroupVisibilityEnum;
         }
 
-        throw new InternalError(`Invalid Group Visibilit "${visibility}"`);
+        throw new EnumValidatorError(`Invalid Group Visibilit "${visibility}"`);
     }
 }

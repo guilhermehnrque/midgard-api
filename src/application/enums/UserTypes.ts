@@ -1,4 +1,4 @@
-import { InternalError } from "../erros/InternalError";
+import { EnumValidatorError } from "../erros/ValidatorError";
 
 export enum UserTypes {
     ADMIN = 'ADMIN',
@@ -22,7 +22,7 @@ export class UserTypesHelper {
             return userType as UserTypes;
         }
 
-        throw new InternalError(`InvalidUserType "${userType}"`);
+        throw new EnumValidatorError(`InvalidUserType "${userType}"`);
     }
 
 }

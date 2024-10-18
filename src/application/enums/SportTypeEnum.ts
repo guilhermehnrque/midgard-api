@@ -1,4 +1,4 @@
-import { InternalError } from "../erros/InternalError";
+import { EnumValidatorError } from "../erros/ValidatorError";
 
 export enum SportTypesEnum {
     SOCCER = 'SOCCER',
@@ -21,6 +21,6 @@ export class SportTypeHelper {
             return sport as SportTypesEnum;
         }
 
-        throw new InternalError(`InvalidSportType "${sport}"`);
+        throw new EnumValidatorError(`InvalidSportType "${sport}"`);
     }
 }

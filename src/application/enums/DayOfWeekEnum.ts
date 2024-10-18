@@ -1,4 +1,4 @@
-import { InternalError } from "../erros/InternalError";
+import { EnumValidatorError } from "../erros/ValidatorError";
 
 export enum DayOfWeekEnum {
     SUNDAY = "SUNDAY",
@@ -28,10 +28,10 @@ export class DayOfWeekHelper {
 
     public static fromString(dayOfWeek: string): DayOfWeekEnum {
 
-        if (Object.values(dayOfWeek).includes(dayOfWeek as DayOfWeekEnum)) {
+        if (Object.values(DayOfWeekEnum).includes(dayOfWeek as DayOfWeekEnum)) {
             return dayOfWeek as DayOfWeekEnum;
         }
 
-        throw new InternalError(`InvalidDayOfWeek "${dayOfWeek}"`);
+        throw new EnumValidatorError(`InvalidDayOfWeek "${dayOfWeek}"`);
     }
 }

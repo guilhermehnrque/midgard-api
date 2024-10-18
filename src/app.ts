@@ -9,6 +9,7 @@ import AuthRoute from './infrastructure/routes/common/AuthRoute'
 import GroupRouter from './infrastructure/routes/organizer/GroupRouter'
 import ScheduleRouter from './infrastructure/routes/organizer/ScheduleRouter'
 import LocalRouter from './infrastructure/routes/organizer/LocalRouter'
+import ListRouter from './infrastructure/routes/organizer/ListRouter'
 
 import jwt from 'jsonwebtoken';
 
@@ -21,6 +22,7 @@ app.use('/api/v1/auth', AuthRoute)
 app.use('/api/v1/organizer/groups', bearerToken.validate, GroupRouter)
 app.use('/api/v1/organizer/schedules', bearerToken.validate, ScheduleRouter)
 app.use('/api/v1/organizer/locals', bearerToken.validate, LocalRouter)
+app.use('/api/v1/organizer/lists', bearerToken.validate, ListRouter)
 
 app.get('/api/v1/protected', bearerToken.validate, (request: Request, response: Response) => {
     response.json({ message: 'You have access to this protected route!', userId: request.userId, userType: request.userType });

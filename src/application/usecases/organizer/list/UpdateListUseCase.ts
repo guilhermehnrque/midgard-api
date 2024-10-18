@@ -12,17 +12,8 @@ export class UpdateListUseCae {
 
     public async execute(listIdPk: number, listDTO: ListDTO): Promise<number> {
         await this.validateListExists(listIdPk);
-
-        const listEntity = await ListBaseEntity.fromUpdateUseCase({
-            id: listIdPk,
-            status: listDTO.status,
-            player_limit: listDTO.playerLimit,
-            starting_time: listDTO.startingTime,
-            ending_time: listDTO.endingTime,
-            day_of_week: listDTO.dayOfWeek,
-            groups_id: listDTO.groupId,
-            locals_id: listDTO.localId
-        });
+ 
+        const listEntity = ListBaseEntity.fromUpdateUseCase(listDTO, listIdPk);
 
         return await this.listBaseService.updateList(listEntity);
     }
