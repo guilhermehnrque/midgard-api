@@ -46,7 +46,7 @@ export class AuthController {
             const forgotPasswordRequest = request.body as ForgotPasswordRequest
             await this.authFacade.forgotPassword(forgotPasswordRequest);
 
-            return response.status(200).json({ message: "A solitição de reset de senha foi enviado para o seu email" });
+            return response.status(200).json({ message: "Solicitação de reset foi efetuada" });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
@@ -59,7 +59,7 @@ export class AuthController {
             const { token } = request.params;
 
             await this.authFacade.resetPassword(resetPasswordRequest, token);
-            return response.status(200).json({ message: "A sua senha foi resetada :3" });
+            return response.status(200).json({ message: "Senha resetada" });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
