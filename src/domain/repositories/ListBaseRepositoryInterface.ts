@@ -5,6 +5,7 @@ export interface ListBaseRepositoryInterface {
     createList(listEntity: ListBaseEntity): Promise<List>;
     updateList(listEntity: ListBaseEntity): Promise<number>;
     updateListStatus(idPk: number, status: boolean): Promise<number>;
+    updateConfirmedPlayers(listIdPk: number, confirmedQuantity: number): Promise<number>
     getList(idPk: number): Promise<List | null>;
     getListByGroupId(groupId: number): Promise<List[] | null> 
     getListsByGroupsIds(groupsIds: number[]): Promise<List[]>;

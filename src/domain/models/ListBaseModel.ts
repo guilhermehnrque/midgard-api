@@ -17,6 +17,7 @@ class List extends Model<ListBaseAttributes, ListCreationAttributes> implements 
     public locals_id!: number;
     public created_at!: Date;
     public updated_at!: Date;
+    public players_confirmed?: number;
 
     public readonly createdAd!: Date;
     public readonly updatedAt!: Date;
@@ -49,6 +50,10 @@ List.init({
     day_of_week: {
         type: DataTypes.TEXT,
         allowNull: false,
+    },
+    players_confirmed: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     groups_id: {
         type: DataTypes.INTEGER,

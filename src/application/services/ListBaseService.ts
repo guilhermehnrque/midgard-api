@@ -4,6 +4,7 @@ import { ListBaseRepositoryImpl } from "../../infrastructure/repositories/ListBa
 import { CustomError } from "../erros/CustomError";
 import { InternalError } from "../erros/InternalError";
 import { ListNotFoundError } from "../erros/list/ListBaseErrors";
+import { ListNotActiveError } from "../erros/list/ListNotActiveError";
 
 export class ListBaseService {
 
@@ -28,6 +29,16 @@ export class ListBaseService {
         } catch (error) {
             const customError = error as CustomError;
             this.logAndThrowError(new InternalError(), `[ListBaseService] updateList -> ${customError.message}`);
+            return 0;
+        }
+    }
+
+    public async updateConfirmedPlayers(listIdPk: number, confirmedQuantity: number): Promise<number> {
+        try {
+            return await this.listBaseRepository.updateConfirmedPlayers(listIdPk, confirmedQuantity);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[ListBaseService] updateConfirmedPlayers -> ${customError.message}`);
             return 0;
         }
     }
@@ -62,6 +73,13 @@ export class ListBaseService {
         return this.createEntityFromPersistence(list);
     }
 
+    public validateEnrollmentAvailability(list: ListBaseEntity): void {
+        if (!list.getStatus()) {
+            console.error(`[ListBaseService] -> List is not active for enrollment`);
+            throw new ListNotActiveError();
+        }
+    }
+
     private async createEntityFromPersistence(listBase: List): Promise<ListBaseEntity> {
         return await ListBaseEntity.fromPersistence({
             id: listBase.id,
@@ -73,6 +91,7 @@ export class ListBaseService {
             groups_id: listBase.groups_id,
             created_at: listBase.created_at,
             updated_at: listBase.updated_at,
+            players_confirmed: listBase.players_confirmed
         })
     }
 

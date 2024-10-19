@@ -26,13 +26,7 @@ export class FetchListsUseCase {
 
         const lists = await this.listBaseService.getListsByGroupId(groupIdPk);
 
-        const mapped = await Promise.all(lists.map(async (list) => {
-            const confirmedPlayers = await this.countConfirmedPlayers(list.id!);
-            list.setConfirmedPlayers(confirmedPlayers)
-            return list
-        }));
-
-        return this.prepareOutput(mapped);
+        return this.prepareOutput(lists);
     }
 
     private prepareOutput(lists: ListBaseEntity[]) {

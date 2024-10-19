@@ -95,6 +95,13 @@ export class ListBaseEntity implements ListBaseAttributes {
     private dayOfWeekByString(dayOfWeek: string): string {
         return DayOfWeekHelper.fromString(dayOfWeek.toUpperCase()).toString().toUpperCase();
     }
+    public getListIdPk(): number {
+        return this.id!;
+    }
+
+    public getStatus(): boolean {
+        return this.status;    
+    }
 
     public getGroupIdPk(): number {
         return this.groups_id;

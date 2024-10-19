@@ -1,6 +1,5 @@
 import { ListPlayerEntity } from "../../../../domain/entity/ListPlayerEntity";
 import { PlayerNotFoundInListError } from "../../../erros/list/ListBaseErrors";
-import { ListNotActiveError } from "../../../erros/list/ListNotActiveError";
 import { ListBaseService } from "../../../services/ListBaseService";
 import { ListPlayerService } from "../../../services/ListPlayerService";
 
@@ -15,7 +14,9 @@ export class LeaveListUseCase {
     }
 
     public async execute(userIdPk: number, listIdPk: number): Promise<void> {
-        await this.isListEnrollmentAvailable(userIdPk, listIdPk);
+        const list = await this.listBaseService.getList(listIdPk);
+        this.listBaseService.validateEnrollmentAvailability(list);
+
         await this.isPlayerOnList(userIdPk, listIdPk);
 
         const listPlayer = await ListPlayerEntity.fromUpdateUseCase({
@@ -25,15 +26,7 @@ export class LeaveListUseCase {
         });
 
         await this.listPlayerService.removePlayerFromList(listPlayer);
-    }
-
-    private async isListEnrollmentAvailable(userIdPk: number, listIdPk: number): Promise<void> {
-        const list = await this.listBaseService.getList(listIdPk);
-
-        if (!list.status) {
-            console.error(`[JoinListUseCase] -> List is not active for enrollment`);
-            throw new ListNotActiveError();
-        }
+        await this.listBaseService.updateConfirmedPlayers(listIdPk, list.getConfirmedPlayers() - 1);
 
     }
 
