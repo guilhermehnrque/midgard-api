@@ -41,13 +41,15 @@ export class GroupDetailOutputDTO {
                 locals: this.locals.map(local => ({
                     id: local.id,
                     name: local.description,
-                    address: local.getFullAddress()
-                })),
-                schedules: this.schedules.map(schedule => ({
-                    id: schedule.id,
-                    startTime: schedule.starting_time,
-                    endTime: schedule.ending_time,
-                    day: schedule.day_of_week
+                    address: local.getFullAddress(),
+                    schedules: this.schedules
+                        .filter(schedule => schedule.locals_id === local.id) 
+                        .map(schedule => ({
+                            id: schedule.id,
+                            startTime: schedule.starting_time,
+                            endTime: schedule.ending_time,
+                            day: schedule.day_of_week
+                        }))
                 }))
             }
         };
