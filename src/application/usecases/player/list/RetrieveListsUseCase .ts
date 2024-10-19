@@ -59,7 +59,4 @@ export class FetchListsUseCase {
         }
     }
 
-    private async countConfirmedPlayers(groupIdPk: number): Promise<number> {
-        return await this.listPlayersService.countPlayersByStatus(groupIdPk, 'confirmed');
-    }
 }
