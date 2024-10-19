@@ -62,11 +62,10 @@ export class SchedulesService {
         return await Promise.all(schedule.map(this.createEntityFromPersistence));
     }
 
-    public async getScheduleByTimesAndGroupId(startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number): Promise<boolean> {
-        const schedule = await this.scheduleRepository.getScheduleByTimesAndGroupId(startingTime, endingTime, dayOfWeek, groupIdPk);
-        return schedule !== null;
+    public async checkScheduleConflictOnDay(dayOfWeek: string, startingTime: string, endingTime: string): Promise<boolean> {
+        return await this.scheduleRepository.checkScheduleConflictOnDay(dayOfWeek, startingTime, endingTime);
     }
-
+    
     private async createEntityFromPersistence(schedule: Schedule): Promise<ScheduleEntity> {
         return await ScheduleEntity.fromPersistence({
             day_of_week: schedule.day_of_week,

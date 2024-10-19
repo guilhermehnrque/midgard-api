@@ -9,7 +9,7 @@ export class UpdateScheduleUseCase {
         this.scheduleService = new SchedulesService();
     }
 
-    public async execute(scheduleId: number, startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number): Promise<void> {
+    public async execute(scheduleId: number, startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number, localId: number): Promise<void> {
 
         await this.scheduleValidation(scheduleId, groupIdPk);
 
@@ -18,7 +18,8 @@ export class UpdateScheduleUseCase {
             starting_time: startingTime,
             ending_time: endingTime,
             day_of_week: dayOfWeek,
-            groups_id: groupIdPk
+            groups_id: groupIdPk,
+            locals_id: localId
         });
 
         await this.scheduleService.updateSchedule(schedule);

@@ -3,4 +3,5 @@ export interface UpdateScheduleRequest {
     endTime: string
     dayOfWeek: string
     groupId: number
+    localId: number
 }

@@ -8,6 +8,7 @@ export class ScheduleEntity implements ScheduleAttributes {
     public ending_time!: string;
     public day_of_week!: string;
     public groups_id!: number;
+    public locals_id!: number;
     public created_at!: Date;
     public updated_at!: Date;
 
@@ -16,6 +17,7 @@ export class ScheduleEntity implements ScheduleAttributes {
         this.ending_time = this.addSecondsToHour(payload.ending_time!);
         this.day_of_week = this.dayOfWeekByString(payload.day_of_week!);
         this.groups_id = payload.groups_id!;
+        this.locals_id = payload.locals_id!;
         this.created_at = payload.created_at!;
         this.updated_at = payload.updated_at!;
         this.id = payload.id;

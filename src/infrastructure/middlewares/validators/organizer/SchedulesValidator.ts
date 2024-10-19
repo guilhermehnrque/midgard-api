@@ -19,6 +19,11 @@ const schemas = {
             .isNumeric().withMessage('GroupId deve ser tdo tipo Inteiro')
             .notEmpty().withMessage('GroupId deve ser declarado no body'),
 
+
+        body('localId')
+            .isNumeric().withMessage('LocalId deve ser tdo tipo Inteiro')
+            .notEmpty().withMessage('LocalId deve ser declarado no body'),
+
     ],
 
     update: [
@@ -37,6 +42,10 @@ const schemas = {
         body('endTime')
             .notEmpty().withMessage('Hora de fim é obrigatório')
             .isString().withMessage('Hora de término deve ser uma string'),
+
+        body('localId')
+            .isNumeric().withMessage('LocalId deve ser tdo tipo Inteiro')
+            .notEmpty().withMessage('LocalId deve ser declarado no body'),
     ],
 
     detail: [
