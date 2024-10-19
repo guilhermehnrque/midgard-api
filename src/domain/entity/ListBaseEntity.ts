@@ -14,6 +14,7 @@ export class ListBaseEntity implements ListBaseAttributes {
     public locals_id: number;
     public created_at: Date;
     public updated_at: Date;
+    public players_confirmed?: number;
 
     constructor(payload: Partial<ListBaseEntity> = {}) {
         this.status = payload.status!;
@@ -26,6 +27,7 @@ export class ListBaseEntity implements ListBaseAttributes {
         this.updated_at = payload.updated_at!;
         this.groups_id = payload.groups_id!;
         this.id = payload.id;
+        this.players_confirmed = payload.players_confirmed;
     }
 
     static fromCreateUseCase(payload: ListDTO): ListBaseEntity {
@@ -100,6 +102,18 @@ export class ListBaseEntity implements ListBaseAttributes {
 
     public getPlayerLimit(): number {
         return this.player_limit;
+    }
+
+    public setConfirmedPlayers(value: number) {
+        this.players_confirmed = value;
+    }
+
+    public getConfirmedPlayers(): number {
+        return this.players_confirmed!;
+    }
+
+    public isListActive(): boolean {
+        return this.status;
     }
 
     public createPayload() {

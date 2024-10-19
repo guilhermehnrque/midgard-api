@@ -6,16 +6,16 @@ import { CustomError } from "../../application/erros/CustomError";
 
 export class GroupRepositoryImpl implements GroupRepositoryInterface {
 
-    async createGroup(groupEntity: GroupEntity): Promise<Group> {
+    public async createGroup(groupEntity: GroupEntity): Promise<Group> {
         try {
             return await Group.create(groupEntity.toCreatePayload());
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] createGroup -> Error creating group: ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] createGroup -> ${customError.message}`);
         }
     }
 
-    async updateGroup(groupEntity: GroupEntity): Promise<number> {
+    public async updateGroup(groupEntity: GroupEntity): Promise<number> {
         try {
             const [affectedCount] = await Group.update(groupEntity.toUpdatePayload(), {
                 where: {
@@ -25,11 +25,11 @@ export class GroupRepositoryImpl implements GroupRepositoryInterface {
             return affectedCount;
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] updateGroup -> Error updating group by id: ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] updateGroup -> ${customError.message}`);
         }
     }
 
-    async getOrganizerGroups(userIdPk: number): Promise<Group[]> {
+    public async getOrganizerGroups(userIdPk: number): Promise<Group[]> {
         try {
             return await Group.findAll({
                 where: { users_id: userIdPk },
@@ -37,25 +37,34 @@ export class GroupRepositoryImpl implements GroupRepositoryInterface {
         }
         catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] getOrganizerGroups -> Error getting organizer groups: ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] getOrganizerGroups -> ${customError.message}`);
         }
     }
 
-    async getGroupByDescription(groupDescription: string): Promise<Group | null> {
+    public async getGroupByDescription(groupDescription: string): Promise<Group | null> {
         try {
             return await Group.findOne({ where: { description: groupDescription } });
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] getGroupByDescription -> Error getting group by description: ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] getGroupByDescription -> ${customError.message}`);
         }
     }
 
-    async getGroupById(groupId: number): Promise<Group | null> {
+    public async getGroupById(groupId: number): Promise<Group | null> {
         try {
             return await Group.findByPk(groupId);
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] getGroupById -> Error getting group by id: ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] getGroupById -> ${customError.message}`);
+        }
+    }
+
+    public async getGroupsByStatus(status: boolean): Promise<Group[]> {
+        try {
+            return await Group.findAll({ where: { is_active: status } });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] getGroupsByStatus -> ${customError.message}`);
         }
     }
 

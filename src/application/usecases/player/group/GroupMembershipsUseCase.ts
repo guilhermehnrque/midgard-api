@@ -1,6 +1,6 @@
 import { GroupEntity } from "../../../../domain/entity/GroupEntity";
 import { GroupUserEntity } from "../../../../domain/entity/GroupUserEntity";
-import { GroupsMembershipOutputDTO } from "../../../dto/player/group/GroupsMembershipOutputDTO";
+import { GroupsOutputDTO } from "../../../dto/player/group/GroupsOutputDTO";
 import { GroupService } from "../../../services/GroupService";
 import { GroupUserService } from "../../../services/GroupUserService";
 
@@ -14,13 +14,13 @@ export class GroupMembershipsUseCase {
         this.groupUserService = new GroupUserService();
     }
 
-    public async execute(userIdPk: number): Promise<GroupsMembershipOutputDTO[]> {
+    public async execute(userIdPk: number): Promise<GroupsOutputDTO[]> {
         const groupMemberships = await this.getGroupMembershipsByUserId(userIdPk)
 
         const groups = await this.getGroupDetails(groupMemberships)
 
         return groups.map(group => {
-            return new GroupsMembershipOutputDTO(
+            return new GroupsOutputDTO(
                 group.description,
                 group.is_active,
                 group.sport_type,

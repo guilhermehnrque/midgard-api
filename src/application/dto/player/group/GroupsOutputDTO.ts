@@ -1,5 +1,5 @@
 
-export class GroupsMembershipOutputDTO {
+export class GroupsOutputDTO {
 
     private readonly description: string;
     private readonly status: boolean;

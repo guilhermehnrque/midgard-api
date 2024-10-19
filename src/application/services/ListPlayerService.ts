@@ -3,6 +3,7 @@ import { ListPlayer } from "../../domain/models/ListPlayerModel";
 import { ListPlayerRepositoryImpl } from "../../infrastructure/repositories/ListPlayerRepositoryImpl";
 import { CustomError } from "../erros/CustomError";
 import { InternalError } from "../erros/InternalError";
+import { ListOverCapacityError } from "../erros/list/ListOverCapacityError";
 
 export class ListPlayerService {
 
@@ -78,6 +79,23 @@ export class ListPlayerService {
     public async validateGuestIsOnList(playerId: number, listIdPk: number): Promise<boolean> {
         const response = await this.listPlayerRepository.getGuestInListByGuestIdAndListId(playerId, listIdPk);
         return response !== null;
+    }
+
+    public async validateListCapacity(listIdPk: number, capacity: number): Promise<void> {
+        const response = await this.countPlayersByStatus(listIdPk, 'confirmed');
+
+        if (response >= capacity) {
+            console.error(`[validateListCapacity] -> List is over capacity (${response}/${capacity}) listId: ${listIdPk}`);
+            throw new ListOverCapacityError();
+        }
+
+    }
+
+    public async countPlayersByStatus(listIdPk: number, status: string): Promise<number> {
+        const response = await this.listPlayerRepository.getListPlayersByListId(listIdPk);
+        const confirmedPlayers = response.filter(player => player.player_status == status);
+
+        return confirmedPlayers.length
     }
 
     private async createListPlayerEntityFromPersistence(listPlayer: ListPlayer): Promise<ListPlayerEntity> {
