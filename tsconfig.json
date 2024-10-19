@@ -11,6 +11,8 @@
     "resolveJsonModule": true,                // Permite a importação de arquivos JSON
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "types": ["node", "express"]
   },
   "include": ["src/**/*", "src/infrastructure/routes/v1/players/PlayersGroupRoute.ts", "src/application/usecases/player/list/GetListsUseCase.ts"],                   // Inclui todos os arquivos TypeScript dentro do diretório src
   "exclude": ["node_modules", "stack-utils"] // Exclui diretórios que não devem ser compilados

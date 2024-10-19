@@ -23,7 +23,7 @@ export class GroupFacade {
         this.getGroupsUseCase = new GetGroupDetailsUseCase();
     }
 
-    async createGroup(request: CreateGroupRequest, userId: string): Promise<void> {
+    async createGroup(request: CreateGroupRequest, userId: number): Promise<void> {
         const userIdPk = await this.organizerAccessService.validateAccess({ userId });
 
         const { description, visibility, sportType } = request;

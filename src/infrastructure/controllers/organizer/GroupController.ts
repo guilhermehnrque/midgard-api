@@ -14,10 +14,10 @@ export class GroupController {
 
     public async createGroup(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const CreateGroupRequest = request.body as CreateGroupRequest;
 
-            await this.groupFacade.createGroup(CreateGroupRequest, userId!);
+            await this.groupFacade.createGroup(CreateGroupRequest, userIdPk!);
             return response.status(201).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
