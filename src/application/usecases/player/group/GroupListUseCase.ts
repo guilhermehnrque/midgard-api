@@ -2,7 +2,7 @@ import { GroupEntity } from "../../../../domain/entity/GroupEntity";
 import { GroupsOutputDTO } from "../../../dto/player/group/GroupsOutputDTO";
 import { GroupService } from "../../../services/GroupService";
 
-export class GroupMembershipsUseCase {
+export class GroupListUseCase {
 
     private readonly groupService: GroupService;
 

@@ -60,6 +60,10 @@ export class UserEntity implements UserAttributes {
         return `${this.name} ${this.surname}`;
     }
 
+    public getUserType() {
+        return this.type;
+    }
+
     public setPassword(password: string) {
         this.password = password;
     }

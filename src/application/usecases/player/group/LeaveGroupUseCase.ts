@@ -4,7 +4,7 @@ import { GroupService } from "../../../services/GroupService";
 import { GroupUserService } from "../../../services/GroupUserService";
 
 
-export class LeaveGroupUSeCase {
+export class LeaveGroupUseCase {
 
     private readonly groupService: GroupService;
     private readonly groupUserService: GroupUserService;

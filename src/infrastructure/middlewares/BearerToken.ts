@@ -1,20 +1,16 @@
 import { JwtUtils } from '../../application/utils/JwtUtils';
 import { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
+import { DecodedTokenInterface } from './interfaces/DecodedTokenInterface';
 
 declare module 'express-serve-static-core' {
     interface Request {
-        userType?: string;
         userId?: string;
+        userIdPk?: number;
     }
 }
 
-interface DecodedToken {
-    type: string;
-    userId: string;
-}
-
-class BearerToken {
+export default class BearerToken {
     static async validate(request: Request, response: Response, next: NextFunction) {
         const token = BearerToken.getTokenFromHeader(request);
 
@@ -22,13 +18,12 @@ class BearerToken {
             return BearerToken.handleUnauthorized(response, 'Token not provided');
         }
 
-        const decoded = await JwtUtils.verifyToken(token) as DecodedToken;
+        const decoded = await JwtUtils.verifyToken(token) as DecodedTokenInterface;
 
         if (!decoded) {
             return BearerToken.handleUnauthorized(response, 'Invalid token');
         }
 
-        request.userType = decoded.type;
         request.userId = decoded.userId;
 
         next();
@@ -46,5 +41,3 @@ class BearerToken {
         return await JwtUtils.verifyToken(token);
     }
 }
-
-export default BearerToken;
