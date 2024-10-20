@@ -4,8 +4,6 @@ import BearerToken from "./infrastructure/middlewares/BearerToken";
 import OrganizerMiddleware from './infrastructure/middlewares/OrganizerMiddleware';
 import PlayerMiddleware from './infrastructure/middlewares/PlayerMiddleware';
 
-// adicionar importação do express-serve-static-core
-
 import authRoutes from "./infrastructure/routes/AuthRoutes";
 import OrganizerRoutes from './infrastructure/routes/OrganizerRoutes';
 import PlayerRouter from "./infrastructure/routes/PlayerRoutes";

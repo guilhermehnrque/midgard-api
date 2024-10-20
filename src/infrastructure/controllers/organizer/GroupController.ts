@@ -17,7 +17,7 @@ export class GroupController {
             const { userIdPk } = request;
             const CreateGroupRequest = request.body as CreateGroupRequest;
 
-            await this.groupFacade.createGroup(CreateGroupRequest, userIdPk!);
+            await this.groupFacade.createGroup(CreateGroupRequest, Number(userIdPk));
             return response.status(201).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -27,11 +27,11 @@ export class GroupController {
 
     public async updateGroup(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const { groupId } = request.params;
             const updateGroupRequest = request.body as UpdateGroupRequest;
 
-            await this.groupFacade.updateGroup(updateGroupRequest, userId!, Number(groupId));
+            await this.groupFacade.updateGroup(updateGroupRequest, Number(userIdPk), Number(groupId));
             return response.status(204).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -41,10 +41,10 @@ export class GroupController {
 
     public async getGroup(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const { groupId } = request.params;
 
-            const facade = await this.groupFacade.getGroup(userId!, Number(groupId));
+            const facade = await this.groupFacade.getGroup(Number(userIdPk), Number(groupId));
 
             return response.status(200).json({ data: facade });
         } catch (error) {
@@ -55,9 +55,9 @@ export class GroupController {
 
     public async getGroups(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
 
-            const facade = await this.groupFacade.getGroups(userId!);
+            const facade = await this.groupFacade.getGroups(Number(userIdPk));
 
             return response.status(200).json({ data: facade });
         } catch (error) {

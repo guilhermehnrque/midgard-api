@@ -27,7 +27,7 @@ export class ListBaseEntity implements ListBaseAttributes {
         this.updated_at = payload.updated_at!;
         this.groups_id = payload.groups_id!;
         this.id = payload.id;
-        this.players_confirmed = payload.players_confirmed;
+        this.players_confirmed = payload.players_confirmed ? payload.players_confirmed : 0;
     }
 
     static fromCreateUseCase(payload: ListDTO): ListBaseEntity {

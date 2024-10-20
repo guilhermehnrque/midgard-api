@@ -18,8 +18,8 @@ export class OrganizerAccessService {
         this.listBaseService = new ListBaseService
     }
 
-    public async validateAccess({ userId, groupId, listId }: { userId: string, groupId?: number, listId?: number }): Promise<number> {
-        const user = await this.userService.getUserByUserId(userId);
+    public async validateAccess({ userId, groupId, listId }: { userId: number, groupId?: number, listId?: number }): Promise<void> {
+        const user = await this.userService.getUserByIdPk(userId);
 
         if (groupId) {
             const group = await this.groupService.getGroupById(groupId);
@@ -31,22 +31,7 @@ export class OrganizerAccessService {
         } else {
             await this.managerAccess(user);
         }
-
-        return user.getUserIdPk();
     }
-
-    public async validateListAccess({ userId, listId }: { userId: string, listId: number }): Promise<void> {
-        const user = await this.userService.getUserByUserId(userId);
-
-        if (listId) {
-            const list = await this.listBaseService.getList(listId);
-            const group = await this.groupService.getGroupById(list.getGroupIdPk());
-            await this.groupManagerAccess(user, group);
-        }
-
-        await this.managerAccess(user);
-    }
-
 
     private async groupManagerAccess(userEntity: UserEntity, groupEntity: GroupEntity): Promise<void> {
         await this.ensureUserIsOrganizer(userEntity);

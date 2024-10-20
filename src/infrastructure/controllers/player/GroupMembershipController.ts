@@ -16,7 +16,7 @@ export class GroupMembershipController {
             const { userIdPk } = request;
             const joinGroupRequest = request.body as JoinGroupRequest;
 
-            await this.groupPlayerFacade.joinGroup(joinGroupRequest, userIdPk!);
+            await this.groupPlayerFacade.joinGroup(joinGroupRequest, Number(userIdPk));
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
@@ -28,11 +28,10 @@ export class GroupMembershipController {
             const { userIdPk } = request;
             const { groupIdPk } = request.params;
 
-            await this.groupPlayerFacade.leaveGroup(Number(groupIdPk), userIdPk!);
+            await this.groupPlayerFacade.leaveGroup(Number(groupIdPk), Number(userIdPk));
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
-
         }
     }
 
@@ -52,7 +51,7 @@ export class GroupMembershipController {
         try {
             const { userIdPk } = request;
 
-            const group = await this.groupPlayerFacade.getGroupMemberships(userIdPk!);
+            const group = await this.groupPlayerFacade.getGroupMemberships(Number(userIdPk));
 
             return response.status(200).json({ data: group });
 
@@ -67,7 +66,7 @@ export class GroupMembershipController {
             const { userIdPk } = request;
             const { groupIdPk } = request.params;
 
-            const group = await this.groupPlayerFacade.getGroupDetails(Number(groupIdPk), userIdPk!);
+            const group = await this.groupPlayerFacade.getGroupDetails(Number(groupIdPk), Number(userIdPk));
 
             return response.status(200).json({ data: group });
 

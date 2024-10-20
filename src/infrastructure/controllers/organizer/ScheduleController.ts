@@ -14,10 +14,10 @@ export class ScheduleController {
 
     public async createSchedule(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const createScheduleRequest = request.body as CreateScheduleRequest;
 
-            await this.scheduleFacade.createSchedule(createScheduleRequest, userId!);
+            await this.scheduleFacade.createSchedule(createScheduleRequest, Number(userIdPk));
 
             return response.status(201).json();
 
@@ -29,11 +29,11 @@ export class ScheduleController {
 
     public async updateSchedule(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const { scheduleId } = request.params;
             const updateScheduleRequest = request.body as UpdateScheduleRequest;
 
-            await this.scheduleFacade.updateSchedule(updateScheduleRequest, userId!, Number(scheduleId));
+            await this.scheduleFacade.updateSchedule(updateScheduleRequest, Number(userIdPk), Number(scheduleId));
 
             return response.status(204).json();
 
@@ -45,10 +45,10 @@ export class ScheduleController {
 
     public async getSchedules(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const { groupId } = request.params;
 
-            const facade = await this.scheduleFacade.getSchedules(userId!, Number(groupId));
+            const facade = await this.scheduleFacade.getSchedules(Number(userIdPk), Number(groupId));
 
             return response.status(200).json({ data: facade });
 
@@ -59,10 +59,10 @@ export class ScheduleController {
     }
     public async getSchedule(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const { groupId, scheduleId } = request.params;
 
-            const facade = await this.scheduleFacade.getSchedule(userId!, Number(scheduleId), Number(groupId));
+            const facade = await this.scheduleFacade.getSchedule(Number(userIdPk), Number(scheduleId), Number(groupId));
 
             return response.status(200).json(facade);
 
@@ -71,6 +71,5 @@ export class ScheduleController {
             return response.status(statusCode).json({ error: message });
         }
     }
-
 
 }

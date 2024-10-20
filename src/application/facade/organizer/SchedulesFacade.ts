@@ -23,31 +23,30 @@ export class SchedulesFacade {
         this.getSchedulesUseCase = new GetSchedulesUseCase();
     }
 
-    public async createSchedule(request: CreateScheduleRequest, userId: string): Promise<void> {
+    public async createSchedule(request: CreateScheduleRequest, userId: number): Promise<void> {
         const { startTime, endTime, dayOfWeek, groupId, localId } = request;
         await this.organizerAccessService.validateAccess({ userId, groupId });
 
         await this.createScheduleUseCase.execute(startTime, endTime, dayOfWeek, groupId, localId);
     }
 
-    public async updateSchedule(request: UpdateScheduleRequest, userId: string, scheduleIdPk: number): Promise<void> {
+    public async updateSchedule(request: UpdateScheduleRequest, userId: number, scheduleIdPk: number): Promise<void> {
         const { startTime, endTime, dayOfWeek, groupId, localId } = request;
         await this.organizerAccessService.validateAccess({ userId, groupId });
 
         await this.updateScheduleUseCase.execute(scheduleIdPk, startTime, endTime, dayOfWeek, groupId, localId);
     }
 
-    public async getSchedules(userId: string, groupId: number): Promise<ScheduleOutputDTO[]> {
+    public async getSchedules(userId: number, groupId: number): Promise<ScheduleOutputDTO[]> {
         await this.organizerAccessService.validateAccess({ userId, groupId });
 
         return await this.getSchedulesUseCase.execute(groupId);
     }
 
-    public async getSchedule(userId: string, scheduleIdPk: number, groupIdPk: number): Promise<ScheduleOutputDTO> {
+    public async getSchedule(userId: number, scheduleIdPk: number, groupIdPk: number): Promise<ScheduleOutputDTO> {
         await this.organizerAccessService.validateAccess({ userId, groupId: groupIdPk });
 
         return await this.getScheduleUseCase.execute(scheduleIdPk, groupIdPk);
     }
-
 
 }

@@ -20,33 +20,32 @@ export class ListPlayerFacade {
         this.organizerAccessService = new OrganizerAccessService();
     }
 
-    public async addPlayer(request: any, userId: string): Promise<void> {
+    public async addPlayer(request: any, userId: number): Promise<void> {
         const { listIdPk, guestIdPk } = request;
 
         await this.organizerAccessService.validateAccess({ userId, groupId: listIdPk });
         await this.addPlayerUseCase.execute(guestIdPk, listIdPk);
     }
 
-    public async removePlayer(request: any, userId: string): Promise<void> {
+    public async removePlayer(request: any, userId: number): Promise<void> {
         const { listIdPk, guestIdPk, playerListIdPk } = request;
 
         await this.organizerAccessService.validateAccess({ userId, groupId: listIdPk });
         await this.removePlayerUseCase.execute(guestIdPk, listIdPk, playerListIdPk);
     }
 
-    public async addGuest(request: any, userId: string): Promise<void> {
+    public async addGuest(request: any, userId: number): Promise<void> {
         const { listIdPk, guestIdPk } = request;
 
         await this.organizerAccessService.validateAccess({ userId, groupId: listIdPk });
         await this.addGuestUseCase.execute(guestIdPk, listIdPk);
     }
 
-    public async removeGuest(request: any, userId: string): Promise<void> {
+    public async removeGuest(request: any, userId: number): Promise<void> {
         const { listIdPk, guestIdPk, playerListIdPk } = request;
 
         await this.organizerAccessService.validateAccess({ userId, groupId: listIdPk });
         await this.removeGuestUseCase.execute(guestIdPk, listIdPk, playerListIdPk);
     }
-
 
 }
