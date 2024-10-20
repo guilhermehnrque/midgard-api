@@ -43,6 +43,10 @@ export class LocalEntity implements LocalAttributes {
         });
     }
 
+    public getFullAddress(): string {
+        return `${this.street}, ${this.number}, ${this.zip_code}, ${this.city}, ${this.state}, ${this.country}`;
+    }
+
     public async createPayload() {
         return {
             description: this.description,

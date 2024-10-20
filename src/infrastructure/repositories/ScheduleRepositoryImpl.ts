@@ -3,6 +3,7 @@ import { ScheduleEntity } from "../../domain/entity/ScheduleEntity";
 import { CustomError } from "../../application/erros/CustomError";
 import { DatabaseError } from "../../application/erros/DatabaseError";
 import { ScheduleRepositoryInterface } from "../../domain/repositories/ScheduleRepositoryInterface";
+import { Op } from "sequelize";
 
 export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
 
@@ -55,22 +56,6 @@ export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
         }
     }
 
-    async getScheduleByTimesAndGroupId(startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number): Promise<Schedule | null> {
-        try {
-            return await Schedule.findOne({
-                where: {
-                    starting_time: startingTime,
-                    ending_time: endingTime,
-                    day_of_week: dayOfWeek,
-                    groups_id: groupIdPk,
-                }
-            });
-        } catch (error) {
-            const customError = error as CustomError;
-            throw new DatabaseError(`[ScheduleRepositoryImpl] getScheduleByTimesAndGroupId -> ${customError.message}`);
-        }
-    }
-
     async getSchedulesGroupId(groupId: number): Promise<Schedule[] | null> {
         try {
             return await Schedule.findAll({
@@ -83,6 +68,31 @@ export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
             throw new DatabaseError(`[ScheduleRepositoryImpl] getSchedulesByGroup -> ${customError.message}`);
         }
 
+    }
+
+    public async checkScheduleConflictOnDay(dayOfWeek: string, startingTime: string, endingTime: string): Promise<boolean> {
+        try {
+            const conflictingSchedules = await Schedule.findAll({
+                where: {
+                    day_of_week: dayOfWeek, 
+                    [Op.or]: [
+                        {
+                            starting_time: {
+                                [Op.lt]: startingTime 
+                            },
+                            ending_time: {
+                                [Op.gt]: endingTime 
+                            }
+                        }
+                    ]
+                }
+            });
+    
+            return conflictingSchedules.length > 0;
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[ScheduleRepositoryImpl] checkScheduleConflictOnDay -> ${customError.message}`);
+        }
     }
 
 }

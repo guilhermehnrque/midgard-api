@@ -23,31 +23,30 @@ export class GroupFacade {
         this.getGroupsUseCase = new GetGroupDetailsUseCase();
     }
 
-    async createGroup(request: CreateGroupRequest, userId: string): Promise<void> {
-        const userIdPk = await this.organizerAccessService.validateAccess({ userId });
+    public async createGroup(request: CreateGroupRequest, userId: number): Promise<void> {
+        await this.organizerAccessService.validateAccess({ userId });
 
         const { description, visibility, sportType } = request;
-        await this.createGroupUseCase.execute(userIdPk, description, visibility, sportType);
+        await this.createGroupUseCase.execute(userId, description, visibility, sportType);
     }
 
-    async updateGroup(request: UpdateGroupRequest, userId: string, groupIdPk: number): Promise<void> {
-        const userIdPk = await this.organizerAccessService.validateAccess({ userId, groupId: groupIdPk });
+    public async updateGroup(request: UpdateGroupRequest, userId: number, groupIdPk: number): Promise<void> {
+        await this.organizerAccessService.validateAccess({ userId, groupId: groupIdPk });
 
         const { description, visibility, sportType, status } = request;
-        await this.updateGroupUseCase.execute(groupIdPk, description, status, visibility, sportType, userIdPk);
+        await this.updateGroupUseCase.execute(groupIdPk, description, status, visibility, sportType, userId);
     }
 
-    async getGroup(userId: string, groupIdPk: number): Promise<GroupOutputDTO> {
+    public async getGroup(userId: number, groupIdPk: number): Promise<GroupOutputDTO> {
         await this.organizerAccessService.validateAccess({ userId });
 
         return await this.getGroupsUseCase.execute(groupIdPk);
     }
 
-    async getGroups(userId: string): Promise<{ active: GroupOutputDTO[], inactive: GroupOutputDTO[] }> {
-        const userIdPk = await this.organizerAccessService.validateAccess({ userId });
+    public async getGroups(userId: number): Promise<{ active: GroupOutputDTO[], inactive: GroupOutputDTO[] }> {
+        await this.organizerAccessService.validateAccess({ userId });
 
-        return await this.getGroupUseCase.execute(userIdPk);
+        return await this.getGroupUseCase.execute(userId);
     }
-
 
 }

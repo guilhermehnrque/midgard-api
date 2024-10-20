@@ -20,21 +20,21 @@ export class GroupMemberFacade {
         this.organizerAccessService = new OrganizerAccessService();
     }
 
-    public async addGroupMember(request: RegisterGroupMemberRequest, userId: string): Promise<void> {
+    public async addGroupMember(request: RegisterGroupMemberRequest, userId: number): Promise<void> {
         const { groupId, membersId } = request;
 
         await this.organizerAccessService.validateAccess({ userId });
         await this.addGroupMemberUseCase.execute(groupId, membersId);
     }
 
-    public async removeGroupMember(request: UpdateGroupMemberRequest, userId: string): Promise<void> {
+    public async removeGroupMember(request: UpdateGroupMemberRequest, userId: number): Promise<void> {
         const { groupId, memberId } = request;
 
         await this.organizerAccessService.validateAccess({ userId });
         await this.removeGroupMemberUseCase.execute(groupId, memberId);
     }
 
-    public async getGroupMembers(groupId: number, userId: string): Promise<GroupMemberOutputDTO> {
+    public async getGroupMembers(groupId: number, userId: number): Promise<GroupMemberOutputDTO> {
         await this.organizerAccessService.validateAccess({ userId });
         
         return await this.getGroupMembersUseCase.execute(groupId);

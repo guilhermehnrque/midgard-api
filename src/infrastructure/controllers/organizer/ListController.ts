@@ -13,10 +13,10 @@ export class ListController {
 
     public async createList(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const createListRequest = request.body as CreateListRequest;
 
-            await this.listBaseFacade.createList(createListRequest, userId!);
+            await this.listBaseFacade.createList(createListRequest, Number(userIdPk));
             return response.status(201).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -26,11 +26,11 @@ export class ListController {
 
     public async updateList(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const { listId } = request.params;
             const updateListRequest = request.body;
 
-            await this.listBaseFacade.updateList(updateListRequest, Number(listId), userId!);
+            await this.listBaseFacade.updateList(updateListRequest, Number(listId), Number(userIdPk));
             return response.status(204).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -40,10 +40,10 @@ export class ListController {
 
     public async getLists(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const { groupId } = request.params;
 
-            const lists = await this.listBaseFacade.getLists(Number(groupId), userId!);
+            const lists = await this.listBaseFacade.getLists(Number(groupId), Number(userIdPk));
 
             return response.status(200).json({ data: lists });
         } catch (error) {
@@ -55,10 +55,10 @@ export class ListController {
 
     public async getList(request: Request, response: Response) {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const { listId, groupId } = request.params;
 
-            const list = await this.listBaseFacade.getList(Number(listId), Number(groupId), userId!);
+            const list = await this.listBaseFacade.getList(Number(listId), Number(groupId), Number(userIdPk));
 
             return response.status(200).json({ data: list });
         } catch (error) {
@@ -66,6 +66,5 @@ export class ListController {
             return response.status(statusCode).json({ error: message });
         }
     }
-
 
 }

@@ -7,7 +7,7 @@ import { GroupUserEntity } from "../../domain/entity/GroupUserEntity";
 
 export class GroupUserRepositoryImpl implements GroupUserRepositoryInterface {
 
-    async createGroupUser(groupUser: GroupUserEntity[], options: { transaction?: Transaction }): Promise<void> {
+    public async createGroupUser(groupUser: GroupUserEntity[], options: { transaction?: Transaction }): Promise<void> {
         try {
             for (const innerGroupUser of groupUser) {
                 await GroupsUsers.bulkCreate([innerGroupUser.registerPayload()], { transaction: options.transaction });
@@ -18,7 +18,7 @@ export class GroupUserRepositoryImpl implements GroupUserRepositoryInterface {
         }
     }
 
-    async removeGroupUser(groupId: number, userIdPk: number, options: { transaction?: Transaction }): Promise<number> {
+    public async removeGroupUser(groupId: number, userIdPk: number, options: { transaction?: Transaction }): Promise<number> {
         try {
             return await GroupsUsers.destroy({
                 where: {
@@ -33,7 +33,7 @@ export class GroupUserRepositoryImpl implements GroupUserRepositoryInterface {
         }
     }
 
-    async getGroupByUserId(userId: number): Promise<GroupsUsers[]> {
+    public async getGroupByUserId(userId: number): Promise<GroupsUsers[]> {
         try {
             return await GroupsUsers.findAll({
                 where: {
@@ -46,7 +46,7 @@ export class GroupUserRepositoryImpl implements GroupUserRepositoryInterface {
         }
     }
 
-    async getGroupMembersByGroupId(groupId: number): Promise<GroupsUsers[]> {
+    public async getGroupMembersByGroupId(groupId: number): Promise<GroupsUsers[]> {
         try {
             return await GroupsUsers.findAll({
                 where: {
@@ -59,7 +59,7 @@ export class GroupUserRepositoryImpl implements GroupUserRepositoryInterface {
         }
     }
 
-    async getGroupUserByGroupIdAndUserIdPk(groupId: number, userId: number): Promise<GroupsUsers | null> {
+    public async getGroupUserByGroupIdAndUserIdPk(groupId: number, userId: number): Promise<GroupsUsers | null> {
         try {
             return await GroupsUsers.findOne({
                 where: {
@@ -73,8 +73,6 @@ export class GroupUserRepositoryImpl implements GroupUserRepositoryInterface {
             throw new DatabaseError(`[GroupUserRepositoryImpl] checkIfUserIsInGroup -> ${customError.message}`);
         }
     }
-
- 
 
 }
 

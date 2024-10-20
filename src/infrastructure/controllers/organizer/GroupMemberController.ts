@@ -13,10 +13,10 @@ export class GroupMemberController {
 
     public async addMember(request: Request, response: Response): Promise<Response> {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const requestBody: RegisterGroupMemberRequest = request.body;
 
-            await this.groupMemberFacade.addGroupMember(requestBody, userId!);
+            await this.groupMemberFacade.addGroupMember(requestBody, Number(userIdPk));
 
             return response.status(201).json();
         } catch (error) {
@@ -27,10 +27,10 @@ export class GroupMemberController {
 
     public async removeMember(request: Request, response: Response): Promise<Response> {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const requestBody: UpdateGroupMemberRequest = request.body;
- 
-            await this.groupMemberFacade.removeGroupMember(requestBody, userId!);
+
+            await this.groupMemberFacade.removeGroupMember(requestBody, Number(userIdPk));
 
             return response.status(204).json();
         } catch (error) {
@@ -41,10 +41,10 @@ export class GroupMemberController {
 
     public async getMembers(request: Request, response: Response): Promise<Response> {
         try {
-            const { userId } = request;
+            const { userIdPk } = request;
             const { groupId } = request.params;
 
-            const members = await this.groupMemberFacade.getGroupMembers(Number(groupId), userId!);
+            const members = await this.groupMemberFacade.getGroupMembers(Number(groupId), Number(userIdPk));
 
             return response.status(200).json(members);
         } catch (error) {

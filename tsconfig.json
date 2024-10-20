@@ -1,17 +1,22 @@
 {
   "compilerOptions": {
-    "target": "ES2020",                      // Define o alvo da compilação como ECMAScript 2020
-    "module": "commonjs",                    // Usa o sistema de módulos CommonJS
-    "strict": true,                          // Ativa todas as verificações estritas
-    "esModuleInterop": true,                 // Permite interoperabilidade entre módulos CommonJS e ES
-    "forceConsistentCasingInFileNames": true, // Garante que os nomes de arquivos sejam consistentes
-    "outDir": "./dist",                      // Diretório onde os arquivos compilados serão colocados
-    "rootDir": "./src",                      // Diretório raiz onde os arquivos TypeScript estão localizados
-    "skipLibCheck": true,                    // Ignora a verificação de tipos das definições de biblioteca
-    "resolveJsonModule": true,                // Permite a importação de arquivos JSON
+    "target": "ES2020",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "typeRoots": ["./node_modules/@types", "./types"], 
+    "types": ["node", "express"]
   },
-  "include": ["src/**/*", "src/infrastructure/routes/v1/players/PlayersGroupRoute.ts", "src/application/usecases/player/list/GetListsUseCase.ts"],                   // Inclui todos os arquivos TypeScript dentro do diretório src
-  "exclude": ["node_modules", "stack-utils"] // Exclui diretórios que não devem ser compilados
+  "include": [
+    "src/**/*",  
+    "types/**/*" 
+  ],
+  "exclude": ["node_modules", "dist"]
 }

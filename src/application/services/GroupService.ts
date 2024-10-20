@@ -16,7 +16,7 @@ export class GroupService {
         this.groupRepository = new GroupRepositoryImpl();
     }
 
-    async createGroup(group: GroupEntity): Promise<void> {
+    public async createGroup(group: GroupEntity): Promise<void> {
         await this.ensureGroupNotExists(group.description);
 
         try {
@@ -27,7 +27,7 @@ export class GroupService {
         }
     }
 
-    async updateGroup(group: GroupEntity): Promise<number> {
+    public async updateGroup(group: GroupEntity): Promise<number> {
         await this.ensureGroupExists(group.id!)
         try {
             return await this.groupRepository.updateGroup(group);
@@ -38,7 +38,7 @@ export class GroupService {
         }
     }
 
-    async getOrganizerGroupsByUserIdPk(userIdPk: number): Promise<GroupEntity[]> {
+    public async getOrganizerGroupsByUserIdPk(userIdPk: number): Promise<GroupEntity[]> {
         const group = await this.groupRepository.getOrganizerGroups(userIdPk);
 
         if (!group || group == null) {
@@ -48,7 +48,7 @@ export class GroupService {
         return Promise.all(group.map(this.createEntityFromPersistante));
     }
 
-    async getGroupByDescription(description: string): Promise<GroupEntity> {
+    public async getGroupByDescription(description: string): Promise<GroupEntity> {
         const group = await this.groupRepository.getGroupByDescription(description);
 
         if (!group || group == null) {
@@ -58,7 +58,7 @@ export class GroupService {
         return this.createEntityFromPersistante(group!);
     }
 
-    async getGroupById(groupId: number): Promise<GroupEntity> {
+    public async getGroupById(groupId: number): Promise<GroupEntity> {
         const group = await this.groupRepository.getGroupById(groupId);
 
         if (!group || group == null) {
@@ -68,7 +68,17 @@ export class GroupService {
         return await this.createEntityFromPersistante(group!);
     }
 
-    async ensureGroupNotExists(description: string): Promise<void> {
+    public async getGroupsByStatus(status: boolean): Promise<GroupEntity[]> {
+        const groups = await this.groupRepository.getGroupsByStatus(status);
+
+        if (!groups || groups == null) {
+            return [];
+        }
+
+        return Promise.all(groups.map(this.createEntityFromPersistante));
+    }
+
+    public async ensureGroupNotExists(description: string): Promise<void> {
         const group = await this.groupRepository.getGroupByDescription(description)
 
         if (group || group != null) {
@@ -76,7 +86,7 @@ export class GroupService {
         }
     }
 
-    async ensureGroupExists(groupIdPk: number): Promise<void> {
+    public async ensureGroupExists(groupIdPk: number): Promise<void> {
         const group = await this.groupRepository.getGroupById(groupIdPk)
 
         if (!group || group == null) {

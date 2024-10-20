@@ -27,7 +27,7 @@ export class AddGuestUseCase {
         });
 
         await this.listPlayerService.addPlayerToList(listPlayer);
-
+        await this.listBaseService.addConfirmedPlayers(listIdPk, list.getConfirmedPlayers());
     }
 
     private async validateListLimit(limitOfPlayers: number, listIdPk: number): Promise<void> {

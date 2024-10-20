@@ -13,7 +13,7 @@ export class SchedulesService {
         this.scheduleRepository = new ScheduleRepositoryImpl();
     }
 
-    async createSchedule(scheduleEntity: ScheduleEntity): Promise<void> {
+    public async createSchedule(scheduleEntity: ScheduleEntity): Promise<void> {
         try {
             await this.scheduleRepository.createSchedule(scheduleEntity);
         } catch (error) {
@@ -22,7 +22,7 @@ export class SchedulesService {
         }
     }
 
-    async updateSchedule(scheduleEntity: ScheduleEntity): Promise<void> { 
+    public async updateSchedule(scheduleEntity: ScheduleEntity): Promise<void> {
         try {
             await this.scheduleRepository.updateSchedule(scheduleEntity);
         } catch (error) {
@@ -31,7 +31,7 @@ export class SchedulesService {
         }
     }
 
-    async getScheduleById(scheduleId: number): Promise<ScheduleEntity> {
+    public async getScheduleById(scheduleId: number): Promise<ScheduleEntity> {
         const schedule = await this.scheduleRepository.getScheduleById(scheduleId);
 
         if (!schedule || schedule == null) {
@@ -42,7 +42,7 @@ export class SchedulesService {
     }
 
 
-    async getScheduleByIdAndGroupId(scheduleId: number, groupIdPk: number): Promise<ScheduleEntity> {
+    public async getScheduleByIdAndGroupId(scheduleId: number, groupIdPk: number): Promise<ScheduleEntity> {
         const schedule = await this.scheduleRepository.getScheduleByIdAndGroupId(scheduleId, groupIdPk);
 
         if (!schedule || schedule == null) {
@@ -52,7 +52,7 @@ export class SchedulesService {
         return this.createEntityFromPersistence(schedule!);
     }
 
-    async getScheduleByGroupId(groupId: number): Promise<ScheduleEntity[]> {
+    public async getSchedulesByGroupId(groupId: number): Promise<ScheduleEntity[]> {
         const schedule = await this.scheduleRepository.getSchedulesGroupId(groupId);
 
         if (!schedule) {
@@ -62,11 +62,10 @@ export class SchedulesService {
         return await Promise.all(schedule.map(this.createEntityFromPersistence));
     }
 
-    async getScheduleByTimesAndGroupId(startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number): Promise<boolean> {
-        const schedule = await this.scheduleRepository.getScheduleByTimesAndGroupId(startingTime, endingTime, dayOfWeek, groupIdPk);
-        return schedule !== null;
+    public async checkScheduleConflictOnDay(dayOfWeek: string, startingTime: string, endingTime: string): Promise<boolean> {
+        return await this.scheduleRepository.checkScheduleConflictOnDay(dayOfWeek, startingTime, endingTime);
     }
-
+    
     private async createEntityFromPersistence(schedule: Schedule): Promise<ScheduleEntity> {
         return await ScheduleEntity.fromPersistence({
             day_of_week: schedule.day_of_week,

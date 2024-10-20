@@ -13,7 +13,7 @@ export class GroupRouter {
         this.groupController = new GroupController();
         this.initializeRoutes();
     }
-
+    
     private initializeRoutes(): void {
         this.router.get('', (req: Request, res: Response) =>
             this.groupController.getGroups(req, res)

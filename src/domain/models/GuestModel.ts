@@ -1,5 +1,4 @@
 import { Model, DataTypes } from 'sequelize';
-import { List } from './ListBaseModel';
 import { GuestAttributes } from '../interfaces/attributes/GuestAttributes';
 import { User } from './UserModel';
 import sequelize from '../../infrastructure/database/index';
@@ -8,7 +7,7 @@ type GuestCreationAttributes = Omit<GuestAttributes, 'id' | 'created_at'>;
 
 class Guest extends Model<GuestAttributes, GuestCreationAttributes> implements GuestAttributes {
     public id!: number;
-    public name!: string;
+    public guest_name!: string;
     public users_id!: number;
 }
 
@@ -19,7 +18,7 @@ Guest.init({
         primaryKey: true,
         autoIncrement: true,
     },
-    name: {
+    guest_name: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
@@ -31,16 +30,13 @@ Guest.init({
             key: 'id',
         },
     },
-
 }, {
     sequelize,
-    tableName: 'guests',
+    tableName: 'guest',
     modelName: 'Guest',
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+    timestamps: false
 });
 
-Guest.belongsTo(List, { foreignKey: 'lists_id', as: 'list' });
-Guest.belongsTo(User, { foreignKey: 'users_id', as: 'user' });
+Guest.belongsTo(User, { foreignKey: 'users_id',  as: 'user' });
 
 export { Guest };
