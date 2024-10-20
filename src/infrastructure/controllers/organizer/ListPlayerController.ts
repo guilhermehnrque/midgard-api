@@ -10,43 +10,16 @@ export class ListPlayerController {
     constructor() {
         this.listPlayerFacade = new ListPlayerFacade();
     }
-    public async addMemberOnList(request: Request, response: Response) {
+
+    public async getListPlayers(request: Request, response: Response) {
         try {
             const { userIdPk } = request;
 
             const playerListRequest: PlayerListRequest = {
-                playerId: request.body.playerId,
-                listId: request.body.listId
+                listId: Number(request.body.listId),
             };
 
-            await this.listPlayerFacade.addPlayer(playerListRequest, Number(userIdPk));
-            return response.status(201).json();
-        } catch (error) {
-            const { statusCode = 500, message } = error as CustomError;
-            return response.status(statusCode).json({ error: message });
-        }
-    }
-
-    public async updateList(request: Request, response: Response) {
-        try {
-            const { userIdPk } = request;
-            const { listId } = request.params;
-            const updateListRequest = request.body;
-
-            await this.listBaseFacade.updateList(updateListRequest, Number(listId), Number(userIdPk));
-            return response.status(204).json();
-        } catch (error) {
-            const { statusCode = 500, message } = error as CustomError;
-            return response.status(statusCode).json({ error: message });
-        }
-    }
-
-    public async getLists(request: Request, response: Response) {
-        try {
-            const { userIdPk } = request;
-            const { groupId } = request.params;
-
-            const lists = await this.listBaseFacade.getLists(Number(groupId), Number(userIdPk));
+            const lists = await this.listPlayerFacade.getPlayers(playerListRequest, Number(userIdPk));
 
             return response.status(200).json({ data: lists });
         } catch (error) {
@@ -56,14 +29,94 @@ export class ListPlayerController {
         }
     }
 
-    public async getList(request: Request, response: Response) {
+    public async updateListPlayer(request: Request, response: Response) {
         try {
             const { userIdPk } = request;
-            const { listId, groupId } = request.params;
+            const { listPlayerId } = request.params;
 
-            const list = await this.listBaseFacade.getList(Number(listId), Number(groupId), Number(userIdPk));
+            const playerListRequest: PlayerListRequest = {
+                playerId: request.body.playerId,
+                status: request.body.status,
+                listId: Number(request.body.listId),
+                playerListId: Number(listPlayerId)
+            };
 
-            return response.status(200).json({ data: list });
+            await this.listPlayerFacade.updateListPlayer(playerListRequest, Number(userIdPk));
+            return response.status(204);
+        } catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
+    }
+
+    public async addPlayerMemberOnList(request: Request, response: Response) {
+        try {
+            const { userIdPk } = request;
+
+            const playerListRequest: PlayerListRequest = {
+                playerId: request.body.playerId,
+                listId: request.body.listId,
+                status: request.body.status,
+            };
+
+            await this.listPlayerFacade.addPlayer(playerListRequest, Number(userIdPk));
+            return response.status(201);
+        } catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
+    }
+
+    public async removePlayerMemberOnList(request: Request, response: Response) {
+        try {
+            const { userIdPk } = request;
+
+            const playerListRequest: PlayerListRequest = {
+                playerId: request.body.playerId,
+                listId: request.body.listId,
+                playerListId: request.body.playerListId,
+            };
+
+            await this.listPlayerFacade.removePlayer(playerListRequest, Number(userIdPk));
+
+            return response.status(204);
+        } catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
+    }
+
+    public async addGuestOnList(request: Request, response: Response) {
+        try {
+            const { userIdPk } = request;
+
+            const playerListRequest: PlayerListRequest = {
+                guestId: request.body.playerId,
+                listId: request.body.listId,
+                status: request.body.status,
+            };
+
+            await this.listPlayerFacade.addGuest(playerListRequest, Number(userIdPk));
+            return response.status(201);
+        } catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
+    }
+
+    public async removeGuestOnList(request: Request, response: Response) {
+        try {
+            const { userIdPk } = request;
+
+            const playerListRequest: PlayerListRequest = {
+                guestId: request.body.playerId,
+                listId: request.body.listId,
+                playerListId: request.body.playerListId,
+            };
+
+            await this.listPlayerFacade.removeGuest(playerListRequest, Number(userIdPk));
+
+            return response.status(204);
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });

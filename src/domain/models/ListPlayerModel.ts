@@ -70,8 +70,8 @@ ListPlayer.init({
     },
 }, {
     sequelize,
-    tableName: 'players_list',
-    modelName: 'PlayersList',
+    tableName: 'list_player',
+    modelName: 'ListPlayer',
     timestamps: false,
     underscored: true,
     createdAt: 'created_at',

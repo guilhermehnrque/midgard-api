@@ -14,7 +14,7 @@ export class AddPlayerUseCase {
         this.listPlayerService = new ListPlayerService();
     }
 
-    public async execute(memberIdPk: number, listIdPk: number): Promise<void> {
+    public async execute(memberIdPk: number, listIdPk: number, playerStatus: string): Promise<void> {
         const list = await this.listBaseService.getList(listIdPk);
 
         await this.isPlayertOnTheList(memberIdPk, listIdPk)
@@ -22,7 +22,7 @@ export class AddPlayerUseCase {
 
         const listPlayer = await ListPlayerEntity.fromCreateUseCase({
             list_base_id: listIdPk,
-            player_status: 'pending',
+            player_status: playerStatus,
             users_id: memberIdPk
         });
 

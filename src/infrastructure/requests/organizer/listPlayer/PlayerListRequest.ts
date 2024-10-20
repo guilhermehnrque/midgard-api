@@ -3,4 +3,5 @@ export interface PlayerListRequest {
     guestId?: number;
     listId?: number;
     playerListId?: number;
+    status?: string;
 }

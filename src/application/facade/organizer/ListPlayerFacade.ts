@@ -6,6 +6,7 @@ import { AddPlayerUseCase } from "../../usecases/organizer/listPlayer/AddPlayerU
 import { GetPlayersUseCase } from "../../usecases/organizer/listPlayer/GetPlayersUseCase";
 import { RemoveGuestUseCase } from "../../usecases/organizer/listPlayer/RemoveGuestUseCase";
 import { RemovePlayerUseCase } from "../../usecases/organizer/listPlayer/RemovePlayerUseCase";
+import { UpdatePlayerStatusUseCase } from "../../usecases/organizer/listPlayer/UpdatePlayerStatusUseCase";
 
 export class ListPlayerFacade {
 
@@ -14,6 +15,7 @@ export class ListPlayerFacade {
     private readonly removePlayerUseCase: RemovePlayerUseCase;
     private readonly addGuestUseCase: AddGuestUseCase;
     private readonly removeGuestUseCase: RemoveGuestUseCase;
+    private readonly updatePlayerStatusUseCase :UpdatePlayerStatusUseCase;
     private readonly organizerAccessService: OrganizerAccessService;
 
     constructor() {
@@ -22,6 +24,7 @@ export class ListPlayerFacade {
         this.removePlayerUseCase = new RemovePlayerUseCase();
         this.addGuestUseCase = new AddGuestUseCase();
         this.removeGuestUseCase = new RemoveGuestUseCase();
+        this.updatePlayerStatusUseCase = new UpdatePlayerStatusUseCase();
         this.organizerAccessService = new OrganizerAccessService();
     }
 
@@ -33,10 +36,10 @@ export class ListPlayerFacade {
     }
 
     public async addPlayer(request: PlayerListRequest, userId: number): Promise<void> {
-        const { playerId, listId } = request;
+        const { playerId, listId, status } = request;
 
         await this.organizerAccessService.validateAccess({ userId, listId: listId! });
-        await this.addPlayerUseCase.execute(playerId!, listId!);
+        await this.addPlayerUseCase.execute(playerId!, listId!, status!);
     }
 
     public async removePlayer(request: PlayerListRequest, userId: number): Promise<void> {
@@ -58,6 +61,13 @@ export class ListPlayerFacade {
 
         await this.organizerAccessService.validateAccess({ userId, listId: listId! });
         await this.removeGuestUseCase.execute(guestId!, listId!, playerListId!);
+    }
+
+    public async updateListPlayer(request: PlayerListRequest, userId: number): Promise<void> {
+        const { playerId, listId, status, playerListId } = request;
+
+        await this.organizerAccessService.validateAccess({ userId, listId: listId });
+        await this.updatePlayerStatusUseCase.execute(playerId!, listId!, playerListId!, status!);
     }
 
 }

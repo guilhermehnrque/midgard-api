@@ -1,5 +1,5 @@
 export interface GuestAttributes {
     id?: number;
-    name: string;
+    guest_name: string;
     users_id: number;
 }
