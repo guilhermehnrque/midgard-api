@@ -14,9 +14,10 @@ export class ListPlayerController {
     public async getListPlayers(request: Request, response: Response) {
         try {
             const { userIdPk } = request;
+            const { listId } = request.params;
 
             const playerListRequest: PlayerListRequest = {
-                listId: Number(request.body.listId),
+                listId: Number(listId),
             };
 
             const lists = await this.listPlayerFacade.getPlayers(playerListRequest, Number(userIdPk));
@@ -60,7 +61,7 @@ export class ListPlayerController {
             };
 
             await this.listPlayerFacade.addPlayer(playerListRequest, Number(userIdPk));
-            return response.status(201);
+            return response.status(201).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
@@ -75,11 +76,12 @@ export class ListPlayerController {
                 playerId: request.body.playerId,
                 listId: request.body.listId,
                 playerListId: request.body.playerListId,
+                status: "DESISTENCIA"
             };
 
             await this.listPlayerFacade.removePlayer(playerListRequest, Number(userIdPk));
 
-            return response.status(204);
+            return response.status(204).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });

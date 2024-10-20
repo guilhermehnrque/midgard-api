@@ -13,14 +13,14 @@ export class RemovePlayerUseCase {
         this.listPlayerService = new ListPlayerService();
     }
 
-    public async execute(memberIdPk: number, listIdPk: number, playerListIdPk: number): Promise<void> {
+    public async execute(memberIdPk: number, listIdPk: number, playerListIdPk: number, status: string): Promise<void> {
         const list = await this.listBaseService.getList(listIdPk);
         await this.isPlayertOnTheList(memberIdPk, listIdPk)
 
         const listPlayer = await ListPlayerEntity.fromUpdateUseCase({
             id: playerListIdPk,
             list_base_id: listIdPk,
-            player_status: 'declined',
+            player_status: status,
             users_id: memberIdPk
         });
 

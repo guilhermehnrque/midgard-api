@@ -15,7 +15,7 @@ export class ListPlayerRouter {
     }
     
     private initializeRoutes(): void {
-        this.router.get('', (req: Request, res: Response) =>
+        this.router.get('/:listId', (req: Request, res: Response) =>
             this.listPlayerController.getListPlayers(req, res)
         );
 
@@ -27,7 +27,7 @@ export class ListPlayerRouter {
             this.listPlayerController.addPlayerMemberOnList(req, res)
         );
 
-        this.router.delete('/player', [...schemas.removePlayerMemberOnList, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        this.router.delete('/remove-player', [...schemas.removePlayerMemberOnList, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.listPlayerController.removePlayerMemberOnList(req, res)
         );
 

@@ -37,7 +37,7 @@ const schemas = {
 
         body('status')
             .notEmpty().withMessage('Status é obrigatorio')
-            .isBoolean().withMessage('Status deve ser um booleano'),
+            .isString().withMessage('Status deve ser um string'),
     ],
 
     removePlayerMemberOnList: [

@@ -37,7 +37,7 @@ ListPlayer.init({
     },
     users_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: User,
             key: 'id',
@@ -45,7 +45,7 @@ ListPlayer.init({
     },
     guest_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: Guest,
             key: 'id',
@@ -78,7 +78,9 @@ ListPlayer.init({
     updatedAt: 'updated_at',
 });
 
-ListPlayer.belongsTo(List, { foreignKey: 'lists_id', as: 'list' });
-ListPlayer.belongsTo(User, { foreignKey: 'players_id', as: 'user' });
+ListPlayer.belongsTo(List, { foreignKey: 'list_base_id', as: 'list' });
+ListPlayer.belongsTo(User, { foreignKey: 'users_id', as: 'user' });
+ListPlayer.belongsTo(Guest, { foreignKey: 'guest_id', as: 'guest' });
+
 
 export { ListPlayer };

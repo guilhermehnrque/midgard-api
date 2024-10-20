@@ -43,10 +43,10 @@ export class ListPlayerFacade {
     }
 
     public async removePlayer(request: PlayerListRequest, userId: number): Promise<void> {
-        const { listId, playerId, playerListId } = request;
+        const { listId, playerId, playerListId, status } = request;
 
         await this.organizerAccessService.validateAccess({ userId, listId: listId });
-        await this.removePlayerUseCase.execute(playerId!, listId!, playerListId!);
+        await this.removePlayerUseCase.execute(playerId!, listId!, playerListId!, status!);
     }
 
     public async addGuest(request: PlayerListRequest, userId: number): Promise<void> {

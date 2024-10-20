@@ -11,7 +11,7 @@ export class ListPlayerRepositoryImpl implements ListPlayerInterface {
             await ListPlayer.create(player.createPayload());
         } catch (error) {
             const customError = error as CustomError
-            throw new DatabaseError(`[ListPlayerRepositoryImpl] registerPlayer ->  ${customError.message}`);
+            throw new DatabaseError(`[ListPlayerRepositoryImpl] registerPlayer -> ${customError.message}`);
         }
     }
 
