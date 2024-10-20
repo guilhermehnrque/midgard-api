@@ -80,6 +80,15 @@ export class ListBaseService {
         }
     }
 
+     public async addConfirmedPlayers(listIdPk: number, quantity: number): Promise<number> {
+        return this.updateConfirmedPlayers(listIdPk, quantity + 1);
+    }
+
+    // Remove jogadores confirmados
+    public async removeConfirmedPlayers(listIdPk: number, quantity: number): Promise<number> {
+        return this.updateConfirmedPlayers(listIdPk, -quantity); 
+    }
+
     private async createEntityFromPersistence(listBase: List): Promise<ListBaseEntity> {
         return await ListBaseEntity.fromPersistence({
             id: listBase.id,

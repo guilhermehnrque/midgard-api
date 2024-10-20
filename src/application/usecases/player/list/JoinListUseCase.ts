@@ -28,7 +28,7 @@ export class JoinListUseCase {
         });
 
         await this.listPlayerService.addPlayerToList(listPlayer);
-        await this.listBaseService.updateConfirmedPlayers(listIdPk, list.getConfirmedPlayers() + 1);
+        await this.listBaseService.addConfirmedPlayers(listIdPk, list.getConfirmedPlayers());
     }
 
     private async isJoinListLimitReached(list: ListBaseEntity): Promise<void> {
