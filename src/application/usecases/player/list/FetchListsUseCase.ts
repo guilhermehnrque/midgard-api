@@ -1,29 +1,22 @@
 import { ListBaseEntity } from "../../../../domain/entity/ListBaseEntity";
 import { ListsOutputDTO } from "../../../dto/player/lists/ListsOutputDTO";
-import { UsertNotGroupMember } from "../../../erros/groupUser/UsertNotGroupMember";
 import { GroupService } from "../../../services/GroupService";
 import { GroupUserService } from "../../../services/GroupUserService";
 import { ListBaseService } from "../../../services/ListBaseService";
-import { ListPlayerService } from "../../../services/ListPlayerService";
 
 export class FetchListsUseCase {
 
     private readonly groupService: GroupService;
     private readonly groupUserService: GroupUserService;
     private readonly listBaseService: ListBaseService;
-    private readonly listPlayersService: ListPlayerService;
 
     constructor() {
         this.groupService = new GroupService();
         this.groupUserService = new GroupUserService();
         this.listBaseService = new ListBaseService();
-        this.listPlayersService = new ListPlayerService();
     }
 
-    public async execute(groupIdPk: number, userIdPk: number): Promise<{ active: ListsOutputDTO[]; inactive: ListsOutputDTO[] }> {
-        await this.groupService.ensureGroupExists(groupIdPk);
-        await this.isGroupMember(userIdPk, groupIdPk);
-
+    public async execute(groupIdPk: number): Promise<{ active: ListsOutputDTO[]; inactive: ListsOutputDTO[] }> {
         const lists = await this.listBaseService.getListsByGroupId(groupIdPk);
 
         return this.prepareOutput(lists);
@@ -47,16 +40,6 @@ export class FetchListsUseCase {
             list.day_of_week,
             list.getConfirmedPlayers()
         );
-    }
-
-    // TODO: mover validação para o facade
-    private async isGroupMember(userIdPk: number, groupIdPk: number): Promise<void> {
-        const groupUser = await this.groupUserService.getGroupUsersByGroupIdAndUserIdPk(userIdPk, groupIdPk);
-
-        if (groupUser == null) {
-            console.error(`[JoinGroupUseCase] -> User not in group`);
-            throw new UsertNotGroupMember();
-        }
     }
 
 }
