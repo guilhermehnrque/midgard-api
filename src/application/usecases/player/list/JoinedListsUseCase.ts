@@ -13,7 +13,7 @@ export class JoinedListsUseCase {
         this.listPlayerService = new ListPlayerService();
     }
 
-    public async execute(listPlayerIdPk: number, userIdPk: number, listBaseIdPk: number): Promise<ListsOutputDTO[]> {
+    public async execute(userIdPk: number): Promise<ListsOutputDTO[]> {
         const listPlayer = await this.listPlayerService.getListPlayersByListId(userIdPk);
 
         const listsMapped = await Promise.all(listPlayer.map(async (player) => {
