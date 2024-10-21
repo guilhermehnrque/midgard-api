@@ -1,21 +1,38 @@
 import 'dotenv/config';
 import app from './app';
 import healthCheck from './infrastructure/routes/health';
-import { createServer } from 'http';
+import { createServer, Server } from 'http';
 import sequelize from './infrastructure/database/index';
 
-const server = createServer(app);
+class Application {
+    private readonly server: Server;
+    private readonly port: string | number;
 
-healthCheck(server);
+    constructor() {
+        this.server = createServer(app);
+        this.port = process.env.PORT!;
 
-sequelize.sync().then(() => {
-    console.log('Modelos sincronizados com o banco de dados.');
-}).catch((error) => {
-    console.error('Erro ao sincronizar modelos:', error);
-});
+        healthCheck(this.server);
+    }
 
-const PORT = process.env.PORT;
+    private async syncDatabase(): Promise<void> {
+        try {
+            await sequelize.sync();
+            console.log('Modelos sincronizados com o banco de dados.');
+        } catch (error) {
+            console.error('Erro ao sincronizar modelos:', error);
+            process.exit(1);
+        }
+    }
 
-server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+    public async start(): Promise<void> {
+        await this.syncDatabase();
+
+        this.server.listen(this.port, () => {
+            console.log(`Server is running on port ${this.port}`);
+        });
+    }
+}
+
+const application = new Application();
+application.start();

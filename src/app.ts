@@ -8,12 +8,25 @@ import authRoutes from "./infrastructure/routes/AuthRoutes";
 import OrganizerRoutes from './infrastructure/routes/OrganizerRoutes';
 import PlayerRouter from "./infrastructure/routes/PlayerRoutes";
 
-const app: Application = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+class App {
+    public app: Application;
 
-app.use('/v1', authRoutes);
-app.use('/v1/organizer', [BearerToken.validate, OrganizerMiddleware.validate], OrganizerRoutes);
-app.use('/v1/player', [BearerToken.validate, PlayerMiddleware.validate], PlayerRouter);
+    constructor() {
+        this.app = express();
+        this.initializeMiddlewares();
+        this.initializeRoutes();
+    }
 
-export default app;
+    private initializeMiddlewares(): void {
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+    }
+
+    private initializeRoutes(): void {
+        this.app.use('/v1', authRoutes);
+        this.app.use('/v1/organizer', [BearerToken.validate, OrganizerMiddleware.validate], OrganizerRoutes);
+        this.app.use('/v1/player', [BearerToken.validate, PlayerMiddleware.validate], PlayerRouter);
+    }
+}
+
+export default new App().app;
