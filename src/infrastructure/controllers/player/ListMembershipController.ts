@@ -3,6 +3,7 @@ import { ListPlayerFacade } from "../../../application/facade/player/ListPlayerF
 import { CustomError } from "../../../application/erros/CustomError";
 
 export class ListMembershipController {
+    
     private readonly listPlayerFacade: ListPlayerFacade;
 
     constructor() {
