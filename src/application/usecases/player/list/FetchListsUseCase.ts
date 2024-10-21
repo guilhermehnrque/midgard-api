@@ -1,18 +1,12 @@
 import { ListBaseEntity } from "../../../../domain/entity/ListBaseEntity";
 import { ListsOutputDTO } from "../../../dto/player/lists/ListsOutputDTO";
-import { GroupService } from "../../../services/GroupService";
-import { GroupUserService } from "../../../services/GroupUserService";
 import { ListBaseService } from "../../../services/ListBaseService";
 
 export class FetchListsUseCase {
 
-    private readonly groupService: GroupService;
-    private readonly groupUserService: GroupUserService;
     private readonly listBaseService: ListBaseService;
 
     constructor() {
-        this.groupService = new GroupService();
-        this.groupUserService = new GroupUserService();
         this.listBaseService = new ListBaseService();
     }
 

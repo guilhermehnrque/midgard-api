@@ -17,14 +17,12 @@ export class ListPlayerFacade {
         this.groupMembershipAccessService = new GroupMembershipAccessService();
     }
 
-
     public async getLists(request: any): Promise<any> {
         const { userId, groupId } = request;
         await this.groupMembershipAccessService.validateAccess({ userId });
 
         return await this.fetchListsUseCase.execute(groupId);
     }
-
 
     public async joinList(request: any): Promise<any> {
         const { userId, listId } = request;
@@ -33,13 +31,11 @@ export class ListPlayerFacade {
         return await this.joinListUseCase.execute(userId, listId);
     }
 
-
     public async leaveList(request: any): Promise<any> {
         const { userId, listId } = request;
         await this.groupMembershipAccessService.validateAccess({ userId });
 
         return await this.leaveListUseCase.execute(userId, listId);
     }
-
 
 }

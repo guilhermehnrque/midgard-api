@@ -35,7 +35,6 @@ export class GroupMembershipAccessService {
         const group = await this.groupUserService.getGroupUsersByGroupIdAndUserIdPk(userId, list.getGroupIdPk())
 
         await this.accessManagement(group);
-
     }
 
 }
