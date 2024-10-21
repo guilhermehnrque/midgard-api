@@ -1,3 +1,4 @@
+import { ListsOutputDTO } from "../../dto/player/lists/ListsOutputDTO";
 import { GroupMembershipAccessService } from "../../services/validation/player/GroupMembershipAccessService";
 import { FetchListsUseCase } from "../../usecases/player/list/FetchListsUseCase";
 import { JoinedListsUseCase } from "../../usecases/player/list/JoinedListsUseCase";
@@ -20,29 +21,25 @@ export class ListPlayerFacade {
         this.groupMembershipAccessService = new GroupMembershipAccessService();
     }
 
-    public async getJoinedLists(request: any): Promise<any> {
-        const { userId } = request;
+    public async getJoinedLists(userId: number): Promise<ListsOutputDTO[]> {
         await this.groupMembershipAccessService.validateAccess({ userId });
 
         return await this.joinedListsUseCase.execute(userId);
     }
 
-    public async getLists(request: any): Promise<any> {
-        const { userId, groupId } = request;
+    public async getLists(userId: number, groupId: number): Promise<{ active: ListsOutputDTO[]; inactive: ListsOutputDTO[] }> {
         await this.groupMembershipAccessService.validateAccess({ userId });
 
         return await this.fetchListsUseCase.execute(groupId);
     }
 
-    public async joinList(request: any): Promise<any> {
-        const { userId, listId } = request;
+    public async joinList(userId: number, listId: number): Promise<void> {
         await this.groupMembershipAccessService.validateAccess({ userId });
 
         return await this.joinListUseCase.execute(userId, listId);
     }
 
-    public async leaveList(request: any): Promise<any> {
-        const { userId, listId } = request;
+    public async leaveList(userId: number, listId: number): Promise<void> {
         await this.groupMembershipAccessService.validateAccess({ userId });
 
         return await this.leaveListUseCase.execute(userId, listId);

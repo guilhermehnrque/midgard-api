@@ -27,7 +27,6 @@ export class LeaveListUseCase {
 
         await this.listPlayerService.removePlayerFromList(listPlayer);
         await this.listBaseService.updateConfirmedPlayers(listIdPk, list.getConfirmedPlayers() - 1);
-
     }
 
     private async isPlayerOnList(userIdPk: number, listIdPk: number): Promise<void> {
