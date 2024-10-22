@@ -13,6 +13,8 @@ tags:
     description: Operations about authentication operations
   - name: organizer/groups
     description: Operations about organizer operations
+  - name: organizer/schedules
+    description: Operations about organizer operations
   - name: organizer/lists
     description: Operations about organizer operations
   - name: player
@@ -35,6 +37,8 @@ paths:
           description: OK
         "400":
           description: Invalid input
+        "422":
+          description: User already exists
   /auth/login:
     post:
       tags:
@@ -51,6 +55,8 @@ paths:
           description: OK
         "400":
           description: Invalid input
+        "422":
+          description: User not found
   /auth/forgot-password:
     post:
       tags:
@@ -67,6 +73,8 @@ paths:
           description: OK
         "400":
           description: Invalid input
+        "422":
+          description: User not found
   /auth/reset-password/{token}:
     put:
       tags:
@@ -83,6 +91,8 @@ paths:
           description: OK
         "400":
           description: Invalid input
+        "422":
+          description: Invalid token
 
   /organizer/group:
     post:
@@ -101,6 +111,8 @@ paths:
           description: OK
         "400":
           description: Invalid input
+        "422":
+          description: Group already exists
   /organizer/groups:
     get:
       tags:
@@ -137,6 +149,8 @@ paths:
                 $ref: "#/components/schemas/GroupOutputSchema"
         "400":
           description: Invalid input
+        "422":
+          description: Group not found
   /organizer/group/{groupId}:
     put:
       tags:
@@ -160,6 +174,51 @@ paths:
           description: OK
         "400":
           description: Invalid input
+        "422":
+          description: Group not found
+
+  /organizer/schedule:
+    post:
+      tags:
+        - organizer/schedules
+      description: Create new Schedule
+      summary: Create new Schedule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateScheduleSchema"
+      responses:
+        "201":
+          description: OK
+        "400":
+          description: Invalid input
+        "422":
+          description: Schedule already exists
+  /organizer/schedule/group/{groupId}:
+    get:
+      tags:
+        - organizer/schedules
+      description: Get list of schedules by groupId
+      summary: Get list of schedules by groupId
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListOfSchedulesSchema"
+        "400":
+          description: Invalid input
+        "422":
+          description: Group not found
 
   /organizer/list:
     post:
@@ -220,6 +279,27 @@ paths:
                 $ref: "#/components/schemas/ListOutputSchema"
         "400":
           description: Invalid input
+  /organizer/list/{listId}:
+    put:
+      tags:
+        - organizer/lists
+      description: Update list
+      summary: Update list
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateListSchema"
+      responses:
+        "201":
+          description: OK
 
 components:
   schemas:
@@ -473,3 +553,126 @@ components:
         localId:
           type: integer
           examples: [1]
+
+    UpdateListSchema:
+      type: object
+      properties:
+        properties:
+        status:
+          type: boolean
+          examples: [true, false]
+        limitOfPlayers:
+          type: integer
+          examples: [18]
+        startingTime:
+          type: string
+          format: time
+          examples: ["08:00"]
+        endingTime:
+          type: string
+          format: time
+          examples: ["17:00"]
+        dayOfWeek:
+          type: string
+          enum:
+            [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday",
+              "saturday",
+              "sunday",
+            ]
+          examples: ["monday"]
+        groupId:
+          type: integer
+          examples: [1]
+        localId:
+          type: integer
+          examples: [1]
+      required:
+        [
+          "status",
+          "limitOfPlayers",
+          "startingTime",
+          "endingTime",
+          "dayOfWeek",
+          "groupId",
+          "localId",
+        ]
+
+    CreateScheduleSchema:
+      type: object
+      properties:
+        dayOfWeek:
+          type: string
+          enum:
+            [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday",
+              "saturday",
+              "sunday",
+            ]
+          examples: ["monday"]
+        startTime:
+          type: string
+          format: time
+          examples: ["08:00"]
+        endTime:
+          type: string
+          format: time
+          examples: ["17:00"]
+        groupId:
+          type: integer
+          examples: [1]
+        localId:
+          type: integer
+          examples: [1]
+      required: ["dayOfWeek", "startTime", "endTime", "groupId", "localId"]
+
+    ListOfSchedulesSchema:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScheduleOutputSchema"
+
+    ScheduleOutputSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          examples: [1]
+        dayOfWeek:
+          type: string
+          enum:
+            [
+              "monday",
+              "tuesday",  
+              "wednesday",
+              "thursday",
+              "friday",
+              "saturday",
+              "sunday",
+            ]
+          examples: ["monday"]
+        startTime:
+          type: string
+          format: time
+          examples: ["08:00"]
+        endTime:
+          type: string
+          format: time
+          examples: ["17:00"]
+        groupId:
+          type: integer
+          examples: [1]
+        localId:
+          type: integer
+          examples: [1] 
+      

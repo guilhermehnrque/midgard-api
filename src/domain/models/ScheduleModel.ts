@@ -14,6 +14,7 @@ class Schedule extends Model<ScheduleAttributes, ScheduleCreationAttributes> imp
     public created_at!: Date;
     public updated_at!: Date;
     public groups_id!: number;
+    public locals_id!: number;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -60,6 +61,14 @@ Schedule.init({
             key: 'id',
         },
     },
+    locals_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Local,
+            key: 'id',
+        },
+    },
 
 }, {
     sequelize,
@@ -71,5 +80,6 @@ Schedule.init({
 });
 
 Schedule.belongsTo(Group, { foreignKey: 'groups_id', as: 'group' });
+Schedule.belongsTo(Local, { foreignKey: 'locals_id', as: 'local' });
 
 export { Schedule };
