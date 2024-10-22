@@ -1,4 +1,4 @@
-import { GroupMembershipAccessService } from "../../services/validation/GroupMembershipAccessService";
+import { GroupMembershipAccessService } from "../../services/validation/player/GroupMembershipAccessService";
 import { JoinGroupUseCase } from "../../usecases/player/group/JoinGroupUseCase";
 import { GroupDetailsUseCase } from "../../usecases/player/group/GroupDetailsUseCase";
 import { LeaveGroupUseCase } from "../../usecases/player/group/LeaveGroupUseCase";

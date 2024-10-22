@@ -84,7 +84,6 @@ export class ListBaseService {
         return this.updateConfirmedPlayers(listIdPk, quantity + 1);
     }
 
-    // Remove jogadores confirmados
     public async removeConfirmedPlayers(listIdPk: number, quantity: number): Promise<number> {
         return this.updateConfirmedPlayers(listIdPk, -quantity); 
     }

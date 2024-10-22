@@ -27,7 +27,6 @@ export class LeaveListUseCase {
 
         await this.listPlayerService.removePlayerFromList(listPlayer);
         await this.listBaseService.updateConfirmedPlayers(listIdPk, list.getConfirmedPlayers() - 1);
-
     }
 
     private async isPlayerOnList(userIdPk: number, listIdPk: number): Promise<void> {
@@ -36,7 +35,7 @@ export class LeaveListUseCase {
         const isPlayerOnList = listPlayers.filter(player => player.users_id == userIdPk);
 
         if (isPlayerOnList.length <= 0) {
-            console.error(`[JoinListUseCase] -> Player already on list`);
+            console.error(`[LeaveListUseCase] -> Player not on list`);
             throw new PlayerNotFoundInListError();
         }
 
