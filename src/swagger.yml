@@ -114,6 +114,50 @@ paths:
                 $ref: "#/components/schemas/ListOfGroupsSchema"
         "400":
           description: Invalid input
+  /organizer/groups/details/{id}:
+    get:
+      tags:
+        - organizer/groups
+      description: Get group details
+      summary: Get group details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupOutputSchema"
+        "400":
+          description: Invalid input
+  /organizer/group/update/{id}:
+    put:
+      tags:
+        - organizer/groups
+      description: Update group
+      summary: Update group
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGroupSchema"
+      responses:
+        "201":
+          description: OK
+        "400":
+          description: Invalid input
 
 components:
   schemas:
@@ -204,7 +248,35 @@ components:
               "GYM",
               "OTHER",
             ]
-      required: ["name"]
+      required: ["description", "visibility", "sportType"]
+    
+    UpdateGroupSchema:
+      type: object
+      properties:
+        description:
+          description: string
+          type: string
+          examples: ["Grupo de véléi do Kinho"]
+        status:
+          type: boolean
+          examples: [true]
+          description: true = active, false = inactive
+        visibility:
+          type: string
+          enum: [PUBLIC, PRIVATE]
+          examples: ["PUBLIC", "PRIVATE"]
+        sportType:
+          type: string
+          enum: ["SOCCER", "BASKETBALL", "VOLLEYBALL"]
+          examples:
+            [
+              "SOCCER",
+              "BASKETBALL",
+              "VOLLEYBALL",
+              "HANDBALL", 
+              "TENNIS",
+              "FOOTBALL"]
+      required: ["description", "visibility", "sportType", "status"]
 
     ListOfGroupsSchema:
       type: object
