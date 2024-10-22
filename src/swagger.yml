@@ -13,6 +13,8 @@ tags:
     description: Operations about authentication operations
   - name: organizer/groups
     description: Operations about organizer operations
+  - name: organizer/lists
+    description: Operations about organizer operations
   - name: player
     description: Operations about organizer operations
 
@@ -82,7 +84,7 @@ paths:
         "400":
           description: Invalid input
 
-  /organizer/groups/create:
+  /organizer/group:
     post:
       tags:
         - organizer/groups
@@ -114,14 +116,14 @@ paths:
                 $ref: "#/components/schemas/ListOfGroupsSchema"
         "400":
           description: Invalid input
-  /organizer/groups/details/{id}:
+  /organizer/group/details/{groupId}:
     get:
       tags:
         - organizer/groups
       description: Get group details
       summary: Get group details
       parameters:
-        - name: id
+        - name: groupId
           in: path
           required: true
           schema:
@@ -135,14 +137,14 @@ paths:
                 $ref: "#/components/schemas/GroupOutputSchema"
         "400":
           description: Invalid input
-  /organizer/group/update/{id}:
+  /organizer/group/{groupId}:
     put:
       tags:
         - organizer/groups
       description: Update group
       summary: Update group
       parameters:
-        - name: id
+        - name: groupId
           in: path
           required: true
           schema:
@@ -156,6 +158,66 @@ paths:
       responses:
         "201":
           description: OK
+        "400":
+          description: Invalid input
+
+  /organizer/list:
+    post:
+      tags:
+        - organizer/lists
+      description: Create new list
+      summary: Create new list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateListSchema"
+      responses:
+        "201":
+          description: OK
+        "400":
+          description: Invalid input
+  /organizer/lists/group/{groupId}:
+    get:
+      tags:
+        - organizer/lists
+      description: Get list of lists by groupId
+      summary: Get list of lists by groupId
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListOfListsSchema"
+        "400":
+          description: Invalid input
+  /organizer/list/details/{listId}:
+    get:
+      tags:
+        - organizer/lists
+      description: Get list details
+      summary: Get list details
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListOutputSchema"
         "400":
           description: Invalid input
 
@@ -249,7 +311,7 @@ components:
               "OTHER",
             ]
       required: ["description", "visibility", "sportType"]
-    
+
     UpdateGroupSchema:
       type: object
       properties:
@@ -273,9 +335,10 @@ components:
               "SOCCER",
               "BASKETBALL",
               "VOLLEYBALL",
-              "HANDBALL", 
+              "HANDBALL",
               "TENNIS",
-              "FOOTBALL"]
+              "FOOTBALL",
+            ]
       required: ["description", "visibility", "sportType", "status"]
 
     ListOfGroupsSchema:
@@ -312,15 +375,101 @@ components:
         sportType:
           type: string
           enum: ["SOCCER", "BASKETBALL", "VOLLEYBALL"]
-          examples:
-            [
-              "SOCCER",
-              "BASKETBALL",
-              "VOLLEYBALL",
-              "HANDBALL",
-            ]
+          examples: ["SOCCER", "BASKETBALL", "VOLLEYBALL", "HANDBALL"]
         createdAt:
           type: string
           format: date
           examples: ["2022-01-01T00:00:00.000Z"]
 
+    CreateListSchema:
+      type: object
+      properties:
+        status:
+          type: boolean
+          examples: [true, false]
+        limitOfPlayers:
+          type: integer
+          examples: [18]
+        startingTime:
+          type: string
+          format: time
+          examples: ["08:00"]
+        endingTime:
+          type: string
+          format: time
+          examples: ["17:00"]
+        dayOfWeek:
+          type: string
+          enum:
+            [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday",
+              "saturday",
+              "sunday",
+            ]
+          examples: ["monday"]
+        groupId:
+          type: integer
+          examples: [1]
+        localId:
+          type: integer
+          examples: [1]
+      required:
+        [
+          "status",
+          "limitOfPlayers",
+          "startingTime",
+          "endingTime",
+          "dayOfWeek",
+          "groupId",
+          "localId",
+        ]
+
+    ListOfListsSchema:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ListOutputSchema"
+
+    ListOutputSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          examples: [1]
+        status:
+          type: boolean
+          examples: [true, false]
+        limitOfPlayers:
+          type: integer
+          examples: [18]
+        startingTime:
+          type: string
+          format: time
+          examples: ["08:00"]
+        endingTime:
+          type: string
+          format: time
+          examples: ["17:00"]
+        dayOfWeek:
+          type: string
+          enum:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+            - saturday
+            - sunday
+          examples: ["monday"]
+        groupId:
+          type: integer
+          examples: [1]
+        localId:
+          type: integer
+          examples: [1]
