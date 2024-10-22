@@ -196,7 +196,7 @@ paths:
           description: Invalid input
         "422":
           description: Schedule already exists
-  /organizer/schedule/group/{groupId}:
+  /organizer/schedules/group/{groupId}:
     get:
       tags:
         - organizer/schedules
@@ -219,6 +219,54 @@ paths:
           description: Invalid input
         "422":
           description: Group not found
+  /organizer/schedule/details/{scheduleId}:
+    get:
+      tags:
+        - organizer/schedules
+      description: Get schedule details
+      summary: Get schedule details
+      parameters:
+        - name: scheduleId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScheduleOutputSchema"
+        "400":
+          description: Invalid input
+        "422":
+          description: Schedule not found
+  /organizer/schedule/update/{scheduleId}:
+    put:
+      tags:
+        - organizer/schedules
+      description: Update schedule
+      summary: Update schedule
+      parameters:
+        - name: scheduleId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateScheduleSchema"
+      responses:
+        "201":
+          description: OK
+        "400":
+          description: Invalid input
+        "422":
+          description: Schedule not found
 
   /organizer/list:
     post:
@@ -653,7 +701,7 @@ components:
           enum:
             [
               "monday",
-              "tuesday",  
+              "tuesday",
               "wednesday",
               "thursday",
               "friday",
@@ -674,5 +722,36 @@ components:
           examples: [1]
         localId:
           type: integer
-          examples: [1] 
-      
+          examples: [1]
+
+    UpdateScheduleSchema:
+      type: object
+      properties:
+        dayOfWeek:
+          type: string
+          enum:
+            [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday",
+              "saturday",
+              "sunday",
+            ]
+          examples: ["monday"]
+        startTime:
+          type: string
+          format: time
+          examples: ["08:00"]
+        endTime:
+          type: string
+          format: time
+          examples: ["17:00"]
+        groupId:
+          type: integer
+          examples: [1]
+        localId:
+          type: integer
+          examples: [1]
+      required: ["dayOfWeek", "startTime", "endTime", "groupId", "localId"]
