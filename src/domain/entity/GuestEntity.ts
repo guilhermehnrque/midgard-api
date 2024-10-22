@@ -2,11 +2,11 @@ import { GuestAttributes } from "../interfaces/attributes/GuestAttributes";
 
 export class GuestEntity implements GuestAttributes {
     public id?: number;
-    public name: string;
+    public guest_name: string;
     public users_id: number;
 
     constructor(payload: Partial<GuestEntity>) {
-        this.name = payload.name!;
+        this.guest_name = payload.guest_name!;
         this.users_id = payload.users_id!;
     }
 
@@ -18,14 +18,14 @@ export class GuestEntity implements GuestAttributes {
 
     public createPayload() {
         return {
-            name: this.name,
+            guest_name: this.guest_name,
             users_id: this.users_id,
         }
     }
 
     public updatePayload() {
         return {
-            name: this.name,
+            guest_name: this.guest_name,
         }
     }
 }
