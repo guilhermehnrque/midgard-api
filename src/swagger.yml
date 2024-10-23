@@ -100,6 +100,8 @@ paths:
         - organizer/groups
       description: Create new group
       summary: Create new group
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -119,6 +121,8 @@ paths:
         - organizer/groups
       description: Get list of groups
       summary: Get list of groups
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: OK
@@ -134,6 +138,8 @@ paths:
         - organizer/groups
       description: Get group details
       summary: Get group details
+      security:
+        - bearerAuth: []
       parameters:
         - name: groupId
           in: path
@@ -157,6 +163,8 @@ paths:
         - organizer/groups
       description: Update group
       summary: Update group
+      security:
+        - bearerAuth: []
       parameters:
         - name: groupId
           in: path
@@ -183,6 +191,8 @@ paths:
         - organizer/schedules
       description: Create new Schedule
       summary: Create new Schedule
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -202,6 +212,8 @@ paths:
         - organizer/schedules
       description: Get list of schedules by groupId
       summary: Get list of schedules by groupId
+      security:
+        - bearerAuth: []
       parameters:
         - name: groupId
           in: path
@@ -225,6 +237,8 @@ paths:
         - organizer/schedules
       description: Get schedule details
       summary: Get schedule details
+      security:
+        - bearerAuth: []
       parameters:
         - name: scheduleId
           in: path
@@ -248,6 +262,8 @@ paths:
         - organizer/schedules
       description: Update schedule
       summary: Update schedule
+      security:
+        - bearerAuth: []
       parameters:
         - name: scheduleId
           in: path
@@ -274,6 +290,8 @@ paths:
         - organizer/lists
       description: Create new list
       summary: Create new list
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -291,6 +309,8 @@ paths:
         - organizer/lists
       description: Get list of lists by groupId
       summary: Get list of lists by groupId
+      security:
+        - bearerAuth: []
       parameters:
         - name: groupId
           in: path
@@ -312,6 +332,8 @@ paths:
         - organizer/lists
       description: Get list details
       summary: Get list details
+      security:
+        - bearerAuth: []
       parameters:
         - name: listId
           in: path
@@ -333,6 +355,8 @@ paths:
         - organizer/lists
       description: Update list
       summary: Update list
+      security:
+        - bearerAuth: []
       parameters:
         - name: listId
           in: path
@@ -755,3 +779,9 @@ components:
           type: integer
           examples: [1]
       required: ["dayOfWeek", "startTime", "endTime", "groupId", "localId"]
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
