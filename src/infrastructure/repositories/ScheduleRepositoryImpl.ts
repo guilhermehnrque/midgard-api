@@ -9,7 +9,8 @@ export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
 
     async createSchedule(scheduleEntity: ScheduleEntity): Promise<Schedule> {
         try {
-            const schedule = Schedule.build(scheduleEntity);
+            const createPayload = scheduleEntity.createPayload() as Required<ScheduleEntity>;
+            const schedule = Schedule.build(createPayload);
             return await schedule.save();
         } catch (error) {
             const customError = error as CustomError;

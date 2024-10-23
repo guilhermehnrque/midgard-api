@@ -37,10 +37,10 @@ export class ListMembershipController {
 
     public async joinList(request: Request, response: Response): Promise<Response> {
         try {
-            const userId = parseInt(request.params.userId);
+            const { userIdPk } = request
             const listId = parseInt(request.params.listId);
 
-            await this.listPlayerFacade.joinList(userId, listId);
+            await this.listPlayerFacade.joinList(userIdPk!, listId);
             return response.status(200).json({ message: "Successfully joined the list" });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;

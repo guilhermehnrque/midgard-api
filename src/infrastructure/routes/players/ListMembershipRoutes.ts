@@ -15,6 +15,7 @@ export class ListMembershipRoutes {
     }
 
     private initializeRoutes(): void {
+        //TODO: Revalidar rotas, payloads e validações para equiparar com o swagger
         this.router.get("/groups/:groupId/lists", validateGetLists, handleValidationErrors.handle, (req: Request, res: Response) => this.listMembershipController.getLists(req, res));
         this.router.get("/joined-lists", validateGetJoinedLists, handleValidationErrors.handle, (req: Request, res: Response) => this.listMembershipController.getJoinedLists(req, res));
         this.router.post("/", validateJoinList, handleValidationErrors.handle,(req: Request, res: Response) => this.listMembershipController.joinList(req, res));

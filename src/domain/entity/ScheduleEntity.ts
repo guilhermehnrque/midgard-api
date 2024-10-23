@@ -77,6 +77,7 @@ export class ScheduleEntity implements ScheduleAttributes {
             ending_time: this.ending_time,
             day_of_week: this.day_of_week,
             groups_id: this.groups_id,
+            locals_id: this.locals_id,
             created_at: new Date(),
             updated_at: new Date(),
         };
@@ -88,6 +89,7 @@ export class ScheduleEntity implements ScheduleAttributes {
             starting_time: this.starting_time,
             ending_time: this.ending_time,
             day_of_week: this.day_of_week,
+            locals_id: this.locals_id,
             groups_id: this.groups_id,
             updated_at: new Date(),
         };

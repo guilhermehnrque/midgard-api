@@ -28,11 +28,14 @@ export class GroupMembershipRouter {
             this.groupMembershipController.getGroups(req, res)
         );
 
+        // TODO CHANGE THIS ROUTE TO RETURN LIST OF GROUP MEMBERSHIPS ->  joined-groups
         this.router.get('/group/:groupId', getMembersValidation, handleValidationErrors.handle, (req: Request, res: Response) =>
             this.groupMembershipController.getGroupMembership(req, res)
         );
+
         this.router.get('/group/:groupId/details', getGroupDetailsValidation, handleValidationErrors.handle, (req: Request, res: Response) =>
             this.groupMembershipController.getGroupDetails(req, res)
         );
+
     }
 }
