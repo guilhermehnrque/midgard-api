@@ -40,7 +40,7 @@ export class GroupDetailOutputDTO {
                 createdAt: this.createdAt,
                 locals: this.locals.map(local => ({
                     id: local.id,
-                    name: local.description,
+                    description: local.description,
                     address: local.getFullAddress(),
                     schedules: this.schedules
                         .filter(schedule => schedule.locals_id === local.id) 
