@@ -18,13 +18,15 @@ export class GroupRouter {
         this.router.get('', (req: Request, res: Response) =>
             this.groupController.getGroups(req, res)
         );
-        this.router.post('', [...schemas.register, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        this.router.post('/create', [...schemas.register, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.groupController.createGroup(req, res)
         );
-        this.router.get('/:groupId', [...schemas.detail, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+
+        this.router.get('/:groupId/details', [...schemas.detail, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.groupController.getGroup(req, res)
         );
-        this.router.put('/:groupId', [...schemas.update, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+
+        this.router.put('/:groupId/update', [...schemas.update, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.groupController.updateGroup(req, res)
         );
     }

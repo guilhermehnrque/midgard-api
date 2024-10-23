@@ -56,11 +56,11 @@ export class ListController {
     public async getList(request: Request, response: Response) {
         try {
             const { userIdPk } = request;
-            const { listId, groupId } = request.params;
+            const { listId } = request.params;
 
-            const list = await this.listBaseFacade.getList(Number(listId), Number(groupId), Number(userIdPk));
+            const list = await this.listBaseFacade.getList(Number(listId), Number(userIdPk));
 
-            return response.status(200).json({ data: list });
+            return response.status(200).json(list);
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });

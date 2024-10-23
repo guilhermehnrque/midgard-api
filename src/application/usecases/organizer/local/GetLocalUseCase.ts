@@ -1,4 +1,3 @@
-import { LocalEntity } from "../../../../domain/entity/LocalEntity";
 import { LocalOutputDTO } from "../../../dto/organizer/local/LocalOutputDTO";
 import { LocalNotFoundError } from "../../../erros/local/LocalNotFoundError";
 import { LocalService } from "../../../services/LocalService";
@@ -19,7 +18,7 @@ export class GetLocalUseCase {
             throw new LocalNotFoundError();
         }
         
-        return LocalOutputDTO.fromEntity(local!);
+        return LocalOutputDTO.fromEntity(local);
     }
 
 }

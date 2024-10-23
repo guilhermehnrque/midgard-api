@@ -13,7 +13,7 @@ export class AuthRouter {
     }
 
     private initializeRoutes(): void {
-        this.router.post('/', schemas.register, handleValidationErrors.handle, (request: Request, response: Response) => 
+        this.router.post('/register', schemas.register, handleValidationErrors.handle, (request: Request, response: Response) => 
             this.authController.createUser(request, response)
         );
 

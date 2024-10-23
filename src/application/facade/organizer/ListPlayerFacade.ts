@@ -1,6 +1,6 @@
 import { PlayerListRequest } from "../../../infrastructure/requests/organizer/listPlayer/PlayerListRequest";
 import { ListPlayerOutputDTO } from "../../dto/organizer/listPlayer/ListPlayerOutputDTO";
-import { OrganizerAccessService } from "../../services/validation/OrganizerAccessService";
+import { AccessValidationHandler } from "../../handlers/access/organizer/AccessValidationHandler";
 import { AddGuestUseCase } from "../../usecases/organizer/listPlayer/AddGuestUseCase";
 import { AddPlayerUseCase } from "../../usecases/organizer/listPlayer/AddPlayerUseCase";
 import { GetPlayersUseCase } from "../../usecases/organizer/listPlayer/GetPlayersUseCase";
@@ -16,7 +16,7 @@ export class ListPlayerFacade {
     private readonly addGuestUseCase: AddGuestUseCase;
     private readonly removeGuestUseCase: RemoveGuestUseCase;
     private readonly updatePlayerStatusUseCase :UpdatePlayerStatusUseCase;
-    private readonly organizerAccessService: OrganizerAccessService;
+    private readonly organizerAccessValidationHandler: AccessValidationHandler;
 
     constructor() {
         this.getPlayersUseCase = new GetPlayersUseCase();
@@ -25,48 +25,48 @@ export class ListPlayerFacade {
         this.addGuestUseCase = new AddGuestUseCase();
         this.removeGuestUseCase = new RemoveGuestUseCase();
         this.updatePlayerStatusUseCase = new UpdatePlayerStatusUseCase();
-        this.organizerAccessService = new OrganizerAccessService();
+        this.organizerAccessValidationHandler = new AccessValidationHandler();
     }
 
     public async getPlayers(request: PlayerListRequest, userId: number): Promise<ListPlayerOutputDTO[]> {
         const { listId } = request;
 
-        await this.organizerAccessService.validateAccess({ userId, listId: listId });
+        await this.organizerAccessValidationHandler.listOrganizerAccessValidation(userId, listId);
         return await this.getPlayersUseCase.execute(listId!);
     }
 
     public async addPlayer(request: PlayerListRequest, userId: number): Promise<void> {
         const { playerId, listId, status } = request;
 
-        await this.organizerAccessService.validateAccess({ userId, listId: listId! });
+        await this.organizerAccessValidationHandler.listOrganizerAccessValidation(userId, listId);
         await this.addPlayerUseCase.execute(playerId!, listId!, status!);
     }
 
     public async removePlayer(request: PlayerListRequest, userId: number): Promise<void> {
         const { listId, playerId, playerListId, status } = request;
 
-        await this.organizerAccessService.validateAccess({ userId, listId: listId });
+        await this.organizerAccessValidationHandler.listOrganizerAccessValidation(userId, listId);
         await this.removePlayerUseCase.execute(playerId!, listId!, playerListId!, status!);
     }
 
     public async addGuest(request: PlayerListRequest, userId: number): Promise<void> {
         const { listId, guestId } = request;
 
-        await this.organizerAccessService.validateAccess({ userId, listId: listId! });
+        await this.organizerAccessValidationHandler.listOrganizerAccessValidation(userId, listId);
         await this.addGuestUseCase.execute(listId!, guestId!);
     }
 
     public async removeGuest(request: PlayerListRequest, userId: number): Promise<void> {
         const { listId, guestId, playerListId  } = request;
 
-        await this.organizerAccessService.validateAccess({ userId, listId: listId! });
+        await this.organizerAccessValidationHandler.listOrganizerAccessValidation(userId, listId);
         await this.removeGuestUseCase.execute(guestId!, listId!, playerListId!);
     }
 
     public async updateListPlayer(request: PlayerListRequest, userId: number): Promise<void> {
         const { playerId, listId, status, playerListId } = request;
 
-        await this.organizerAccessService.validateAccess({ userId, listId: listId });
+        await this.organizerAccessValidationHandler.listOrganizerAccessValidation(userId, listId);
         await this.updatePlayerStatusUseCase.execute(playerId!, listId!, playerListId!, status!);
     }
 

@@ -44,8 +44,8 @@ export class LocalFacade {
         return await this.getLocalsUseCase.execute(groupIdPk);
     }
 
-    public async getLocal(localIdPk: number, groupIdPk: number, userId: number): Promise<any> {
-        await this.organizerAccessService.validateAccess({ userId, groupId: groupIdPk });
+    public async getLocal(localIdPk: number, userId: number): Promise<any> {
+        await this.organizerAccessService.validateAccess({ userId, listId: localIdPk });
         return await this.getLocalUseCase.execute(localIdPk);
     }
 

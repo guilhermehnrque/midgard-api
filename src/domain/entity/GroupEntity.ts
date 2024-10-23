@@ -57,6 +57,10 @@ export class GroupEntity implements GroupAttributes {
         this.users_id = user_id;
     }
 
+    public getGroupOwner() {    
+        return this.users_id;
+    }
+
     public setGroupStatus(status: boolean) {
         this.is_active = status;
     }

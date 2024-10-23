@@ -14,19 +14,19 @@ export class ListRouter {
     }
 
     private initializeRoutes(): void {
-        this.router.post('/', [...schemas.register, handleValidationErrors.handle], (req: Request, res: Response) => 
+        this.router.post('/create', [...schemas.register, handleValidationErrors.handle], (req: Request, res: Response) => 
             this.listController.createList(req, res)
         );
 
-        this.router.get('/:groupId', [...schemas.get, handleValidationErrors.handle], (req: Request, res: Response) => 
+        this.router.get('/group/:groupId', [...schemas.get, handleValidationErrors.handle], (req: Request, res: Response) => 
             this.listController.getLists(req, res)
         );
 
-        this.router.get('/:listId/group-id/:groupId', [...schemas.details, handleValidationErrors.handle], (req: Request, res: Response) => 
+        this.router.get('/:listId/details', [...schemas.details, handleValidationErrors.handle], (req: Request, res: Response) => 
             this.listController.getList(req, res)
         );
 
-        this.router.put('/:listId', [...schemas.update, handleValidationErrors.handle], (req: Request, res: Response) => 
+        this.router.put('/:listId/update', [...schemas.update, handleValidationErrors.handle], (req: Request, res: Response) => 
             this.listController.updateList(req, res)
         );
     }

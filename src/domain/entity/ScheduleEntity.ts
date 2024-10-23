@@ -54,6 +54,10 @@ export class ScheduleEntity implements ScheduleAttributes {
         }
     }
 
+    public getGroupIdPk(): number {
+        return this.groups_id;
+    }
+
     private validateTimeFormat(hour: string): boolean {
         const regex = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
         return regex.test(hour);

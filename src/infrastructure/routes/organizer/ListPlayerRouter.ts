@@ -23,11 +23,12 @@ export class ListPlayerRouter {
             this.listPlayerController.updateListPlayer(req, res)
         );
 
-        this.router.post('/player', [...schemas.addPlayerMemberOnList, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        this.router.post('', [...schemas.addPlayerMemberOnList, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.listPlayerController.addPlayerMemberOnList(req, res)
         );
 
-        this.router.delete('/remove-player', [...schemas.removePlayerMemberOnList, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        //TODO: remover body
+        this.router.delete('/:listPlayerId/remover', [...schemas.removePlayerMemberOnList, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.listPlayerController.removePlayerMemberOnList(req, res)
         );
 

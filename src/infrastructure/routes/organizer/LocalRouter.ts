@@ -12,19 +12,19 @@ export class LocalRouter {
     }
 
     private initializeRoutes(): void {
-        this.router.post('/', [...schemas.register, handleValidationErrors.handle], (req: Request, res: Response) =>
+        this.router.post('/create', [...schemas.register, handleValidationErrors.handle], (req: Request, res: Response) =>
             this.localController.createLocal(req, res)
         );
 
-        this.router.put('/:localId', [...schemas.update, handleValidationErrors.handle], (req: Request, res: Response) =>
+        this.router.put('/:localId/update', [...schemas.update, handleValidationErrors.handle], (req: Request, res: Response) =>
             this.localController.updateLocal(req, res)
         );
 
-        this.router.get('/:groupId', [...schemas.getLocals, handleValidationErrors.handle], (req: Request, res: Response) =>
+        this.router.get('/group/:groupId', [...schemas.getLocals, handleValidationErrors.handle], (req: Request, res: Response) =>
             this.localController.getLocals(req, res)
         );
 
-        this.router.get('/:localId/group-id/:groupId', [...schemas.detail, handleValidationErrors.handle], (req: Request, res: Response) =>
+        this.router.get('/:localId/details', [...schemas.detail, handleValidationErrors.handle], (req: Request, res: Response) =>
             this.localController.getLocal(req, res)
         );
     }

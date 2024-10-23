@@ -9,8 +9,8 @@ export class GetScheduleUseCase {
         this.scheduleService = new SchedulesService();
     }
 
-    public async execute(scheduleIdPk: number, groupIdPk: number): Promise<ScheduleOutputDTO> {
-        const schedules = await this.scheduleService.getScheduleByIdAndGroupId(scheduleIdPk, groupIdPk);
+    public async execute(scheduleIdPk: number): Promise<ScheduleOutputDTO> {
+        const schedules = await this.scheduleService.getScheduleById(scheduleIdPk);
 
         return ScheduleOutputDTO.fromEntity(schedules);
     }
