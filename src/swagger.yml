@@ -108,7 +108,7 @@ paths:
         "422":
           description: Invalid token
 
-  /organizer/group:
+  /organizer/groups/create:
     post:
       tags:
         - organizer/groups
@@ -146,7 +146,7 @@ paths:
                 $ref: "#/components/schemas/ListOfGroupsSchema"
         "400":
           description: Invalid input
-  /organizer/group/details/{groupId}:
+  /organizer/groups/details/{groupId}:
     get:
       tags:
         - organizer/groups
@@ -171,7 +171,7 @@ paths:
           description: Invalid input
         "422":
           description: Group not found
-  /organizer/group/{groupId}:
+  /organizer/groups/{groupId}:
     put:
       tags:
         - organizer/groups
@@ -199,7 +199,7 @@ paths:
         "422":
           description: Group not found
 
-  /organizer/schedule:
+  /organizer/schedules/create:
     post:
       tags:
         - organizer/schedules
@@ -245,7 +245,7 @@ paths:
           description: Invalid input
         "422":
           description: Group not found
-  /organizer/schedule/details/{scheduleId}:
+  /organizer/schedules/details/{scheduleId}:
     get:
       tags:
         - organizer/schedules
@@ -270,7 +270,7 @@ paths:
           description: Invalid input
         "422":
           description: Schedule not found
-  /organizer/schedule/update/{scheduleId}:
+  /organizer/schedules/update/{scheduleId}:
     put:
       tags:
         - organizer/schedules
@@ -298,7 +298,7 @@ paths:
         "422":
           description: Schedule not found
 
-  /organizer/locals:
+  /organizer/locals/create:
     post:
       tags:
         - organizer/locals
@@ -344,7 +344,7 @@ paths:
           description: Invalid input
         "422":
           description: Group not found
-  /organizer/local/details/{localId}:
+  /organizer/locals/details/{localId}:
     get:
       tags:
         - organizer/locals
@@ -369,7 +369,7 @@ paths:
           description: Invalid input
         "422":
           description: Local not found
-  /organizer/local/{localId}:
+  /organizer/locals/{localId}:
     put:
       tags:
         - organizer/locals
@@ -397,7 +397,7 @@ paths:
         "422":
           description: Local not found
 
-  /organizer/list:
+  /organizer/lists/create:
     post:
       tags:
         - organizer/lists
@@ -439,7 +439,7 @@ paths:
                 $ref: "#/components/schemas/ListOfListsSchema"
         "400":
           description: Invalid input
-  /organizer/list/details/{listId}:
+  /organizer/lists/details/{listId}:
     get:
       tags:
         - organizer/lists
@@ -462,7 +462,7 @@ paths:
                 $ref: "#/components/schemas/ListOutputSchema"
         "400":
           description: Invalid input
-  /organizer/list/{listId}:
+  /organizer/lists/{listId}:
     put:
       tags:
         - organizer/lists
@@ -486,7 +486,7 @@ paths:
         "201":
           description: OK
 
-  /organizer/group-member:
+  /organizer/group-members:
     post:
       tags:
         - organizer/group-member
@@ -507,7 +507,7 @@ paths:
           description: Invalid input
         "422":
           description: Already a member
-  /organizer/group-member/{groupId}:
+  /organizer/group-members/{groupId}:
     delete:
       tags:
         - organizer/group-member
@@ -554,7 +554,7 @@ paths:
         "422":
           description: Group not found
 
-  /organizer/player-list:
+  /organizer/players-lists:
     post:
       tags:
         - organizer/player-list
@@ -575,7 +575,7 @@ paths:
           description: Invalid input
         "422":
           description: Player already in list
-  /organizer/player-list/{listId}/remove/{playerId}:
+  /organizer/players-lists/{listId}/remove/{playerId}:
     delete:
       tags:
         - organizer/player-list
@@ -601,7 +601,7 @@ paths:
           description: Invalid input
         "422":
           description: Player not in list
-  /organizer/player-list/{listId}:
+  /organizer/players-lists/{listId}:
     get:
       tags:
         - organizer/player-list
@@ -626,7 +626,7 @@ paths:
           description: Invalid input
         "422":
           description: List not found
-  /organizer/player-list/{listId}/update:
+  /organizer/players-lists/{listId}/update:
     put:
       tags:
         - organizer/player-list
@@ -654,7 +654,7 @@ paths:
         "422":
           description: List not found
 
-  /organizer/guest:
+  /organizer/guests:
     post:
       tags:
         - organizer/guest
@@ -676,7 +676,7 @@ paths:
           description: Invalid input
         "422":
           description: Already a guest
-  /organizer/guest/{guestId}/delete:
+  /organizer/guests/{guestId}/delete:
     delete:
       tags:
         - organizer/guest
@@ -698,7 +698,7 @@ paths:
           description: Invalid input
         "422":
           description: Guest not found
-  /organizer/guest/{guestId}:
+  /organizer/guests/{guestId}:
     get:
       tags:
         - organizer/guest

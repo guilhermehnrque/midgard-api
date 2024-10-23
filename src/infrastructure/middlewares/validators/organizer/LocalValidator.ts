@@ -42,10 +42,6 @@ const schemas = {
     ],
 
     detail: [
-        param('groupId')
-            .isString().withMessage('groupId should be a type of text')
-            .notEmpty().withMessage('GroupId should be declared Path Variable'),
-
         param('localId')
             .isString().withMessage('localId should be a type of text')
             .notEmpty().withMessage('localId should be declared Path Variable')

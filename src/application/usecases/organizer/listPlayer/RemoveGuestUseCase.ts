@@ -13,6 +13,7 @@ export class RemoveGuestUseCase {
         this.listBaseService = new ListBaseService();
     }
 
+    //TODO: CRIAR ROTAS DE CONVIDADO
     public async execute(guestIdPk: number, listIdPk: number, playerListIdPk: number): Promise<void> {
         const list = await this.listBaseService.getList(listIdPk);
         await this.isPlayertOnTheList(guestIdPk, listIdPk)
