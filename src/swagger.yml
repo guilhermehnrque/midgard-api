@@ -12,11 +12,13 @@ tags:
   - name: authentication
     description: Operations about authentication operations
   - name: organizer/groups
-    description: Operations about organizer operations
+    description: Operations about organizer groups operations
   - name: organizer/schedules
-    description: Operations about organizer operations
+    description: Operations about organizer schedules operations
+  - name: organizer/locals
+    description: Operations about organizer locals operations
   - name: organizer/lists
-    description: Operations about organizer operations
+    description: Operations about organizer lists operations
   - name: player
     description: Operations about organizer operations
 
@@ -283,6 +285,105 @@ paths:
           description: Invalid input
         "422":
           description: Schedule not found
+
+  /organizer/locals:
+    post:
+      tags:
+        - organizer/locals
+      description: Create new local
+      summary: Create new local
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLocalSchema"
+      responses:
+        "201":
+          description: OK
+        "400":
+          description: Invalid input
+        "422":
+          description: Local already exists
+  /organizer/locals/group/{groupId}:
+    get:
+      tags:
+        - organizer/locals
+      description: Get list of locals by groupId
+      summary: Get list of locals by groupId
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListOfLocalsSchema"
+        "400":
+          description: Invalid input
+        "422":
+          description: Group not found
+  /organizer/local/details/{localId}:
+    get:
+      tags:
+        - organizer/locals
+      description: Get local details
+      summary: Get local details
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: localId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocalOutputSchema"
+        "400":
+          description: Invalid input
+        "422":
+          description: Local not found
+  /organizer/local/{localId}:
+    put:
+      tags:
+        - organizer/locals
+      description: Update local
+      summary: Update local
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: localId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLocalSchema"
+      responses:
+        "201":
+          description: OK
+        "400":
+          description: Invalid input
+        "422":
+          description: Local not found
 
   /organizer/list:
     post:
@@ -779,6 +880,149 @@ components:
           type: integer
           examples: [1]
       required: ["dayOfWeek", "startTime", "endTime", "groupId", "localId"]
+
+    CreateLocalSchema:
+      type: object
+      required:
+        [
+          "description",
+          "country",
+          "state",
+          "city",
+          "street",
+          "zipCode",
+          "number",
+          "groupId",
+        ]
+      properties:
+        description:
+          type: string
+          description: Description of the location
+          examples: ["Local de Kinho"]
+        country:
+          type: string
+          description: Country of the location
+          examples: ["Brasil"]
+        state:
+          type: string
+          description: State of the location
+          examples: ["ES"]
+        city:
+          type: string
+          description: City of the location
+          examples: ["Vitoria"]
+        street:
+          type: string
+          description: Street of the location
+          examples: ["Rua Rafael"]
+        zipCode:
+          type: integer
+          format: int64
+          description: Zip code of the location
+          examples: [00000000]
+        number:
+          type: integer
+          format: int64
+          description: Number of the location
+          examples: [123]
+        groupId:
+          type: integer
+          format: int64
+          description: Group ID of the location
+          examples: [1]
+
+    ListOfLocalsSchema:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateLocalSchema"
+
+    LocalOutputSchema:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+                examples: [1]
+              country:
+                type: string
+                examples: ["Brazil"]
+              state:
+                type: string
+                examples: ["ES"]
+              city:
+                type: string
+                examples: ["Vitoria"]
+              street:
+                type: string
+                examples: ["Rua Rafael"]
+              number:
+                type: integer
+                format: int64
+                examples: [123]
+              zipCode:
+                type: integer
+                format: int64
+                examples: [00000000]
+              description:
+                type: string
+                examples: ["Centro comunitário de Kinho"]
+              groupsId:
+                type: integer
+                format: int64
+                examples: [1]
+              createdAt:
+                type: string
+                format: date-time
+                examples: ["2022-01-01T00:00:00.000Z"]
+
+    UpdateLocalSchema:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description of the location
+          examples: ["Local de Kinho"]
+        country:
+          type: string
+          description: Country of the location
+          examples: ["Brasil"]
+        state:
+          type: string
+          description: State of the location
+          examples: ["ES"]
+        city:
+          type: string
+          description: City of the location
+          examples: ["Vitoria"]
+        street:
+          type: string
+          description: Street of the location
+          examples: ["Rua Rafael"]
+        zipCode:
+          type: integer
+          format: int64
+          description: Zip code of the location
+          examples: [00000000]
+        number:
+          type: integer
+          format: int64
+          description: Number of the location
+          examples: [123]
+        groupId:
+          type: integer
+          format: int64
+          description: Group ID of the location
+          examples: [1]
+      required: ["description", "country", "state", "city", "street", "zipCode", "number", "groupId"]  
+        
 
   securitySchemes:
     bearerAuth:
