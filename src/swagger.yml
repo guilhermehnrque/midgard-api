@@ -20,6 +20,9 @@ tags:
   - name: organizer/lists
     description: Operations about organizer lists operations
   - name: organizer/group-member
+    description: Operations about organizer group members operations
+  - name: organizer/player-list
+    description: Operations about organizer player list operations
   - name: player
     description: Operations about organizer operations
 
@@ -496,7 +499,6 @@ paths:
           description: Invalid input
         "422":
           description: Already a member
-
   /organizer/group-member/{groupId}:
     delete:
       tags:
@@ -518,7 +520,6 @@ paths:
           description: Invalid input
         "422":
           description: Not a member
-  
   /organizer/group-members/{groupId}/members:
     get:
       tags:
@@ -545,6 +546,106 @@ paths:
         "422":
           description: Group not found
 
+  /organizer/player-list:
+    post:
+      tags:
+        - organizer/player-list
+      description: Add new player list
+      summary: Add new player list
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePlayerListSchema"
+      responses:
+        "201":
+          description: OK
+        "400":
+          description: Invalid input
+        "422":
+          description: Player already in list
+  /organizer/player-list/{listId}/remove/{playerId}:
+    delete:
+      tags:
+        - organizer/player-list
+      description: Delete player list
+      summary: Delete player list
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Invalid input
+        "422":
+          description: Player not in list
+  /organizer/player-list/{listId}:
+    get:
+      tags:
+        - organizer/player-list
+      description: Get player list with players
+      summary: Get player list
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerListOutputSchema"
+        "400":
+          description: Invalid input
+        "422":
+          description: List not found
+
+  /organizer/player-list/{listId}/update:
+    put:
+      tags:
+        - organizer/player-list
+      description: Update player list
+      summary: Update player list
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePlayerListSchema"
+      responses:
+        "201":
+          description: OK
+        "400":
+          description: Invalid input  
+        "422":
+          description: List not found
 
 components:
   schemas:
@@ -1148,6 +1249,68 @@ components:
         memberName:
           type: string
           examples: ["guido"]
+
+    CreatePlayerListSchema:
+      type: object
+      properties:
+        listId:
+          type: integer
+          format: int64
+          examples: [1]
+        playerId:
+          type: array
+          items:
+            type: integer
+            format: int64
+          examples: [1]
+        status:
+          type: string
+          enum: ["CONFIRMADO", "PENDENTE", "REJEITADO"]
+          examples: [CONFIRMADO]
+
+    PlayerListOutputSchema:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/PlayerList"
+
+    PlayerList:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          examples: [1]
+        playerId:
+          type: integer
+          format: int64
+          examples: [1]
+        status:
+          type: string
+          enum: ["CONFIRMADO", "PENDENTE", "REJEITADO"]
+          examples: [CONFIRMADO]
+
+    UpdatePlayerListSchema:
+      type: object
+      properties:
+        listId:
+          type: integer
+          format: int64
+          examples: [1]
+        playerId:
+          type: array
+          items:
+            type: integer
+            format: int64
+          examples: [1]
+        playuerStatus:
+          type: string
+          enum: ["CONFIRMADO", "PENDENTE", "REJEITADO"]
+          examples: [CONFIRMADO]
+
+
 
   securitySchemes:
     bearerAuth:
