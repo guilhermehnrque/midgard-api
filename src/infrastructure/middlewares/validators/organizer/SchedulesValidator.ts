@@ -52,10 +52,6 @@ const schemas = {
         param('scheduleId')
             .isString().withMessage('groupId should be a type of text')
             .notEmpty().withMessage('GroupId should be declared Path Variable'),
-
-        param('groupId')
-            .isString().withMessage('groupId should be a type of text')
-            .notEmpty().withMessage('GroupId should be declared Path Variable')
     ],
 
     getSchedules: [

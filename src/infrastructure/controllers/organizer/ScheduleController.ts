@@ -60,9 +60,9 @@ export class ScheduleController {
     public async getSchedule(request: Request, response: Response) {
         try {
             const { userIdPk } = request;
-            const { scheduleId, groupId } = request.params;
+            const { scheduleId } = request.params;
 
-            const facade = await this.scheduleFacade.getSchedule(Number(userIdPk), Number(scheduleId), Number(groupId));
+            const facade = await this.scheduleFacade.getSchedule(Number(userIdPk), Number(scheduleId));
 
             return response.status(200).json(facade);
 

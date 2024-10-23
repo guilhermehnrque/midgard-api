@@ -58,7 +58,7 @@ export class LocalController {
             const { localId } = request.params;
 
             const local = await this.localFacade.getLocal(Number(localId), Number(userIdPk));
-            return response.status(200).json({ data: local });
+            return response.status(200).json(local);
 
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;

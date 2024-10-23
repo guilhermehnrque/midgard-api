@@ -16,10 +16,13 @@ export class GroupMemberRouter {
         this.router.post('', (req: Request, res: Response) =>
             this.groupMemberController.addMember(req, res)
         );
-        this.router.delete('', (req: Request, res: Response) =>
+
+        //TODO: remover body
+        this.router.delete('/:groupIdMember/remove', (req: Request, res: Response) =>
             this.groupMemberController.removeMember(req, res)
         );
-        this.router.get('/group/:groupId/members', (req: Request, res: Response) =>
+
+        this.router.get('/:groupId/members', (req: Request, res: Response) =>
             this.groupMemberController.getMembers(req, res)
         );
     }

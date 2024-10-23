@@ -44,10 +44,10 @@ export class SchedulesFacade {
         return await this.getSchedulesUseCase.execute(groupId);
     }
 
-    public async getSchedule(userId: number, scheduleIdPk: number, groupIdPk: number): Promise<ScheduleOutputDTO> {
+    public async getSchedule(userId: number, scheduleIdPk: number): Promise<ScheduleOutputDTO> {
         await this.organizerAccessValidationHandler.scheduleOrganizerAccessValidation(userId, scheduleIdPk);
 
-        return await this.getScheduleUseCase.execute(scheduleIdPk, groupIdPk);
+        return await this.getScheduleUseCase.execute(scheduleIdPk);
     }
 
 }

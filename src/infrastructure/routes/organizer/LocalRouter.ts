@@ -16,7 +16,7 @@ export class LocalRouter {
             this.localController.createLocal(req, res)
         );
 
-        this.router.put('/:localId', [...schemas.update, handleValidationErrors.handle], (req: Request, res: Response) =>
+        this.router.put('/:localId/update', [...schemas.update, handleValidationErrors.handle], (req: Request, res: Response) =>
             this.localController.updateLocal(req, res)
         );
 
@@ -24,7 +24,7 @@ export class LocalRouter {
             this.localController.getLocals(req, res)
         );
 
-        this.router.get('/detais/:localId', [...schemas.detail, handleValidationErrors.handle], (req: Request, res: Response) =>
+        this.router.get('/:localId/details', [...schemas.detail, handleValidationErrors.handle], (req: Request, res: Response) =>
             this.localController.getLocal(req, res)
         );
     }

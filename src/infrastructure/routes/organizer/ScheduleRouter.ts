@@ -7,6 +7,7 @@ export class ScheduleRouter {
 
     public readonly router: Router;
     private readonly schedulesController: ScheduleController;
+
     constructor() {
         this.router = Router();
         this.schedulesController = new ScheduleController();
@@ -17,13 +18,16 @@ export class ScheduleRouter {
         this.router.post('/create', [...schemas.register, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.schedulesController.createSchedule(req, res)
         );
+
         this.router.get('/group/:groupId', [...schemas.getSchedules, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.schedulesController.getSchedules(req, res)
         );
-        this.router.get('/details/:scheduleId', [...schemas.detail, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+
+        this.router.get('/:scheduleId/details', [...schemas.detail, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.schedulesController.getSchedule(req, res)
         );
-        this.router.put('/:scheduleId', [...schemas.update, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+
+        this.router.put('/:scheduleId/update', [...schemas.update, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.schedulesController.updateSchedule(req, res)
         );
     }

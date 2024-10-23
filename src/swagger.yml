@@ -23,7 +23,7 @@ tags:
     description: Operations about organizer lists operations
   - name: organizer/group-member
     description: Operations about organizer group members operations
-  - name: organizer/player-list
+  - name: organizer/list-players
     description: Operations about organizer player list operations
   - name: organizer/guest
     description: Operations about organizer guest operations
@@ -146,7 +146,7 @@ paths:
                 $ref: "#/components/schemas/ListOfGroupsSchema"
         "400":
           description: Invalid input
-  /organizer/groups/details/{groupId}:
+  /organizer/groups/{groupId}/details:
     get:
       tags:
         - organizer/groups
@@ -171,7 +171,7 @@ paths:
           description: Invalid input
         "422":
           description: Group not found
-  /organizer/groups/{groupId}:
+  /organizer/groups/{groupId}/update:
     put:
       tags:
         - organizer/groups
@@ -245,7 +245,7 @@ paths:
           description: Invalid input
         "422":
           description: Group not found
-  /organizer/schedules/details/{scheduleId}:
+  /organizer/schedules/{scheduleId}/details:
     get:
       tags:
         - organizer/schedules
@@ -270,7 +270,7 @@ paths:
           description: Invalid input
         "422":
           description: Schedule not found
-  /organizer/schedules/update/{scheduleId}:
+  /organizer/schedules/{scheduleId}/update:
     put:
       tags:
         - organizer/schedules
@@ -344,7 +344,7 @@ paths:
           description: Invalid input
         "422":
           description: Group not found
-  /organizer/locals/details/{localId}:
+  /organizer/locals/{localId}/details:
     get:
       tags:
         - organizer/locals
@@ -369,7 +369,7 @@ paths:
           description: Invalid input
         "422":
           description: Local not found
-  /organizer/locals/{localId}:
+  /organizer/locals/{localId}/update:
     put:
       tags:
         - organizer/locals
@@ -439,7 +439,7 @@ paths:
                 $ref: "#/components/schemas/ListOfListsSchema"
         "400":
           description: Invalid input
-  /organizer/lists/details/{listId}:
+  /organizer/lists/{listId}/details:
     get:
       tags:
         - organizer/lists
@@ -462,7 +462,7 @@ paths:
                 $ref: "#/components/schemas/ListOutputSchema"
         "400":
           description: Invalid input
-  /organizer/lists/{listId}:
+  /organizer/lists/{listId}/update:
     put:
       tags:
         - organizer/lists
@@ -554,10 +554,10 @@ paths:
         "422":
           description: Group not found
 
-  /organizer/players-lists:
+  /organizer/list-players:
     post:
       tags:
-        - organizer/player-list
+        - organizer/list-players
       description: Add new player list
       summary: Add new player list
       security:
@@ -575,10 +575,35 @@ paths:
           description: Invalid input
         "422":
           description: Player already in list
-  /organizer/players-lists/{listId}/remove/{playerId}:
+  /organizer/list-players/{listId}:
+    get:
+      tags:
+        - organizer/list-players
+      description: Get player list with players
+      summary: Get player list
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerListOutputSchema"
+        "400":
+          description: Invalid input
+        "422":
+          description: List not found
+  /organizer/list-players/{listId}/remove/{playerId}:
     delete:
       tags:
-        - organizer/player-list
+        - organizer/list-players
       description: Delete player list
       summary: Delete player list
       security:
@@ -601,39 +626,16 @@ paths:
           description: Invalid input
         "422":
           description: Player not in list
-  /organizer/players-lists/{listId}:
-    get:
-      tags:
-        - organizer/player-list
-      description: Get player list with players
-      summary: Get player list
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: listId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PlayerListOutputSchema"
-        "400":
-          description: Invalid input
-        "422":
-          description: List not found
-  /organizer/players-lists/{listId}/update:
+
+  /organizer/list-players/{listId}/update:
     put:
       tags:
-        - organizer/player-list
+        - organizer/list-players
       description: Update player list
       summary: Update player list
       security:
         - bearerAuth: []
+      deprecated: true
       parameters:
         - name: listId
           in: path
@@ -1467,46 +1469,41 @@ components:
     LocalOutputSchema:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: integer
-                format: int64
-                examples: [1]
-              country:
-                type: string
-                examples: ["Brazil"]
-              state:
-                type: string
-                examples: ["ES"]
-              city:
-                type: string
-                examples: ["Vitoria"]
-              street:
-                type: string
-                examples: ["Rua Rafael"]
-              number:
-                type: integer
-                format: int64
-                examples: [123]
-              zipCode:
-                type: integer
-                format: int64
-                examples: [00000000]
-              description:
-                type: string
-                examples: ["Centro comunitário de Kinho"]
-              groupsId:
-                type: integer
-                format: int64
-                examples: [1]
-              createdAt:
-                type: string
-                format: date-time
-                examples: ["2022-01-01T00:00:00.000Z"]
+          id:
+            type: integer
+            format: int64
+            examples: [1]
+          country:
+            type: string
+            examples: ["Brazil"]
+          state:
+            type: string
+            examples: ["ES"]
+          city:
+            type: string
+            examples: ["Vitoria"]
+          street:
+            type: string
+            examples: ["Rua Rafael"]
+          number:
+            type: integer
+            format: int64
+            examples: [123]
+          zipCode:
+            type: integer
+            format: int64
+            examples: [00000000]
+          description:
+            type: string
+            examples: ["Centro comunitário de Kinho"]
+          groupsId:
+            type: integer
+            format: int64
+            examples: [1]
+          createdAt:
+            type: string
+            format: date-time
+            examples: ["2022-01-01T00:00:00.000Z"]
 
     UpdateLocalSchema:
       type: object
@@ -1903,7 +1900,7 @@ components:
               "wednesday",
               "thursday",
               "friday",
-              "saturday", 
+              "saturday",
               "sunday",
             ]
           examples: ["monday"]
@@ -1915,7 +1912,7 @@ components:
           type: integer
           format: int64
           examples: [1]
-      
+
     ListOfPlayersSchema:
       type: object
       properties:
@@ -1931,14 +1928,14 @@ components:
     ListOfPlayersOutputSchema:
       type: object
       properties:
-          fullName:
-            type: string
-            examples: ["guido"]
-          playerStatus:
-            type: string
-            enum: ["CONFIRMADO", "PENDENTE", "REJEITADO"]
-            examples: [CONFIRMADO]
-    
+        fullName:
+          type: string
+          examples: ["guido"]
+        playerStatus:
+          type: string
+          enum: ["CONFIRMADO", "PENDENTE", "REJEITADO"]
+          examples: [CONFIRMADO]
+
     ResumePlayerStatusListOutputSchema:
       type: object
       properties:

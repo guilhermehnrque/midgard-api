@@ -22,11 +22,11 @@ export class GroupRouter {
             this.groupController.createGroup(req, res)
         );
 
-        this.router.get('/details/:groupId', [...schemas.detail, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        this.router.get('/:groupId/details', [...schemas.detail, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.groupController.getGroup(req, res)
         );
 
-        this.router.put('/:groupId', [...schemas.update, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        this.router.put('/:groupId/update', [...schemas.update, ValidationErrorHandler.handle], (req: Request, res: Response) =>
             this.groupController.updateGroup(req, res)
         );
     }
