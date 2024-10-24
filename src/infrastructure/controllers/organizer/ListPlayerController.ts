@@ -11,7 +11,7 @@ export class ListPlayerController {
         this.listPlayerFacade = new ListPlayerFacade();
     }
 
-    public async getListPlayers(request: Request, response: Response) {
+    public async getListPlayers(request: Request, response: Response): Promise<Response> {
         try {
             const { userIdPk } = request;
             const { listId } = request.params;
@@ -30,27 +30,26 @@ export class ListPlayerController {
         }
     }
 
-    public async updateListPlayer(request: Request, response: Response) {
+    public async updateListPlayer(request: Request, response: Response): Promise<Response> {
         try {
             const { userIdPk } = request;
-            const { listPlayerId } = request.params;
+            const { listId } = request.params;
 
             const playerListRequest: PlayerListRequest = {
                 playerId: request.body.playerId,
                 status: request.body.status,
-                listId: Number(request.body.listId),
-                playerListId: Number(listPlayerId)
+                listId: Number(listId)
             };
 
             await this.listPlayerFacade.updateListPlayer(playerListRequest, Number(userIdPk));
-            return response.status(204);
+            return response.status(204).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
         }
     }
 
-    public async addPlayerMemberOnList(request: Request, response: Response) {
+    public async addPlayerMemberOnList(request: Request, response: Response): Promise<Response> {
         try {
             const { userIdPk } = request;
 
@@ -68,18 +67,12 @@ export class ListPlayerController {
         }
     }
 
-    public async removePlayerMemberOnList(request: Request, response: Response) {
+    public async removePlayerMemberOnList(request: Request, response: Response): Promise<Response> {
         try {
             const { userIdPk } = request;
+            const { listId, playerId } = request.params;
 
-            const playerListRequest: PlayerListRequest = {
-                playerId: request.body.playerId,
-                listId: request.body.listId,
-                playerListId: request.body.playerListId,
-                status: "DESISTENCIA"
-            };
-
-            await this.listPlayerFacade.removePlayer(playerListRequest, Number(userIdPk));
+            await this.listPlayerFacade.removePlayer(Number(listId), Number(playerId), Number(userIdPk));
 
             return response.status(204).json();
         } catch (error) {
@@ -88,7 +81,7 @@ export class ListPlayerController {
         }
     }
 
-    public async addGuestOnList(request: Request, response: Response) {
+    public async addGuestOnList(request: Request, response: Response): Promise<Response> {
         try {
             const { userIdPk } = request;
 
@@ -106,7 +99,7 @@ export class ListPlayerController {
         }
     }
 
-    public async removeGuestOnList(request: Request, response: Response) {
+    public async removeGuestOnList(request: Request, response: Response): Promise<Response> {
         try {
             const { userIdPk } = request;
 

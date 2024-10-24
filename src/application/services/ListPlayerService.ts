@@ -22,13 +22,12 @@ export class ListPlayerService {
         }
     }
 
-    public async updatePlayerStatus(playerEntity: ListPlayerEntity): Promise<number> {
+    public async updatePlayerStatus(playerEntity: ListPlayerEntity): Promise<number | undefined> {
         try {
             return await this.listPlayerRepository.updatePlayerStatus(playerEntity.id!, playerEntity.player_status, playerEntity.users_id!);
         } catch (error) {
             const customError = error as CustomError;
             this.logAndThrowError(new InternalError(), `[PlayersListService] addPlayerToList -> ${customError.message}`);
-            return 0;
         }
     }
 
@@ -69,6 +68,22 @@ export class ListPlayerService {
         }
 
         return Promise.all(playerList.map(this.createListPlayerEntityFromPersistence));
+    }
+
+    public async getPlayerInListByPlayerIdAndListId(playerId: number, listIdPk: number): Promise<ListPlayerEntity | null | undefined> {
+
+        try {
+            const response = await this.listPlayerRepository.getPlayerInListByPlayerIdAndListId(playerId, listIdPk);
+
+            if (response == null) {
+                return null;
+            }
+
+            return this.createListPlayerEntityFromPersistence(response);
+        } catch (error) {
+            const customError = error as CustomError
+            this.logAndThrowError(new InternalError(), `[PlayersListService] getPlayerInListByPlayerIdAndListId -> ${customError.message}`);
+        }
     }
 
     public async validatePlayerIsOnList(playerId: number, listIdPk: number): Promise<boolean> {

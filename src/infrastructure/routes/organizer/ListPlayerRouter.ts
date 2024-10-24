@@ -1,7 +1,6 @@
 import { Router, Request, Response } from "express";
-import { schemas } from "../../middlewares/validators/organizer/PlayerListValidator";
+import { schemas, handleValidationErrors } from "../../middlewares/validators/organizer/PlayerListValidator";
 import { ListPlayerController } from "../../controllers/organizer/ListPlayerController";
-import ValidationErrorHandler from "../../middlewares/validators/ValidatorHandler";
 
 export class ListPlayerRouter {
 
@@ -19,26 +18,24 @@ export class ListPlayerRouter {
             this.listPlayerController.getListPlayers(req, res)
         );
 
-        this.router.put('/:listPlayerId', [...schemas.updateListPlayer, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        this.router.put('/:listId/update', [...schemas.updateListPlayer, handleValidationErrors.handle], (req: Request, res: Response) =>
             this.listPlayerController.updateListPlayer(req, res)
         );
 
-        this.router.post('', [...schemas.addPlayerMemberOnList, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        this.router.post('', [...schemas.addPlayerMemberOnList, handleValidationErrors.handle], (req: Request, res: Response) =>
             this.listPlayerController.addPlayerMemberOnList(req, res)
         );
 
-        //TODO: remover body
-        this.router.delete('/:listPlayerId/remover', [...schemas.removePlayerMemberOnList, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        this.router.delete('/:listId/players/:playerId', [...schemas.removePlayerMemberOnList, handleValidationErrors.handle], (req: Request, res: Response) =>
             this.listPlayerController.removePlayerMemberOnList(req, res)
         );
 
-        this.router.post('/guest', [...schemas.addGuestMemberOnList, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        this.router.post('/guest', [...schemas.addGuestMemberOnList, handleValidationErrors.handle], (req: Request, res: Response) =>
             this.listPlayerController.addGuestOnList(req, res)
         );
 
-        this.router.delete('/guest', [...schemas.removeGuestMemberOnList, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        this.router.delete('/guest', [...schemas.removeGuestMemberOnList, handleValidationErrors.handle], (req: Request, res: Response) =>
             this.listPlayerController.removePlayerMemberOnList(req, res)
         );
-
     }
 }

@@ -635,7 +635,6 @@ paths:
       summary: Update player list
       security:
         - bearerAuth: []
-      deprecated: true
       parameters:
         - name: listId
           in: path
@@ -1624,8 +1623,8 @@ components:
           examples: [1]
         status:
           type: string
-          enum: ["CONFIRMADO", "PENDENTE", "REJEITADO"]
-          examples: [CONFIRMADO]
+          enum: ["WAITING", "CONFIRMED", "DECLINED"]
+          examples: [WAITING]
 
     PlayerListOutputSchema:
       type: object
@@ -1638,7 +1637,7 @@ components:
     PlayerList:
       type: object
       properties:
-        id:
+        listPlayerId:
           type: integer
           format: int64
           examples: [1]
@@ -1646,6 +1645,13 @@ components:
           type: integer
           format: int64
           examples: [1]
+        listId:
+          type: integer
+          format: int64
+          examples: [1]
+        fullName:
+          type: string
+          examples: ["guido guiro"]
         status:
           type: string
           enum: ["CONFIRMADO", "PENDENTE", "REJEITADO"]
@@ -1654,17 +1660,13 @@ components:
     UpdatePlayerListSchema:
       type: object
       properties:
-        listId:
-          type: integer
-          format: int64
-          examples: [1]
         playerId:
           type: array
           items:
             type: integer
             format: int64
           examples: [1]
-        playuerStatus:
+        status:
           type: string
           enum: ["CONFIRMADO", "PENDENTE", "REJEITADO"]
           examples: [CONFIRMADO]

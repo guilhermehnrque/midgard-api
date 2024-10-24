@@ -17,12 +17,11 @@ export class GroupMemberRouter {
             this.groupMemberController.addMember(req, res)
         );
 
-        //TODO: remover body
-        this.router.delete('/:groupIdMember/remove', (req: Request, res: Response) =>
+        this.router.delete('/:memberId/group/:groupId', (req: Request, res: Response) =>
             this.groupMemberController.removeMember(req, res)
         );
 
-        this.router.get('/:groupId/members', (req: Request, res: Response) =>
+        this.router.get('/group/:groupId/members', (req: Request, res: Response) =>
             this.groupMemberController.getMembers(req, res)
         );
     }

@@ -42,11 +42,9 @@ export class ListPlayerFacade {
         await this.addPlayerUseCase.execute(playerId!, listId!, status!);
     }
 
-    public async removePlayer(request: PlayerListRequest, userId: number): Promise<void> {
-        const { listId, playerId, playerListId, status } = request;
-
+    public async removePlayer(listId: number, playerId: number, userId: number): Promise<void> {
         await this.organizerAccessValidationHandler.listOrganizerAccessValidation(userId, listId);
-        await this.removePlayerUseCase.execute(playerId!, listId!, playerListId!, status!);
+        await this.removePlayerUseCase.execute(listId, playerId);
     }
 
     public async addGuest(request: PlayerListRequest, userId: number): Promise<void> {
@@ -64,10 +62,10 @@ export class ListPlayerFacade {
     }
 
     public async updateListPlayer(request: PlayerListRequest, userId: number): Promise<void> {
-        const { playerId, listId, status, playerListId } = request;
+        const { playerId, listId, status } = request;
 
         await this.organizerAccessValidationHandler.listOrganizerAccessValidation(userId, listId);
-        await this.updatePlayerStatusUseCase.execute(playerId!, listId!, playerListId!, status!);
+        await this.updatePlayerStatusUseCase.execute(playerId!, listId!, status!);
     }
 
 }

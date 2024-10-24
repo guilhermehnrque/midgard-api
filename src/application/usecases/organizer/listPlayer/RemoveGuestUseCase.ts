@@ -26,7 +26,7 @@ export class RemoveGuestUseCase {
         });
 
         await this.listPlayerService.removePlayerFromList(listPlayer);
-        await this.listBaseService.addConfirmedPlayers(listIdPk, list.getConfirmedPlayers());
+        await this.listBaseService.addConfirmedPlayers(list);
     }
 
     private async isPlayertOnTheList(memberIdPk: number, listIdPk: number): Promise<void> {

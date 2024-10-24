@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { CustomError } from '../../../application/erros/CustomError';
 import { GroupMemberFacade } from '../../../application/facade/organizer/GroupMemberFacade';
 import { RegisterGroupMemberRequest } from '../../requests/organizer/groupMember/RegisterGroupMemberRequest';
-import { UpdateGroupMemberRequest } from '../../requests/organizer/groupMember/UpdateGroupMemberRequest';
 
 export class GroupMemberController {
     private readonly groupMemberFacade: GroupMemberFacade;
@@ -28,9 +27,9 @@ export class GroupMemberController {
     public async removeMember(request: Request, response: Response): Promise<Response> {
         try {
             const { userIdPk } = request;
-            const requestBody: UpdateGroupMemberRequest = request.body;
+            const { memberId, groupId } = request.params;
 
-            await this.groupMemberFacade.removeGroupMember(requestBody, Number(userIdPk));
+            await this.groupMemberFacade.removeGroupMember(Number(memberId), Number(groupId), Number(userIdPk));
 
             return response.status(204).json();
         } catch (error) {

@@ -1,5 +1,5 @@
+import { PlayerStatusVO } from "../../application/valueobjects/PlayerStatusVO";
 import { ListPlayerAttributes } from "../interfaces/attributes/ListPlayerAttributes";
-import { allowedPlayerListStatus, ListPlayerStatusEnum } from "../../application/enums/ListPlayerStatusEnum";
 
 export class ListPlayerEntity implements ListPlayerAttributes {
 
@@ -43,11 +43,11 @@ export class ListPlayerEntity implements ListPlayerAttributes {
     }
 
     private getUserStatus(status: string): string {
-        if (!allowedPlayerListStatus().includes(status.toUpperCase() as ListPlayerStatusEnum)) {
-            throw new Error('Status inválido');
+        try {
+            return PlayerStatusVO.fromString(status); 
+        } catch (error) {
+            throw new Error(`Invalid player status: ${status}`);
         }
-
-        return status
     }
 
     public createPayload() {

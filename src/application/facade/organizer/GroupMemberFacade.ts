@@ -1,5 +1,4 @@
 import { RegisterGroupMemberRequest } from "../../../infrastructure/requests/organizer/groupMember/RegisterGroupMemberRequest";
-import { UpdateGroupMemberRequest } from "../../../infrastructure/requests/organizer/groupMember/UpdateGroupMemberRequest";
 import { GroupMemberOutputDTO } from "../../dto/organizer/groupMember/GroupMemberOutputDTO";
 import { AccessValidationHandler } from "../../handlers/access/organizer/AccessValidationHandler";
 import { AddGroupMemberUseCase } from "../../usecases/organizer/groupMember/AddGroupMemberUseCase";
@@ -27,9 +26,7 @@ export class GroupMemberFacade {
         await this.addGroupMemberUseCase.execute(groupId, membersId);
     }
 
-    public async removeGroupMember(request: UpdateGroupMemberRequest, userId: number): Promise<void> {
-        const { groupId, memberId } = request;
-
+    public async removeGroupMember(groupId: number, memberId: number, userId: number): Promise<void> {
         await this.organizerAccessValidationHandler.organizerAccessValidation(userId);
         await this.removeGroupMemberUseCase.execute(groupId, memberId);
     }

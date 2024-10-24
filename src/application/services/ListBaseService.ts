@@ -33,7 +33,7 @@ export class ListBaseService {
         }
     }
 
-    public async updateConfirmedPlayers(listIdPk: number, confirmedQuantity: number): Promise<number> {
+    private async updateConfirmedPlayers(listIdPk: number, confirmedQuantity: number): Promise<number> {
         try {
             return await this.listBaseRepository.updateConfirmedPlayers(listIdPk, confirmedQuantity);
         } catch (error) {
@@ -80,12 +80,16 @@ export class ListBaseService {
         }
     }
 
-     public async addConfirmedPlayers(listIdPk: number, quantity: number): Promise<number> {
-        return this.updateConfirmedPlayers(listIdPk, quantity + 1);
+     public async addConfirmedPlayers(listEntity: ListBaseEntity): Promise<number> {
+        const listIdPk = listEntity.id;
+        const quantity = listEntity.getConfirmedPlayers();
+        return this.updateConfirmedPlayers(listIdPk!, quantity + 1);
     }
 
-    public async removeConfirmedPlayers(listIdPk: number, quantity: number): Promise<number> {
-        return this.updateConfirmedPlayers(listIdPk, -quantity); 
+    public async removeConfirmedPlayers(listEntity: ListBaseEntity): Promise<number> {
+        const listIdPk = listEntity.id;
+        const quantity = listEntity.getConfirmedPlayers();
+        return this.updateConfirmedPlayers(listIdPk!, quantity - 1); 
     }
 
     private async createEntityFromPersistence(listBase: List): Promise<ListBaseEntity> {
