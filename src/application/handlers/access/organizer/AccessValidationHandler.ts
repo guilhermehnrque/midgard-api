@@ -17,21 +17,21 @@ export class AccessValidationHandler {
         this.scheduleAccessHandler = new ScheduleAccessHandler();
     }
 
-    public async organizerAccessValidation(userId?: number) {
+    public async organizerAccessValidation(userId?: number): Promise<void> {
         await this.organizerAccess.handle({ userId });
     }
 
-    public async groupOrganizerAccessValidation(userId?: number, groupId?: number) {
+    public async groupOrganizerAccessValidation(userId?: number, groupId?: number): Promise<void> {
         this.organizerAccess.setNext(this.groupOrganizerAccess);
         await this.organizerAccess.handle({ userId, groupId });
     }
 
-    public async listOrganizerAccessValidation(userId?: number, listId?: number) {
+    public async listOrganizerAccessValidation(userId?: number, listId?: number): Promise<void> {
         this.organizerAccess.setNext(this.listAccessHandler);
         await this.organizerAccess.handle({ userId, listId });
     }
 
-    public async scheduleOrganizerAccessValidation(userId?: number, scheduleId?: number) {
+    public async scheduleOrganizerAccessValidation(userId?: number, scheduleId?: number): Promise<void> {
         this.organizerAccess.setNext(this.scheduleAccessHandler);
         await this.organizerAccess.handle({ userId, scheduleId });
     }

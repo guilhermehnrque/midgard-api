@@ -71,19 +71,13 @@ export class ListPlayerService {
     }
 
     public async getPlayerInListByPlayerIdAndListId(playerId: number, listIdPk: number): Promise<ListPlayerEntity | null | undefined> {
+        const response = await this.listPlayerRepository.getPlayerInListByPlayerIdAndListId(playerId, listIdPk);
 
-        try {
-            const response = await this.listPlayerRepository.getPlayerInListByPlayerIdAndListId(playerId, listIdPk);
-
-            if (response == null) {
-                return null;
-            }
-
-            return this.createListPlayerEntityFromPersistence(response);
-        } catch (error) {
-            const customError = error as CustomError
-            this.logAndThrowError(new InternalError(), `[PlayersListService] getPlayerInListByPlayerIdAndListId -> ${customError.message}`);
+        if (response == null) {
+            return null;
         }
+
+        return this.createListPlayerEntityFromPersistence(response);
     }
 
     public async validatePlayerIsOnList(playerId: number, listIdPk: number): Promise<boolean> {

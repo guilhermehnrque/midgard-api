@@ -19,7 +19,7 @@ class App {
         this.app = express();
         this.initializeMiddlewares();
         this.initializeRoutes();
-        this.initializeSwagger()
+        this.initializeSwagger();
     }
 
     private initializeMiddlewares(): void {

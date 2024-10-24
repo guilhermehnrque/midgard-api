@@ -1,5 +1,3 @@
-
-
 import { PermissionError } from "../../../../erros/PermissionError";
 import { GroupService } from "../../../../services/GroupService";
 import { ListBaseService } from "../../../../services/ListBaseService";
@@ -10,7 +8,7 @@ export class ListAccessHandler extends AbstractHandler {
 
     private readonly groupService: GroupService;
     private readonly listBaseService: ListBaseService;
-    
+
     constructor() {
         super();
         this.groupService = new GroupService();

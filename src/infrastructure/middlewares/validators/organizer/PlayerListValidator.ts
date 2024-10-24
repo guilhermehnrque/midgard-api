@@ -10,7 +10,7 @@ const schemas = {
 
     updateListPlayer: [
         param('listId')
-            .isString().withMessage('listId should be a type of text')
+            .isNumeric().withMessage('listId should be a type of number')
             .notEmpty().withMessage('listId should be declared Path Variable'),
 
         body('playerId')
