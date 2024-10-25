@@ -3,7 +3,7 @@ import handleValidationErrors from '../ValidatorHandler';
 
 const schemas = {
     getListPlayer: [
-        body('listId')
+        param('listId')
             .notEmpty().withMessage('Id da lista é obrigatório')
             .isNumeric().withMessage('Id da lista deve ser um número'),
     ],

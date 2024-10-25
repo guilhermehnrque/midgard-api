@@ -49,7 +49,7 @@ const schemas = {
 
     detail: [
         param('scheduleId')
-            .isNumeric().withMessage('groupId should be a type of text')
+            .isNumeric().withMessage('groupId should be a type of numeric')
             .notEmpty().withMessage('GroupId should be declared Path Variable'),
     ],
 

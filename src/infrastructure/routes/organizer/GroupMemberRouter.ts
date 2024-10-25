@@ -16,7 +16,7 @@ export class GroupMemberRouter {
     }
 
     private initializeRoutes(): void {
-        this.router.post('', (req: Request, res: Response) =>
+        this.router.post('', [this.accessHandler.groupAccess.bind(this.accessHandler)], (req: Request, res: Response) =>
             this.groupMemberController.addMember(req, res)
         );
 

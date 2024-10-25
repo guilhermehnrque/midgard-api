@@ -1,4 +1,4 @@
-import { getDayOfWeekByString } from "../../application/enums/DayOfWeekEnum";
+import { DayOfWeekHelper } from "../../application/enums/DayOfWeekEnum";
 import { ScheduleAttributes } from "../interfaces/attributes/ScheduleAttributes";
 
 export class ScheduleEntity implements ScheduleAttributes {
@@ -72,7 +72,7 @@ export class ScheduleEntity implements ScheduleAttributes {
     }
 
     private dayOfWeekByString(dayOfWeek: string): string {
-        return getDayOfWeekByString(dayOfWeek)!.toString().toUpperCase();
+        return DayOfWeekHelper.fromString(dayOfWeek.toUpperCase()).toString().toUpperCase();
     }
 
     public createPayload(): Partial<ScheduleEntity> {

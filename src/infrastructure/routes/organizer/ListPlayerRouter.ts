@@ -17,7 +17,7 @@ export class ListPlayerRouter {
     }
     
     private initializeRoutes(): void {
-        this.router.get('/:listId', [this.accessHandler.listAccess.bind(this.accessHandler)],(req: Request, res: Response) =>
+        this.router.get('/:listId', [...schemas.getListPlayer, handleValidationErrors.handle, this.accessHandler.listAccess.bind(this.accessHandler)],(req: Request, res: Response) =>
             this.listPlayerController.getListPlayers(req, res)
         );
 

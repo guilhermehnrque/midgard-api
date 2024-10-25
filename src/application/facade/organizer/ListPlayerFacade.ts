@@ -25,35 +25,35 @@ export class ListPlayerFacade {
         this.updatePlayerStatusUseCase = new UpdatePlayerStatusUseCase();
     }
 
-    public async getPlayers(request: PlayerListRequest, userId: number): Promise<ListPlayerOutputDTO[]> {
+    public async getPlayers(request: PlayerListRequest): Promise<ListPlayerOutputDTO[]> {
         const { listId } = request;
 
         return await this.getPlayersUseCase.execute(listId!);
     }
 
-    public async addPlayer(request: PlayerListRequest, userId: number): Promise<void> {
+    public async addPlayer(request: PlayerListRequest): Promise<void> {
         const { playerId, listId, status } = request;
 
         await this.addPlayerUseCase.execute(playerId!, listId!, status!);
     }
 
-    public async removePlayer(listId: number, playerId: number, userId: number): Promise<void> {
+    public async removePlayer(listId: number, playerId: number): Promise<void> {
         await this.removePlayerUseCase.execute(listId, playerId);
     }
 
-    public async addGuest(request: PlayerListRequest, userId: number): Promise<void> {
+    public async addGuest(request: PlayerListRequest): Promise<void> {
         const { listId, guestId } = request;
 
         await this.addGuestUseCase.execute(listId!, guestId!);
     }
 
-    public async removeGuest(request: PlayerListRequest, userId: number): Promise<void> {
+    public async removeGuest(request: PlayerListRequest): Promise<void> {
         const { listId, guestId, playerListId  } = request;
 
         await this.removeGuestUseCase.execute(guestId!, listId!, playerListId!);
     }
 
-    public async updateListPlayer(request: PlayerListRequest, userId: number): Promise<void> {
+    public async updateListPlayer(request: PlayerListRequest): Promise<void> {
         const { playerId, listId, status } = request;
 
         await this.updatePlayerStatusUseCase.execute(playerId!, listId!, status!);

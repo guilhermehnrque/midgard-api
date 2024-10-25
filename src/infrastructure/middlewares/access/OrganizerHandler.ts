@@ -20,7 +20,11 @@ export class OrganizerHandler {
 
     public async groupAccess(req: Request, res: Response, next: NextFunction) {
         const userId = Number(req.userIdPk);
-        const groupId = Number(req.params.groupId);
+        let groupId = Number(req.params.groupId);
+
+        if (isNaN(groupId)) {
+            groupId = Number(req.body.groupId);
+        }
 
         try {
             await this.groupHandler.handle({ userId, groupId });

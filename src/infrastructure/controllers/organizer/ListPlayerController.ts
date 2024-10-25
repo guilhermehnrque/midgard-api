@@ -13,14 +13,13 @@ export class ListPlayerController {
 
     public async getListPlayers(request: Request, response: Response): Promise<Response> {
         try {
-            const { userIdPk } = request;
             const { listId } = request.params;
 
             const playerListRequest: PlayerListRequest = {
                 listId: Number(listId),
             };
 
-            const lists = await this.listPlayerFacade.getPlayers(playerListRequest, Number(userIdPk));
+            const lists = await this.listPlayerFacade.getPlayers(playerListRequest);
 
             return response.status(200).json({ data: lists });
         } catch (error) {
@@ -32,7 +31,6 @@ export class ListPlayerController {
 
     public async updateListPlayer(request: Request, response: Response): Promise<Response> {
         try {
-            const { userIdPk } = request;
             const { listId } = request.params;
 
             const playerListRequest: PlayerListRequest = {
@@ -41,7 +39,7 @@ export class ListPlayerController {
                 listId: Number(listId)
             };
 
-            await this.listPlayerFacade.updateListPlayer(playerListRequest, Number(userIdPk));
+            await this.listPlayerFacade.updateListPlayer(playerListRequest);
             return response.status(204).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -51,15 +49,13 @@ export class ListPlayerController {
 
     public async addPlayerMemberOnList(request: Request, response: Response): Promise<Response> {
         try {
-            const { userIdPk } = request;
-
             const playerListRequest: PlayerListRequest = {
                 playerId: request.body.playerId,
                 listId: request.body.listId,
                 status: request.body.status,
             };
 
-            await this.listPlayerFacade.addPlayer(playerListRequest, Number(userIdPk));
+            await this.listPlayerFacade.addPlayer(playerListRequest);
             return response.status(201).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -69,10 +65,9 @@ export class ListPlayerController {
 
     public async removePlayerMemberOnList(request: Request, response: Response): Promise<Response> {
         try {
-            const { userIdPk } = request;
             const { listId, playerId } = request.params;
 
-            await this.listPlayerFacade.removePlayer(Number(listId), Number(playerId), Number(userIdPk));
+            await this.listPlayerFacade.removePlayer(Number(listId), Number(playerId));
 
             return response.status(204).json();
         } catch (error) {
@@ -83,15 +78,13 @@ export class ListPlayerController {
 
     public async addGuestOnList(request: Request, response: Response): Promise<Response> {
         try {
-            const { userIdPk } = request;
-
             const playerListRequest: PlayerListRequest = {
                 guestId: request.body.playerId,
                 listId: request.body.listId,
                 status: request.body.status,
             };
 
-            await this.listPlayerFacade.addGuest(playerListRequest, Number(userIdPk));
+            await this.listPlayerFacade.addGuest(playerListRequest);
             return response.status(201);
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -101,7 +94,6 @@ export class ListPlayerController {
 
     public async removeGuestOnList(request: Request, response: Response): Promise<Response> {
         try {
-            const { userIdPk } = request;
 
             const playerListRequest: PlayerListRequest = {
                 guestId: request.body.playerId,
@@ -109,7 +101,7 @@ export class ListPlayerController {
                 playerListId: request.body.playerListId,
             };
 
-            await this.listPlayerFacade.removeGuest(playerListRequest, Number(userIdPk));
+            await this.listPlayerFacade.removeGuest(playerListRequest);
 
             return response.status(204);
         } catch (error) {

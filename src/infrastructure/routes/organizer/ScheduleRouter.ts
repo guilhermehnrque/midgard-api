@@ -18,19 +18,19 @@ export class ScheduleRouter {
     }
 
     private initializeRoutes(): void {
-        this.router.post('/create', [...schemas.register, ValidationErrorHandler.handle], (req: Request, res: Response) =>
+        this.router.post('/create', [...schemas.register, ValidationErrorHandler.handle, this.accessHandler.groupAccess.bind(this.accessHandler)], (req: Request, res: Response) =>
             this.schedulesController.createSchedule(req, res)
         );
 
-        this.router.get('/group/:groupId', [...schemas.getSchedules, ValidationErrorHandler.handle, this.accessHandler.groupAccess], (req: Request, res: Response) =>
+        this.router.get('/group/:groupId', [...schemas.getSchedules, ValidationErrorHandler.handle, this.accessHandler.groupAccess.bind(this.accessHandler)], (req: Request, res: Response) =>
             this.schedulesController.getSchedules(req, res)
         );
 
-        this.router.get('/:scheduleId/details', [...schemas.detail, ValidationErrorHandler.handle, this.accessHandler.scheduleAccess], (req: Request, res: Response) =>
+        this.router.get('/:scheduleId/details', [...schemas.detail, ValidationErrorHandler.handle, this.accessHandler.scheduleAccess.bind(this.accessHandler)], (req: Request, res: Response) =>
             this.schedulesController.getSchedule(req, res)
         );
 
-        this.router.put('/:scheduleId/update', [...schemas.update, ValidationErrorHandler.handle, this.accessHandler.scheduleAccess], (req: Request, res: Response) =>
+        this.router.put('/:scheduleId/update', [...schemas.update, ValidationErrorHandler.handle, this.accessHandler.scheduleAccess.bind(this.accessHandler)], (req: Request, res: Response) =>
             this.schedulesController.updateSchedule(req, res)
         );
     }

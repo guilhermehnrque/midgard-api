@@ -17,7 +17,7 @@ export class LocalRouter {
     }
 
     private initializeRoutes(): void {
-        this.router.post('/create', [...schemas.register, handleValidationErrors.handle], (req: Request, res: Response) =>
+        this.router.post('/create', [...schemas.register, handleValidationErrors.handle, this.accessHandler.groupAccess.bind(this.accessHandler)], (req: Request, res: Response) =>
             this.localController.createLocal(req, res)
         );
 

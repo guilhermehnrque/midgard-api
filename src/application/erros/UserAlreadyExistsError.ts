@@ -1,4 +1,6 @@
-export class UserAlreadyExistsError extends Error {
+import { CustomError } from "./CustomError";
+
+export class UserAlreadyExistsError extends CustomError {
     constructor(
         message: string = "Usuário já cadastrado", 
         public statusCode: number = 400
