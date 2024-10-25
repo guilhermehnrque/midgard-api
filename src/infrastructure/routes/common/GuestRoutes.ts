@@ -13,7 +13,7 @@ export class GuestRoutes {
     }
 
     private initializeRoutes(): void {
-        this.router.post('/register', [...schemas.register, handleValidationErrors.handle], (request: Request, response: Response) =>
+        this.router.post('/create', [...schemas.register, handleValidationErrors.handle], (request: Request, response: Response) =>
             this.guestController.createGuest(request, response)
         );
 

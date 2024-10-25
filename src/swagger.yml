@@ -655,13 +655,13 @@ paths:
         "422":
           description: List not found
 
-  /organizer/guests:
+  /organizer/guests/create:
     post:
       tags:
         - organizer/guest
       description: Create new guest
       summary: Create new guest
-      deprecated: true
+      deprecated: false
       security:
         - bearerAuth: []
       requestBody:
@@ -677,13 +677,14 @@ paths:
           description: Invalid input
         "422":
           description: Already a guest
+
   /organizer/guests/{guestId}/delete:
     delete:
       tags:
         - organizer/guest
       description: Delete guest
       summary: Delete guest
-      deprecated: true
+      deprecated: false
       security:
         - bearerAuth: []
       parameters:
@@ -699,13 +700,41 @@ paths:
           description: Invalid input
         "422":
           description: Guest not found
-  /organizer/guests/{guestId}:
+  /organizer/guests/{guestId}/update:
+    put:
+      tags:
+        - organizer/guest
+      description: Update a guest
+      summary: Update a guest
+      deprecated: false
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: guestId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGuestSchema"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Invalid input
+        "422":
+          description: Guest not found
+  /organizer/guests:
     get:
       tags:
         - organizer/guest
       description: Get guest
       summary: Get guest
-      deprecated: true
+      deprecated: false
       security:
         - bearerAuth: []
       parameters:
@@ -1674,7 +1703,7 @@ components:
     CreateGuestSchema:
       type: object
       properties:
-        name:
+        guestName:
           type: string
           examples: ["guido"]
 
@@ -1693,7 +1722,7 @@ components:
           type: integer
           format: int64
           examples: [1]
-        name:
+        guestName:
           type: string
           examples: ["guido"]
 
@@ -1953,6 +1982,13 @@ components:
           type: integer
           format: int64
           examples: [3]
+
+    UpdateGuestSchema:
+      type: object
+      properties:
+        guestName:
+          type: string
+          examples: ["guido"]
 
   securitySchemes:
     bearerAuth:

@@ -9,7 +9,7 @@ const schemas = {
     ],
 
     updateGuest: [
-        body('name')
+        body('guestName')
             .notEmpty().withMessage('Nome é obrigatório')
             .isString().withMessage('Nome deve ser uma string'),
         param('guestId')
