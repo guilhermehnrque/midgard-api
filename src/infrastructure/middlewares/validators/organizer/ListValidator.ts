@@ -46,7 +46,7 @@ const schemas = {
 
     update: [
         param('listId')
-            .notEmpty().withMessage('Id é obrigatório')
+            .isNumeric().withMessage('Id é obrigatório')
             .isNumeric().withMessage('Id deve ser um número'),
 
         body('status')

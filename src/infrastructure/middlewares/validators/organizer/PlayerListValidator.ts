@@ -38,7 +38,7 @@ const schemas = {
 
     removePlayerMemberOnList: [
         param('listId')
-            .isString().withMessage('playerListId should be a type of text')
+            .isNumeric().withMessage('playerListId should be a type of text')
             .notEmpty().withMessage('playerListId should be declared Path Variable'),
 
         param('playerId')

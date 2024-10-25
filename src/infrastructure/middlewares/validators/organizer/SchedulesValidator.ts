@@ -19,7 +19,6 @@ const schemas = {
             .isNumeric().withMessage('GroupId deve ser tdo tipo Inteiro')
             .notEmpty().withMessage('GroupId deve ser declarado no body'),
 
-
         body('localId')
             .isNumeric().withMessage('LocalId deve ser tdo tipo Inteiro')
             .notEmpty().withMessage('LocalId deve ser declarado no body'),
@@ -50,13 +49,13 @@ const schemas = {
 
     detail: [
         param('scheduleId')
-            .isString().withMessage('groupId should be a type of text')
+            .isNumeric().withMessage('groupId should be a type of text')
             .notEmpty().withMessage('GroupId should be declared Path Variable'),
     ],
 
     getSchedules: [
         param('groupId')
-            .isString().withMessage('groupId should be a type of text')
+            .isNumeric().withMessage('groupId should be a type of text')
             .notEmpty().withMessage('GroupId should be declared Path Variable')
     ]
 }

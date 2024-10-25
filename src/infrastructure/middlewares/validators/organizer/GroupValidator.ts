@@ -19,13 +19,13 @@ const schemas = {
 
     detail: [
         param('groupId')
-            .isString().withMessage('groupId should be a type of text')
+            .isNumeric().withMessage('groupId should be a type of number')
             .notEmpty().withMessage('GroupId should be declared Path Variable')
     ],
 
     update: [
         param('groupId')
-            .isString().withMessage('groupId should be a type of text')
+            .isNumeric().withMessage('groupId should be a type of text')
             .notEmpty().withMessage('GroupId should be declared Path Variable'),
 
         body('description')
