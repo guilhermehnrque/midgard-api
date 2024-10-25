@@ -5,6 +5,7 @@ import { ListBaseService } from "../../ListBaseService";
 
 export class GroupMembershipAccessService {
 
+    //TODO: Migrar para handlers
     private readonly groupUserService: GroupUserService
     private readonly listBaseService: ListBaseService
 

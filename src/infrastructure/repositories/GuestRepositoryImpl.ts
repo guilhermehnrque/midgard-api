@@ -34,6 +34,15 @@ export class GuestRepositoryImpl implements GuestRepositoryInterface {
         }
     }
 
+    public async getGuestByHostId(usersId: number): Promise<Guest[]> {
+        try {
+            return await Guest.findAll({ where: { users_id: usersId } });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GuestRepositoryImpl] Error getting guest by host id: ${customError.message}`);
+        }
+    }
+
     async updateGuestById(guestId: number, guestEntity: GuestEntity): Promise<number> {
         try {
             const [rowsAffected] = await Guest.update(guestEntity.updatePayload(), { where: { id: guestId } });
