@@ -6,9 +6,10 @@ import { CustomError } from "../../application/erros/CustomError";
 
 export class GroupRepositoryImpl implements GroupRepositoryInterface {
 
-    public async createGroup(groupEntity: GroupEntity): Promise<Group> {
+    public async createGroup(groupEntity: GroupEntity): Promise<number> {
         try {
-            return await Group.create(groupEntity.toCreatePayload());
+            const group =  await Group.create(groupEntity.toCreatePayload());
+            return group.id;
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[GroupRepositoryImpl] createGroup -> ${customError.message}`);

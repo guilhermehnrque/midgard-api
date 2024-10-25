@@ -1,13 +1,17 @@
 import { GroupUserEntity } from "../../../../domain/entity/GroupUserEntity";
+import { OrganizerCreatedGroupObserver } from "../../../../domain/observers/OrganizerCreatedGroupObserver";
 import { AddMemberToGroupError } from "../../../erros/groupUser/AddMemberToGroupError";
+import { OrganizerCreatedGroupSubject } from "../../../observers/OrganizerCreatedGroupSubject";
 import { GroupUserService } from "../../../services/GroupUserService";
 
-export class AddGroupMemberUseCase {
+export class AddGroupMemberUseCase implements OrganizerCreatedGroupObserver {
 
     private readonly groupUsersService: GroupUserService;
 
     constructor() {
         this.groupUsersService = new GroupUserService();
+        const organizerCreatedGroupSubject = OrganizerCreatedGroupSubject.getInstance();
+        organizerCreatedGroupSubject.subscribe(this);
     }
 
     public async execute(groupIdPk: number, membersId: Array<number>): Promise<void> {
@@ -17,7 +21,6 @@ export class AddGroupMemberUseCase {
             groups_id: groupIdPk,
             users_id: membersId
         })));
-
 
         await this.groupUsersService.registerUserToGroup(members);
     }
@@ -34,6 +37,10 @@ export class AddGroupMemberUseCase {
 
     private async isUserAlreadyInGroup(membersId: Array<number>, groupIdPk: number): Promise<void> {
         await Promise.all(membersId.map(async memberId => await this.groupUsersService.ensureUserIsNotInGroup(memberId, groupIdPk)));
+    }
+
+    public async save(groupId: number, membersId: number[]): Promise<void> {
+        await this.execute(groupId, membersId);
     }
 
 }

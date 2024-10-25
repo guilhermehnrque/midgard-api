@@ -1,17 +1,19 @@
 import { GroupEntity } from "../../../../domain/entity/GroupEntity";
 import { GroupVisibilityHelper } from "../../../enums/GroupVisibilitEnum";
 import { SportTypeHelper } from "../../../enums/SportTypeEnum";
+import { OrganizerCreatedGroupSubject } from "../../../observers/OrganizerCreatedGroupSubject";
 import { GroupService } from "../../../services/GroupService";
 
 export class CreateGroupUseCase {
 
     private readonly groupService: GroupService;
+    private readonly organizerCreatedGroupSubject: OrganizerCreatedGroupSubject = OrganizerCreatedGroupSubject.getInstance();
 
     constructor() {
         this.groupService = new GroupService();
     }
 
-    async execute(userIdPk: number, description: string, visibility: string, sportType: string): Promise<void> {
+    public async execute(userIdPk: number, description: string, visibility: string, sportType: string): Promise<void> {
         const sportTypeEnum = SportTypeHelper.fromString(sportType);
         const visibilityEnum = GroupVisibilityHelper.fromString(visibility);
 
@@ -23,7 +25,9 @@ export class CreateGroupUseCase {
             visibility: visibilityEnum
         })
 
-        await this.groupService.createGroup(groupEntity);
+        const groupId = await this.groupService.createGroup(groupEntity);
+
+        await this.organizerCreatedGroupSubject.notify(userIdPk, groupId!);
     }
 
 }

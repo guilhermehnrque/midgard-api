@@ -16,17 +16,17 @@ export class GroupMemberFacade {
         this.getGroupMembersUseCase = new GetGroupMembersUseCase();
     }
 
-    public async addGroupMember(request: RegisterGroupMemberRequest, userId: number): Promise<void> {
+    public async addGroupMember(request: RegisterGroupMemberRequest): Promise<void> {
         const { groupId, membersId } = request;
 
         await this.addGroupMemberUseCase.execute(groupId, membersId);
     }
 
-    public async removeGroupMember(groupId: number, memberId: number, userId: number): Promise<void> {
+    public async removeGroupMember(groupId: number, memberId: number): Promise<void> {
         await this.removeGroupMemberUseCase.execute(groupId, memberId);
     }
 
-    public async getGroupMembers(groupId: number, userId: number): Promise<GroupMemberOutputDTO> {
+    public async getGroupMembers(groupId: number): Promise<GroupMemberOutputDTO> {
         return await this.getGroupMembersUseCase.execute(groupId);
     }
 
