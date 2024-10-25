@@ -3,7 +3,7 @@ import handleValidationErrors from '../ValidatorHandler';
 
 const schemas = {
     register: [
-        body('name')
+        body('guestName')
             .notEmpty().withMessage('Nome é obrigatório')
             .isString().withMessage('Nome deve ser uma string'),
     ],
