@@ -11,7 +11,9 @@ export class LogoutUseCase {
         this.userService = new UserService();
     }
 
-    public async execute(): Promise<void> {
-        return;
+    public async execute(userId: string): Promise<void> {
+        const user = await this.userService.getUserByUserId(userId);
+
+        await this.jwtService.expireLatestToken(user.id!);
     }
 }

@@ -38,7 +38,7 @@ export class JwtService {
         const token = await this.jwtRepository.getLatestValidToken(userIdPk);
 
         if (token) {
-            const jwtEntity = await JwtTokenEntity.createFromPayload(token);
+            const jwtEntity = await JwtTokenEntity.createFromPersistance(token);
             jwtEntity.revoked = true;
             jwtEntity.revoked_at = new Date();
 
@@ -54,6 +54,16 @@ export class JwtService {
         }
 
         return token.token;
+    }
+
+    public async getTokenByTokenString(token: string): Promise<JwtTokenEntity | null> {
+        const repository = await this.jwtRepository.getByToken(token);
+
+        if (repository == null) {
+            return null;
+        }
+
+        return await this.fromPersistance(repository!);
     }
 
     private async fromPersistance(jwtToken: JwtToken) {

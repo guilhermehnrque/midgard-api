@@ -66,6 +66,18 @@ export class AuthController {
         }
     }
 
+    public async logout(request: Request, response: Response): Promise<Response> {
+        try {
+            const { userId } = request;
+            await this.authFacade.logout(userId!);
+
+            return response.status(200).json({ message: "Logout efetuado" });
+        } catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
+    }
+
     public async getProfile(request: Request, response: Response): Promise<Response> {
         try {
             const { userId } = request;

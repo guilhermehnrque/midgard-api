@@ -30,6 +30,10 @@ export class AuthRouter {
             this.authController.resetPassword(request, response)
         );
 
+        this.router.post('/logout', [BearerToken.validate], (request: Request, response: Response) =>
+            this.authController.logout(request, response)
+        );
+
         this.router.get('/profile', [BearerToken.validate], (request: Request, response: Response) => 
             this.authController.getProfile(request, response)
         );

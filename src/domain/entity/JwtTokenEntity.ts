@@ -21,6 +21,11 @@ export class JwtTokenEntity implements JwtTokenAttributes {
         this.revoked_at = payload.revoked_at;
         this.created_at = payload.created_at!;
         this.updated_at = payload.updated_at!;
+        this.id = payload.id!;
+    }
+
+    public getRevoked(): boolean {
+        return this.revoked;
     }
 
     private readonly DAYS_TO_EXPIRE = +process.env.DAYS_TO_EXPIRE_DAY!;
@@ -43,7 +48,7 @@ export class JwtTokenEntity implements JwtTokenAttributes {
 
     static async createFromPersistance(payload: Partial<JwtTokenEntity>): Promise<JwtTokenEntity> {
         return new JwtTokenEntity({
-            id: payload.id,
+            id: payload.id!,
             users_id: payload.users_id!,
             token: payload.token!,
             expires_at: payload.expires_at,
