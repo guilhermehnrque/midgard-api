@@ -1,5 +1,4 @@
 import { JwtUtils } from '../../application/utils/JwtUtils';
-import { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { DecodedTokenInterface } from './interfaces/DecodedTokenInterface';
 import { JwtService } from '../../application/services/JwtService';
