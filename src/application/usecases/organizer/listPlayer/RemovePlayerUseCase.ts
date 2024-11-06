@@ -2,6 +2,7 @@ import { ListPlayerEntity } from "../../../../domain/entity/ListPlayerEntity";
 import { PlayerNotFoundInListError } from "../../../erros/list/ListBaseErrors";
 import { ListBaseService } from "../../../services/ListBaseService";
 import { ListPlayerService } from "../../../services/ListPlayerService";
+import { PlayerStatusVO } from "../../../valueobjects/PlayerStatusVO";
 
 export class RemovePlayerUseCase {
 
@@ -13,27 +14,29 @@ export class RemovePlayerUseCase {
         this.listPlayerService = new ListPlayerService();
     }
 
-    public async execute(memberIdPk: number, listIdPk: number, playerListIdPk: number, status: string): Promise<void> {
-        const list = await this.listBaseService.getList(listIdPk);
-        await this.isPlayertOnTheList(memberIdPk, listIdPk)
+    public async execute(listId: number, playerId: number,): Promise<void> {
+        const list = await this.listBaseService.getList(listId);
+        const playerList = await this.getPlayerOnList(playerId, listId)
 
         const listPlayer = await ListPlayerEntity.fromUpdateUseCase({
-            id: playerListIdPk,
-            list_base_id: listIdPk,
-            player_status: status,
-            users_id: memberIdPk
+            id: playerList.id,
+            list_base_id: listId,
+            player_status: PlayerStatusVO.DECLINED,
+            users_id: playerId
         });
 
         await this.listPlayerService.removePlayerFromList(listPlayer);
-        await this.listBaseService.removeConfirmedPlayers(listIdPk, list.getConfirmedPlayers());
+        await this.listBaseService.removeConfirmedPlayers(list);
     }
 
-    private async isPlayertOnTheList(memberIdPk: number, listIdPk: number): Promise<void> {
-        const response = await this.listPlayerService.validatePlayerIsOnList(memberIdPk, listIdPk);
+    private async getPlayerOnList(memberIdPk: number, listIdPk: number): Promise<ListPlayerEntity> {
+        const response = await this.listPlayerService.getPlayerInListByPlayerIdAndListId(memberIdPk, listIdPk);
 
-        if (!response) {
+        if (response == null) {
             console.error(`Player not found in list: ${memberIdPk})`)
             throw new PlayerNotFoundInListError();
         }
+
+        return response
     }
 }

@@ -55,10 +55,10 @@ export class LocalController {
     public async getLocal(request: Request, response: Response) {
         try {
             const { userIdPk } = request;
-            const { localId, groupId } = request.params;
+            const { localId } = request.params;
 
-            const local = await this.localFacade.getLocal(Number(localId), Number(groupId), Number(userIdPk));
-            return response.status(200).json({ data: local });
+            const local = await this.localFacade.getLocal(Number(localId), Number(userIdPk));
+            return response.status(200).json(local);
 
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;

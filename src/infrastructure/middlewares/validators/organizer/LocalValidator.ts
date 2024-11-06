@@ -42,12 +42,8 @@ const schemas = {
     ],
 
     detail: [
-        param('groupId')
-            .isString().withMessage('groupId should be a type of text')
-            .notEmpty().withMessage('GroupId should be declared Path Variable'),
-
         param('localId')
-            .isString().withMessage('localId should be a type of text')
+            .isNumeric().withMessage('localId should be a type of text')
             .notEmpty().withMessage('localId should be declared Path Variable')
     ],
 
@@ -67,7 +63,6 @@ const schemas = {
         body('city')
             .notEmpty().withMessage('Cidade é obrigatório')
             .isString().withMessage('Cidade deve ser uma string'),
-
 
         body('street')
             .notEmpty().withMessage('Rua é obrigatório')
@@ -93,7 +88,7 @@ const schemas = {
 
     getLocals: [
         param('groupId')
-            .isString().withMessage('groupId should be a type of text')
+            .isNumeric().withMessage('groupId should be a type of text')
             .notEmpty().withMessage('GroupId should be declared Query'),
     ],
 

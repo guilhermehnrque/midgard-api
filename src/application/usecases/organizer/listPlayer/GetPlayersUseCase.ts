@@ -18,7 +18,7 @@ export class GetPlayersUseCase {
         const players: ListPlayerOutputDTO[] = await Promise.all(
             listPlayers.map(async player => {
                 const fullName = await this.getFullName(player.users_id!);
-                return new ListPlayerOutputDTO(player.id!, player.player_status, fullName);
+                return new ListPlayerOutputDTO(player.id!, player.users_id!, player.player_status, fullName);
             })
         );
 

@@ -13,8 +13,8 @@ export class LoginUserUseCase {
         this.userService = new UserService();
     }
 
-    async execute(phoneNumber: string, password: string): Promise<string> {
-        const user = await this.validateUserLoginAndReturnUser(parseInt(phoneNumber));
+    public async execute(login: string, password: string): Promise<string> {
+        const user = await this.validateUserLoginAndReturnUser(login);
         await this.validateUserPassword(password, user.password);
 
         const latestToken = await this.retriveLatestToken(user);
@@ -22,8 +22,8 @@ export class LoginUserUseCase {
         return latestToken?.toString() ?? await this.createTokenAndGetNewToken(user);
     }
 
-    private async validateUserLoginAndReturnUser(login: number): Promise<UserEntity> {
-        const user = await this.userService.getUserByPhone(login);
+    private async validateUserLoginAndReturnUser(login: string): Promise<UserEntity> {
+        const user = await this.userService.getUserByLogin(login);
 
         if (user == null) {
             console.error(`User not found: ${login}`);

@@ -36,10 +36,6 @@ const schemas = {
         param('listId')
             .notEmpty().withMessage('Id é obrigatório')
             .isNumeric().withMessage('Id deve ser um número'),
-
-        param('groupId')
-            .isNumeric().withMessage('LocalId deve ser tdo tipo Inteiro')
-            .notEmpty().withMessage('LocalId deve ser declarado no param'),
     ],
 
     get: [
@@ -50,7 +46,7 @@ const schemas = {
 
     update: [
         param('listId')
-            .notEmpty().withMessage('Id é obrigatório')
+            .isNumeric().withMessage('Id é obrigatório')
             .isNumeric().withMessage('Id deve ser um número'),
 
         body('status')

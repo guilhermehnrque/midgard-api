@@ -16,11 +16,11 @@ export class GroupService {
         this.groupRepository = new GroupRepositoryImpl();
     }
 
-    public async createGroup(group: GroupEntity): Promise<void> {
+    public async createGroup(group: GroupEntity): Promise<number | undefined> {
         await this.ensureGroupNotExists(group.description);
 
         try {
-            await this.groupRepository.createGroup(group);
+            return await this.groupRepository.createGroup(group);
         } catch (error) {
             const customError = error as CustomError;
             this.logAndThrowError(new InternalError(), `[GroupService] createGroup -> ${customError.message}`);

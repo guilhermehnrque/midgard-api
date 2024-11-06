@@ -1,10 +1,12 @@
 export class ListPlayerOutputDTO {
-    id: number;            
+    playerListId: number;
+    playerId: number;            
     status: string;         
     fullName: string;  
     
-    constructor(id: number, status: string, fullName: string) {
-        this.id = id;
+    constructor(id: number, playerId: number, status: string, fullName: string) {
+        this.playerListId = id;
+        this.playerId = playerId;
         this.status = status;
         this.fullName = fullName;
     }

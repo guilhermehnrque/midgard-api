@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { AuthController } from '../../controllers/auth/AuthController';
 import { schemas, handleValidationErrors } from '../../middlewares/validators/auth/AuthValidator';
+import BearerToken from '../../middlewares/BearerToken';
 
 export class AuthRouter {
     public readonly router: Router;
@@ -13,7 +14,7 @@ export class AuthRouter {
     }
 
     private initializeRoutes(): void {
-        this.router.post('/', schemas.register, handleValidationErrors.handle, (request: Request, response: Response) => 
+        this.router.post('/register', schemas.register, handleValidationErrors.handle, (request: Request, response: Response) => 
             this.authController.createUser(request, response)
         );
 
@@ -27,6 +28,14 @@ export class AuthRouter {
 
         this.router.post('/reset-password/:token', [...schemas.resetPassword, handleValidationErrors.handle], (request: Request, response: Response) => 
             this.authController.resetPassword(request, response)
+        );
+
+        this.router.post('/logout', [BearerToken.validate], (request: Request, response: Response) =>
+            this.authController.logout(request, response)
+        );
+
+        this.router.get('/profile', [BearerToken.validate], (request: Request, response: Response) => 
+            this.authController.getProfile(request, response)
         );
     }
 }

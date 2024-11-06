@@ -32,6 +32,16 @@ export class GuestService {
         return await GuestEntity.fromData(guest);
     }
 
+    public async getGuestsByHostId(usersId: number): Promise<GuestEntity[]> {
+        const guest = await this.guestRepository.getGuestByHostId(usersId);
+
+        if (!guest || guest == null) {
+            return [];
+        }
+
+       return Promise.all(guest.map((guest) => GuestEntity.fromData(guest)));
+    }
+
     public async updateGuest(guest: GuestEntity): Promise<number> {
         try {
             return await this.guestRepository.updateGuestById(guest.id!, guest);

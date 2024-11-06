@@ -1,7 +1,7 @@
 import { JwtUtils } from '../../application/utils/JwtUtils';
-import { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { DecodedTokenInterface } from './interfaces/DecodedTokenInterface';
+import { JwtService } from '../../application/services/JwtService';
 
 declare module 'express-serve-static-core' {
     interface Request {
@@ -11,6 +11,7 @@ declare module 'express-serve-static-core' {
 }
 
 export default class BearerToken {
+    
     static async validate(request: Request, response: Response, next: NextFunction) {
         const token = BearerToken.getTokenFromHeader(request);
 
@@ -22,6 +23,12 @@ export default class BearerToken {
 
         if (!decoded) {
             return BearerToken.handleUnauthorized(response, 'Invalid token');
+        }
+
+        const revoked = await BearerToken.isTokenRevoked(token);
+
+        if (revoked) {
+            return BearerToken.handleUnauthorized(response, 'Token revoked');
         }
 
         request.userId = decoded.userId;
@@ -37,7 +44,15 @@ export default class BearerToken {
         return response.status(401).json({ message });
     }
 
-    static async isTokenValid(token: string): Promise<JwtPayload | boolean> {
-        return await JwtUtils.verifyToken(token);
+    static async isTokenRevoked(token: string): Promise<boolean> {
+        const jwtService = new JwtService();
+
+        const tokenEntity = await jwtService.getTokenByTokenString(token);
+
+        if (tokenEntity == null || tokenEntity!.getRevoked()) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -14,19 +14,18 @@ const schemas = {
 
     getMembers: [
         param('groupId')
-            .isString().withMessage('groupId should be a type of text')
+            .isNumeric().withMessage('groupId should be a type of number')
             .notEmpty().withMessage('GroupId should be declared Path Variable')
     ],
 
     removeMember: [
         param('groupId')
-            .isString().withMessage('groupId should be a type of text')
+            .isNumeric().withMessage('groupId should be a type of number')
             .notEmpty().withMessage('GroupId should be declared Path Variable'),
 
         param('memberId')
-            .isString().withMessage('groupId should be a type of text')
+            .isNumeric().withMessage('groupId should be a type of number')
             .notEmpty().withMessage('GroupId should be declared Path Variable'),
-
     ],
 
 };

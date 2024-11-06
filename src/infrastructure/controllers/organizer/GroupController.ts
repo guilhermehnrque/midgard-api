@@ -41,10 +41,9 @@ export class GroupController {
 
     public async getGroup(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const { groupId } = request.params;
 
-            const facade = await this.groupFacade.getGroup(Number(userIdPk), Number(groupId));
+            const facade = await this.groupFacade.getGroup(Number(groupId));
 
             return response.status(200).json({ data: facade });
         } catch (error) {

@@ -97,7 +97,6 @@ export class ListPlayerRepositoryImpl implements ListPlayerInterface {
         }
     }
 
-
     async getGuestInListByGuestIdAndListId(guestId: number, listIdPk: number): Promise<ListPlayer | null> {
         try {
             return await ListPlayer.findOne({

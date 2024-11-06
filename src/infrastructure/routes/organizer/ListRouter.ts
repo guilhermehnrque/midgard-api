@@ -1,32 +1,35 @@
 import { Router, Request, Response } from 'express';
 import { schemas, handleValidationErrors } from '../../middlewares/validators/organizer/ListValidator';
 import { ListController } from '../../controllers/organizer/ListController';
+import { OrganizerHandler } from "../../middlewares/access/OrganizerHandler";
 
 export class ListRouter {
 
     public readonly router: Router;
     private readonly listController: ListController;
-    
+    private readonly accessHandler: OrganizerHandler;
+
     constructor() {
         this.router = Router();
         this.listController = new ListController();
+        this.accessHandler = new OrganizerHandler();
         this.initializeRoutes();
     }
 
     private initializeRoutes(): void {
-        this.router.post('/', [...schemas.register, handleValidationErrors.handle], (req: Request, res: Response) => 
+        this.router.post('/create', [...schemas.register, handleValidationErrors.handle, this.accessHandler.groupAccess.bind(this.accessHandler)], (req: Request, res: Response) =>
             this.listController.createList(req, res)
         );
 
-        this.router.get('/:groupId', [...schemas.get, handleValidationErrors.handle], (req: Request, res: Response) => 
+        this.router.get('/group/:groupId', [...schemas.get, handleValidationErrors.handle, this.accessHandler.groupAccess.bind(this.accessHandler)], (req: Request, res: Response) =>
             this.listController.getLists(req, res)
         );
 
-        this.router.get('/:listId/group-id/:groupId', [...schemas.details, handleValidationErrors.handle], (req: Request, res: Response) => 
+        this.router.get('/:listId/details', [...schemas.details, handleValidationErrors.handle, this.accessHandler.listAccess.bind(this.accessHandler)], (req: Request, res: Response) =>
             this.listController.getList(req, res)
         );
 
-        this.router.put('/:listId', [...schemas.update, handleValidationErrors.handle], (req: Request, res: Response) => 
+        this.router.put('/:listId/update', [...schemas.update, handleValidationErrors.handle, this.accessHandler.listAccess.bind(this.accessHandler)], (req: Request, res: Response) =>
             this.listController.updateList(req, res)
         );
     }

@@ -70,11 +70,10 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
     }
 
     public async getUserByLogin(login: string): Promise<UserModel | null> {
-        const parsedLogin = parseInt(login);
         try {
             return await UserModel.findOne({
                 where: {
-                    phone_number: parsedLogin
+                    login: login
                 },
             });
         } catch (error) {

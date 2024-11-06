@@ -42,7 +42,7 @@ export class JwtTokensRepositoryImpl implements JwtTokensRepositoryInterface {
         }
     }
 
-    async updateToken(token: JwtTokenEntity): Promise<number> {
+    public async updateToken(token: JwtTokenEntity): Promise<number> {
         try {
             const [affectedCount] = await JwtToken.update(token.updatePayload(),
                 {
