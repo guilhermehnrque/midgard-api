@@ -5,6 +5,7 @@ import { ResetPasswordRequest } from "../../../infrastructure/requests/auth/Rese
 import { CreateUserDTO } from "../../dto/common/CreateUserDTO";
 import { ForgotPasswordUseCase } from "../../usecases/auth/ForgotPasswordUseCase";
 import { LoginUserUseCase } from "../../usecases/auth/LoginUserUseCase";
+import { ProfileUseCase } from "../../usecases/auth/ProfileUseCase";
 import { RegisterUserUseCase } from "../../usecases/auth/RegisterUserUseCase";
 import { ResetPasswordUseCase } from "../../usecases/auth/ResetPasswordUseCase";
 
@@ -14,12 +15,14 @@ export class AuthFacade {
     private readonly registerUserUseCase: RegisterUserUseCase;
     private readonly forgotPasswordUseCase: ForgotPasswordUseCase;
     private readonly resetPasswordUseCase: ResetPasswordUseCase;
+    private readonly profileUseCase: ProfileUseCase;
 
     constructor() {
         this.loginUserUseCase = new LoginUserUseCase();
         this.registerUserUseCase = new RegisterUserUseCase();
         this.forgotPasswordUseCase = new ForgotPasswordUseCase();
         this.resetPasswordUseCase = new ResetPasswordUseCase();
+        this.profileUseCase = new ProfileUseCase();
     }
 
     public async registerUser(request: RegisterRequest): Promise<void> {
@@ -42,6 +45,10 @@ export class AuthFacade {
     public async resetPassword(request: ResetPasswordRequest, token: string) {
         const { password } = request;
         return this.resetPasswordUseCase.execute(password, token);
+    }
+
+    public async profile(userId: string): Promise<string> {
+        return this.profileUseCase.execute(userId);
     }
 
 }

@@ -107,6 +107,24 @@ paths:
           description: Invalid input
         "422":
           description: Invalid token
+  /auth/profile:
+    get:
+      tags:
+        - authentication
+      description: Get profile
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileSchema"
+        "400":
+          description: Invalid input
+        "422":
+          description: User not found
 
   /organizer/groups/create:
     post:
@@ -1089,6 +1107,13 @@ components:
           type: string
           examples: [123456]
       required: ["password"]
+    
+    ProfileSchema:
+      type: object
+      properties:
+        data:
+          type: string
+          examples: ["ORGANIZER", "PLAYER"]
 
     CreateGroupSchema:
       type: object

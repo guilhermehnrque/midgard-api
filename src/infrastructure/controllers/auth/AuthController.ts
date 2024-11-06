@@ -66,4 +66,17 @@ export class AuthController {
         }
     }
 
+    public async getProfile(request: Request, response: Response): Promise<Response> {
+        try {
+            const { userId } = request;
+
+            const profile = await this.authFacade.profile(userId!);
+
+            return response.status(200).json({data: profile});
+        } catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
+    }
+
 }
