@@ -4,6 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yaml'
 import fs from 'fs';
 import path from 'path';
+import cors from 'cors';
 import BearerToken from "./infrastructure/middlewares/BearerToken";
 import OrganizerMiddleware from './infrastructure/middlewares/OrganizerMiddleware';
 import PlayerMiddleware from './infrastructure/middlewares/PlayerMiddleware';
@@ -23,6 +24,7 @@ class App {
     }
 
     private initializeMiddlewares(): void {
+        this.app.use(cors()); 
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
     }

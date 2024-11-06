@@ -35,7 +35,7 @@ export class AuthFacade {
     }
 
     public async forgotPassword(request: ForgotPasswordRequest) {
-        const { phoneNumber, email } = request;
+        const { phoneNumber } = request;
         return this.forgotPasswordUseCase.execute(parseInt(phoneNumber!));
     }
 

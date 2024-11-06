@@ -37,6 +37,16 @@ export class UserService {
         }
     }
 
+    public async getUserByLogin(login: string): Promise<UserEntity | null> {
+        const user = await this.userRepository.getUserByLogin(login);
+
+        if (!user || user == null) {    
+            return null;
+        }
+
+        return await this.createEntityFromPersistance(user);
+    }
+
     async getUserByPhone(phone: number): Promise<UserEntity | null> {
         const user = await this.userRepository.getUserByPhone(phone);
 

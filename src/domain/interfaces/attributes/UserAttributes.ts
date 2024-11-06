@@ -3,6 +3,7 @@ export interface UserAttributes {
     user_id: string;
     name: string;
     surname: string;
+    login: string;
     type: string;
     status: boolean;
     password: string;

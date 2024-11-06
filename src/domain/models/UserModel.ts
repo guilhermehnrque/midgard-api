@@ -11,6 +11,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public user_id!: string;
     public name!: string;
     public surname!: string;
+    public login!: string;
     public type!: string;
     public status!: boolean;
     public password!: string;
@@ -43,6 +44,10 @@ User.init({
         allowNull: false,
     },
     surname: {
+        type: DataTypes.STRING(150),
+        allowNull: false,
+    },
+    login: {
         type: DataTypes.STRING(150),
         allowNull: false,
     },
