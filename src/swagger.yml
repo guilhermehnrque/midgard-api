@@ -71,6 +71,21 @@ paths:
           description: Invalid input
         "422":
           description: User not found
+  /auth/logout:
+    post:
+      tags:
+        - authentication
+      description: Logout
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Invalid input
+        "422":  
+          description: User not found
+
   /auth/forgot-password:
     post:
       tags:
