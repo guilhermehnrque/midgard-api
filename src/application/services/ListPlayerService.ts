@@ -4,10 +4,12 @@ import { ListPlayerRepositoryImpl } from "../../infrastructure/repositories/List
 import { CustomError } from "../erros/CustomError";
 import { InternalError } from "../erros/InternalError";
 import { ListOverCapacityError } from "../erros/list/ListOverCapacityError";
+import { LimitOfPlayersError } from "../erros/listPlayer/LimitOfPlayersError";
 
 export class ListPlayerService {
 
     private readonly listPlayerRepository: ListPlayerRepositoryImpl;
+    private readonly NUMBER_ONE: number = 1 as const;
 
     constructor() {
         this.listPlayerRepository = new ListPlayerRepositoryImpl();
@@ -105,6 +107,18 @@ export class ListPlayerService {
         const confirmedPlayers = response.filter(player => player.player_status == status);
 
         return confirmedPlayers.length
+    }
+
+    public async checkListCapacity(listIdPk: number, limitOfPlayers: number): Promise<void> {
+        const response = await this.getListPlayersByListId(listIdPk);
+        const totalConfirmed = response.filter(player => player.isPlayerConfirmed()).length;
+        const desiredConfirmed = totalConfirmed + this.NUMBER_ONE;
+
+        if (desiredConfirmed <= limitOfPlayers) {
+            return
+        }
+        
+        throw new LimitOfPlayersError();
     }
 
     private async createListPlayerEntityFromPersistence(listPlayer: ListPlayer): Promise<ListPlayerEntity> {

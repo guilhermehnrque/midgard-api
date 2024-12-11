@@ -35,14 +35,14 @@ export class AuthFacade {
         await this.registerUserUseCase.execute(createUserDTO);
     }
 
-    public async login(request: LoginRequest): Promise<string> {
+    public async login(request: LoginRequest): Promise<String> {
         const { login, password } = request;
         return this.loginUserUseCase.execute(login, password);
     }
 
     public async forgotPassword(request: ForgotPasswordRequest) {
-        const { phoneNumber } = request;
-        return this.forgotPasswordUseCase.execute(parseInt(phoneNumber!));
+        const { login } = request;
+        return this.forgotPasswordUseCase.execute(login);
     }
 
     public async resetPassword(request: ResetPasswordRequest, token: string) {
@@ -53,7 +53,6 @@ export class AuthFacade {
     public async logout(userId: string) {
         await this.logoutUseCase.execute(userId);
     }
-
 
     public async profile(userId: string): Promise<string> {
         return await this.profileUseCase.execute(userId);

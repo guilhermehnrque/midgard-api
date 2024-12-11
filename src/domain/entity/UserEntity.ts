@@ -10,6 +10,7 @@ export class UserEntity implements UserAttributes {
     public type: string;
     public status: boolean;
     public phone_number: number;
+    public email: string;
     public login: string;
     public password: string;
     public created_at: Date;
@@ -25,6 +26,7 @@ export class UserEntity implements UserAttributes {
         this.type = payload.type!;
         this.status = payload.status!;
         this.phone_number = payload.phone_number!;
+        this.email = payload.email!;
         this.login = payload.login!;
         this.password = payload.password!;
         this.created_at = payload.created_at!;
@@ -42,6 +44,14 @@ export class UserEntity implements UserAttributes {
 
     public setUserIdPk(id: number) {
         this.id = id;
+    }
+
+    public async setResetPasswordToken(token: string) {
+        this.reset_password_token = token;
+    }
+
+    public async setResetPasswordExpires(expires: Date) {
+        this.reset_password_expires = expires;
     }
 
     public getUserIdPk() {
@@ -66,6 +76,14 @@ export class UserEntity implements UserAttributes {
 
     public setPassword(password: string) {
         this.password = password;
+    }
+
+    public getPassword() {
+        return this.password;
+    }
+
+    public getEmail(){
+        return this.email;
     }
 
     static async fromUseCase(payload: Partial<UserEntity>): Promise<UserEntity> {
@@ -100,6 +118,7 @@ export class UserEntity implements UserAttributes {
             type: this.type,
             status: this.status,
             phone_number: this.phone_number,
+            email: this.email,
             login: this.login,
             password: this.password,
             user_id: this.user_id

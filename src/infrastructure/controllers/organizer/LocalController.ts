@@ -14,10 +14,9 @@ export class LocalController {
 
     public async createLocal(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const createLocalRequest = request.body as CreateLocalRequest;
 
-            await this.localFacade.createLocal(createLocalRequest, Number(userIdPk));
+            await this.localFacade.createLocal(createLocalRequest);
             return response.status(200).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -27,11 +26,10 @@ export class LocalController {
 
     public async updateLocal(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const { localId } = request.params;
             const updateLocalRequest = request.body as UpdateLocalRequest;
 
-            await this.localFacade.updateLocal(updateLocalRequest, Number(userIdPk), Number(localId));
+            await this.localFacade.updateLocal(updateLocalRequest, Number(localId));
             return response.status(200).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -41,10 +39,9 @@ export class LocalController {
 
     public async getLocals(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const { groupId } = request.params;
 
-            const locals = await this.localFacade.getLocals(Number(groupId), Number(userIdPk));
+            const locals = await this.localFacade.getLocals(Number(groupId));
             return response.status(200).json({ data: locals });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -54,10 +51,9 @@ export class LocalController {
 
     public async getLocal(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const { localId } = request.params;
 
-            const local = await this.localFacade.getLocal(Number(localId), Number(userIdPk));
+            const local = await this.localFacade.getLocal(Number(localId));
             return response.status(200).json(local);
 
         } catch (error) {

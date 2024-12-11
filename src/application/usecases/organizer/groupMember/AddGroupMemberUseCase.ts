@@ -28,14 +28,13 @@ export class AddGroupMemberUseCase implements OrganizerCreatedGroupObserver {
     private async validations(membersId: Array<number>, groupIdPk: number): Promise<void> {
 
         if ((membersId.length <= 0)) {
-            console.error(`[AddMemberToGroupUseCase] -> empty array of members`);
             throw new AddMemberToGroupError();
         }
 
-        await this.isUserAlreadyInGroup(membersId, groupIdPk);
+        await this.checkAnyMemberAlreadyInGroup(membersId, groupIdPk);
     }
 
-    private async isUserAlreadyInGroup(membersId: Array<number>, groupIdPk: number): Promise<void> {
+    private async checkAnyMemberAlreadyInGroup(membersId: Array<number>, groupIdPk: number): Promise<void> {
         await Promise.all(membersId.map(async memberId => await this.groupUsersService.ensureUserIsNotInGroup(memberId, groupIdPk)));
     }
 

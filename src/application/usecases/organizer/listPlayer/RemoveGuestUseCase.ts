@@ -2,6 +2,7 @@ import { ListPlayerEntity } from "../../../../domain/entity/ListPlayerEntity";
 import { PlayerNotFoundInListError } from "../../../erros/list/ListBaseErrors";
 import { ListBaseService } from "../../../services/ListBaseService";
 import { ListPlayerService } from "../../../services/ListPlayerService";
+import { PlayerStatusVO } from "../../../valueobjects/PlayerStatusVO";
 
 export class RemoveGuestUseCase {
 
@@ -13,7 +14,6 @@ export class RemoveGuestUseCase {
         this.listBaseService = new ListBaseService();
     }
 
-    //TODO: CRIAR ROTAS DE CONVIDADO
     public async execute(guestIdPk: number, listIdPk: number, playerListIdPk: number): Promise<void> {
         const list = await this.listBaseService.getList(listIdPk);
         await this.isPlayertOnTheList(guestIdPk, listIdPk)
@@ -21,20 +21,21 @@ export class RemoveGuestUseCase {
         const listPlayer = await ListPlayerEntity.fromUpdateUseCase({
             id: playerListIdPk,
             list_base_id: listIdPk,
-            player_status: 'declined',
+            player_status: PlayerStatusVO.DECLINED,
             guest_id: guestIdPk
         });
 
         await this.listPlayerService.removePlayerFromList(listPlayer);
-        await this.listBaseService.addConfirmedPlayers(list);
+        await this.listBaseService.removePlayerFromConfirmedPlayers(list!);
     }
 
     private async isPlayertOnTheList(memberIdPk: number, listIdPk: number): Promise<void> {
         const response = await this.listPlayerService.validateGuestIsOnList(memberIdPk, listIdPk);
 
-        if (!response) {
-            console.error(`Player not found in list: ${memberIdPk})`)
-            throw new PlayerNotFoundInListError();
+        if (response) {
+            return 
         }
+
+        throw new PlayerNotFoundInListError();
     }
 }

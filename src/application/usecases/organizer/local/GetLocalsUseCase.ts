@@ -9,11 +9,10 @@ export class GetLocalsUseCase {
         this.localService = new LocalService();
     }
 
-    async execute(groupIdPk: number): Promise<LocalOutputDTO[]> {
+    public async execute(groupIdPk: number): Promise<LocalOutputDTO[]> {
         const locals = await this.localService.getLocalsByGroupId(groupIdPk);
 
         return LocalOutputDTO.fromEntities(locals);
-
     }
 
 }

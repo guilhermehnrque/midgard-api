@@ -59,5 +59,15 @@ export class JwtTokensRepositoryImpl implements JwtTokensRepositoryInterface {
         }
     }
 
+    public async expireAllUserTokens(userIdPk: number): Promise<number>{
+        try {
+            const [affectedCount] = await JwtToken.update({ revoked: true, revoked_at: new Date() }, { where: { users_id: userIdPk} });
+            return affectedCount;
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[JwtTokensRepositoryImpl] expireAllUserTokens -> ${customError.message}`);
+        }
+    }
+
 
 }

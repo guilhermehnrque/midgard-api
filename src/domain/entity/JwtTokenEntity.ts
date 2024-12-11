@@ -11,6 +11,8 @@ export class JwtTokenEntity implements JwtTokenAttributes {
     public created_at!: Date;
     public updated_at!: Date;
 
+    private readonly DAYS_TO_EXPIRE = +process.env.DAYS_TO_EXPIRE_DAY!;
+
     constructor(
         payload: Partial<JwtTokenEntity> = {},
     ) {
@@ -28,7 +30,10 @@ export class JwtTokenEntity implements JwtTokenAttributes {
         return this.revoked;
     }
 
-    private readonly DAYS_TO_EXPIRE = +process.env.DAYS_TO_EXPIRE_DAY!;
+    public isValid(): boolean {
+        return !this.revoked && this.created_at <= this.expires_at;
+    }    
+
 
     static async createFromPayload(payload: Partial<JwtTokenEntity>): Promise<JwtTokenEntity> {
         const jwtTokenEntityInstance = new JwtTokenEntity();

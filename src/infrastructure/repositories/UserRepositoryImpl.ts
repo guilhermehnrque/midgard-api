@@ -46,19 +46,6 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
         }
     }
 
-    async getUserByPhone(phoneNumber: number): Promise<UserModel | null> {
-        try {
-            return await UserModel.findOne({
-                where: {
-                    phone_number: phoneNumber
-                },
-            });
-        } catch (error) {
-            const customError = error as CustomError;
-            throw new DatabaseError(`[UserRepository] getUserByPhone -> ${customError.message}`);
-        }
-    }
-
     async getUserByPK(userId: number): Promise<UserModel | null> {
         try {
             return await UserModel.findOne({ where: { id: userId } });
@@ -67,6 +54,22 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
             throw new DatabaseError(`[UserRepository] getUserByPK -> Error getting user: ${customError.message}`);
         }
 
+    }
+
+    public async getUserByEmailOrLogin(userEmail: string, userLogin: string): Promise<UserModel | null> {
+        try {
+            return await UserModel.findOne({
+                where: {
+                    [Op.or]: [
+                        { email: userEmail },
+                        { login: userLogin }
+                    ],
+                },
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[UserRepository] getUserByLogin -> ${customError.message}`);
+        }
     }
 
     public async getUserByLogin(login: string): Promise<UserModel | null> {

@@ -20,23 +20,23 @@ export class SchedulesFacade {
         this.getSchedulesUseCase = new GetSchedulesUseCase();
     }
 
-    public async createSchedule(request: CreateScheduleRequest, userId: number): Promise<void> {
+    public async createSchedule(request: CreateScheduleRequest): Promise<void> {
         const { startTime, endTime, dayOfWeek, groupId, localId } = request;
 
         await this.createScheduleUseCase.execute(startTime, endTime, dayOfWeek, groupId, localId);
     }
 
-    public async updateSchedule(request: UpdateScheduleRequest, userId: number, scheduleIdPk: number): Promise<void> {
+    public async updateSchedule(request: UpdateScheduleRequest, scheduleIdPk: number): Promise<void> {
         const { startTime, endTime, dayOfWeek, groupId, localId } = request;
 
         await this.updateScheduleUseCase.execute(scheduleIdPk, startTime, endTime, dayOfWeek, groupId, localId);
     }
 
-    public async getSchedules(userId: number, groupId: number): Promise<ScheduleOutputDTO[]> {
+    public async getSchedules(groupId: number): Promise<ScheduleOutputDTO[]> {
         return await this.getSchedulesUseCase.execute(groupId);
     }
 
-    public async getSchedule(userId: number, scheduleIdPk: number): Promise<ScheduleOutputDTO> {
+    public async getSchedule(scheduleIdPk: number): Promise<ScheduleOutputDTO> {
         return await this.getScheduleUseCase.execute(scheduleIdPk);
     }
 

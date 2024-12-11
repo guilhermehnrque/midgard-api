@@ -11,26 +11,22 @@ export class ForgotPasswordUseCase {
         this.userService = new UserService();
     }
 
-    async execute(phoneNumber: number): Promise<void> {
-        const user = await this.validateUserPhoneNumberAndReturnUser(phoneNumber);
+    async execute(userLogin: string): Promise<void> {
+        const user = await this.userService.getUserByLogin(userLogin);
+        await this.checkUser(user);
 
-        const { token, expiration } = await this.prepareTokens();
+        const { token, expiration } = await this.prepareExpirationTokens();
 
-        await this.updateUser(user, token, expiration);
+        await this.updateUser(user!, token, expiration);
     }
 
-    private async validateUserPhoneNumberAndReturnUser(phoneNumber: number): Promise<UserEntity> {
-        const user = await this.userService.getUserByPhone(phoneNumber);
-
+    private async checkUser(user: UserEntity | null): Promise<void> {
         if (user == null) {
-            console.error(`User not found: ${phoneNumber}`);
             throw new LoginError();
         }
-
-        return user;
     }
 
-    private async prepareTokens() {
+    private async prepareExpirationTokens() {
         const token = crypto.randomBytes(8).toString('hex');
         
         const expiration = new Date();
@@ -41,8 +37,8 @@ export class ForgotPasswordUseCase {
     }
 
     private async updateUser(user: UserEntity, token: string, expiration: Date): Promise<void> {
-        user.reset_password_token = token;
-        user.reset_password_expires = expiration;
+        user.setResetPasswordToken(token);
+        user.setResetPasswordExpires(expiration);
 
         await this.userService.updateUser(user);
     }

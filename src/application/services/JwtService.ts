@@ -4,6 +4,7 @@ import { UserEntity } from "../../domain/entity/UserEntity";
 import { JwtUtils } from '../utils/JwtUtils';
 import { JwtTokensRepositoryImpl } from "../../infrastructure/repositories/JwtTokenRepositoryImpl";
 import { JwtToken } from "../../domain/models/JwtTokenModel";
+import { Token } from "yaml/dist/parse/cst";
 
 interface JSONConvertible {
     toJSON(): any;
@@ -46,14 +47,14 @@ export class JwtService {
         }
     }
 
-    public async getLatestValidToken(userEntity: UserEntity): Promise<string | null> {
-        const token = await this.jwtRepository.getLatestValidToken(userEntity.id!);
+    public async expireAllUserTokens(userIdPk: number): Promise<void> {
+        await this.jwtRepository.expireAllUserTokens(userIdPk);
+    }
 
-        if (!token) {
-            return null;
-        }
+    public async getLatestValidToken(userEntity: UserEntity): Promise<JwtTokenEntity | null> {
+        const token = await this.jwtRepository.getLatestValidToken(userEntity.getUserIdPk());
 
-        return token.token;
+        return token != null ? await this.fromPersistance(token) : null;
     }
 
     public async getTokenByTokenString(token: string): Promise<JwtTokenEntity | null> {
