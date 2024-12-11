@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { GroupHandler } from './handlers/GroupHandler';
-import { ScheduleHandler } from './handlers/ScheduleHandler';
-import { LocalHandler } from './handlers/LocalHandler';
 import { ListHandler } from './handlers/ListHandler';
+import { LocalHandler } from './handlers/LocalHandler';
+import { ScheduleHandler } from './handlers/ScheduleHandler';
+import { CustomError } from '../../../../application/erros/CustomError';
 
 export class OrganizerHandler {
 
@@ -30,8 +31,24 @@ export class OrganizerHandler {
             await this.groupHandler.handle({ userId, groupId });
             next();
         } catch (error) {
-            console.error(error);
-            res.status(403).json({ error: 'Access denied' });
+            const err = error as CustomError;
+            res.status(err.statusCode).json({ error: err.message });
+        }
+    }
+
+    
+    public async localAccess(req: Request, res: Response, next: NextFunction) {
+        const userId = Number(req.userIdPk);
+        const localId = Number(req.params.localId);
+
+        this.localHandler.setNextHandler(this.groupHandler)
+
+        try {
+            await this.localHandler.handle({ userId, localId });
+            next();
+        } catch (error) {
+            const err = error as CustomError;
+            res.status(err.statusCode).json({ error: err.message });
         }
     }
 
@@ -45,33 +62,15 @@ export class OrganizerHandler {
             await this.scheduleHandler.handle({ userId, scheduleId });
             next();
         } catch (error) {
-            console.error(error);
-            res.status(403).json({ error: 'Access denied' });
+            const err = error as CustomError;
+            res.status(err.statusCode).json({ error: err.message });
         }
     }
 
-    public async localAccess(req: Request, res: Response, next: NextFunction) {
-        const userId = Number(req.userIdPk);
-        const localId = Number(req.params.localId);
-
-        this.localHandler.setNextHandler(this.groupHandler)
-
-        try {
-            await this.localHandler.handle({ userId, localId });
-            next();
-        } catch (error) {
-            console.error(error);
-            res.status(403).json({ error: 'Access denied' });
-        }
-    }
 
     public async listAccess(req: Request, res: Response, next: NextFunction) {
         const userId = Number(req.userIdPk);
-        let listId = Number(req.params.listId);
-
-        if (!listId || isNaN(listId) || undefined) {
-            listId = Number(req.body.listId);
-        }
+        const listId = this.checkListAccessParams(req);
 
         this.listHandler.setNextHandler(this.groupHandler)
 
@@ -79,8 +78,18 @@ export class OrganizerHandler {
             await this.listHandler.handle({ userId, listId });
             next();
         } catch (error) {
-            console.error(error);
-            res.status(403).json({ error: 'Access denied' });
+            const err = error as CustomError;
+            res.status(err.statusCode).json({ error: err.message });
         }
+    }
+
+    private checkListAccessParams(req: Request) {
+        let listId = Number(req.params.listId);
+
+        if (!listId || isNaN(listId) || undefined) {
+            listId = Number(req.body.listId);
+        }
+
+        return listId;
     }
 }

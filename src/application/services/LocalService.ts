@@ -35,7 +35,7 @@ export class LocalService {
     public async getLocalByIdPk(idLocalPk: number): Promise<LocalEntity | null> {
         const local = await this.localRepository.getLocalByIdPk(idLocalPk);
 
-        if (!local || local == null) {
+        if (local == null) {
             return null;
         }
 
