@@ -21,7 +21,7 @@ export class GroupOrganizersRepositoryImpl implements GroupOrganizersRepositoryI
         }
     }
 
-    public async checkAlreadyOrganizer(groupId: number, userIdPk: number): Promise<GroupOrganizers | null> {
+    public async getOrganizerByGroupId(groupId: number, userIdPk: number): Promise<GroupOrganizers | null> {
         try {
             return await GroupOrganizers.findOne({ where: { groups_id: groupId, users_id: userIdPk } });
         } catch (error) {

@@ -32,8 +32,8 @@ class App {
 
     private initializeRoutes(): void {
         this.app.use('/v1', authRoutes);
-        this.app.use('/v1/organizer', [this.tokenHandler.organizerTokenHandler.bind(this.tokenHandler)], OrganizerRoutes);
-        this.app.use('/v1/player',[this.tokenHandler.playerTokenHandler.bind(this.tokenHandler)], PlayerRouter);
+        this.app.use('/v1/organizer', [this.tokenHandler.tokenHandler.bind(this.tokenHandler)], OrganizerRoutes);
+        this.app.use('/v1/player',[this.tokenHandler.tokenHandler.bind(this.tokenHandler)], PlayerRouter);
     }
 
     private initializeSwagger(): void {

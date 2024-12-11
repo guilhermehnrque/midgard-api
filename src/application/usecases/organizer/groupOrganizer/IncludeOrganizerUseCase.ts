@@ -18,7 +18,7 @@ export class IncludeOrganizerUseCase {
     }
 
     private async checkOrganizerAlreadyInGroup(groupId: number, organizerId: number): Promise<void> {
-        const groupOrganizer = await this.groupOrganizerRepository.checkAlreadyOrganizer(groupId, organizerId);
+        const groupOrganizer = await this.groupOrganizerRepository.getOrganizerByGroupId(groupId, organizerId);
 
         if (!groupOrganizer) {
             return
