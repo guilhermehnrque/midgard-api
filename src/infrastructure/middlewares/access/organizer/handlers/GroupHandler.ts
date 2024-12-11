@@ -1,4 +1,4 @@
-import { OrganizerDomain } from "../types/OrganizerDomain";
+import { OrganizerDomain } from "../domain/OrganizerDomain";
 import { PermissionError } from "../../../../../application/erros/PermissionError";
 import { GroupService } from "../../../../../application/services/GroupService";
 import { AbstractOrganizerHandler } from "../AbstractOrganizerHandler";

@@ -16,9 +16,10 @@ export class UserTypeVO {
 
     }
 
-    public static getPlayerType(): string {
-        return UserTypeVO.PLAYER;
+    public static getPlayerAccessAuthorization(): Array<string> {
+        return [UserTypeVO.PLAYER, UserTypeVO.ORGANIZER];
     }
+
 
     public static getOrganizerType(): string {
         return UserTypeVO.ORGANIZER;

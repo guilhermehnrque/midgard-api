@@ -67,7 +67,6 @@ export class OrganizerHandler {
         }
     }
 
-
     public async listAccess(req: Request, res: Response, next: NextFunction) {
         const userId = Number(req.userIdPk);
         const listId = this.checkListAccessParams(req);
@@ -92,4 +91,5 @@ export class OrganizerHandler {
 
         return listId;
     }
+
 }

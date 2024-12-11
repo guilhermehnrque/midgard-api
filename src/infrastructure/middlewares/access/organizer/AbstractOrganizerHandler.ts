@@ -1,4 +1,4 @@
-import { OrganizerDomain } from "./types/OrganizerDomain";
+import { OrganizerDomain } from "./domain/OrganizerDomain";
 
 export abstract class AbstractOrganizerHandler {
 

@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { GroupMemberController } from '../../controllers/organizer/GroupMemberController';
-import { OrganizerHandler } from "../../middlewares/access/OrganizerHandler";
+import { OrganizerHandler } from "../../middlewares/access/organizer/OrganizerHandler";
 
 export class GroupMemberRouter {
 

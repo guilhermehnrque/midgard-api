@@ -1,7 +1,7 @@
 import { ListNotFoundError } from "../../../../../application/erros/list/ListBaseErrors";
 import { ListBaseService } from "../../../../../application/services/ListBaseService";
 import { AbstractOrganizerHandler } from "../AbstractOrganizerHandler";
-import { OrganizerDomain } from "../types/OrganizerDomain";
+import { OrganizerDomain } from "../domain/OrganizerDomain";
 
 export class ListHandler extends AbstractOrganizerHandler {
 

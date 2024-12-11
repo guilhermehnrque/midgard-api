@@ -26,7 +26,7 @@ export class JwtTokenEntity implements JwtTokenAttributes {
         this.id = payload.id!;
     }
 
-    public getRevoked(): boolean {
+    public isRevoked(): boolean {
         return this.revoked;
     }
 

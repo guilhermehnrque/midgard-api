@@ -1,7 +1,7 @@
 import { ScheduleNotFoundError } from "../../../../../application/erros/schedules/ScheduleNotFoundError";
 import { SchedulesService } from "../../../../../application/services/ScheduleService";
 import { AbstractOrganizerHandler } from "../AbstractOrganizerHandler";
-import { OrganizerDomain } from "../types/OrganizerDomain";
+import { OrganizerDomain } from "../domain/OrganizerDomain";
 
 export class ScheduleHandler extends AbstractOrganizerHandler {
 
