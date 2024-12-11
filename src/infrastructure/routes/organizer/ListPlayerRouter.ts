@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import { schemas, handleValidationErrors } from "../../middlewares/validators/organizer/PlayerListValidator";
 import { ListPlayerController } from "../../controllers/organizer/ListPlayerController"
-import { OrganizerHandler } from "../../middlewares/access/OrganizerHandler";
+import { OrganizerHandler } from "../../middlewares/access/organizer/OrganizerHandler";
 
 export class ListPlayerRouter {
 

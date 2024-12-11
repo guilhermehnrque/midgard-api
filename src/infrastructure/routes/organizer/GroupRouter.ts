@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import { GroupController } from "../../controllers/organizer/GroupController";
 import { schemas } from "../../middlewares/validators/organizer/GroupValidator";
 import ValidationErrorHandler from "../../middlewares/validators/ValidatorHandler";
-import { OrganizerHandler } from "../../middlewares/access/OrganizerHandler";
+import { OrganizerHandler } from "../../middlewares/access/organizer/OrganizerHandler";
 
 export class GroupRouter {
 

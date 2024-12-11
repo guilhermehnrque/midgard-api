@@ -6,12 +6,11 @@ import { GroupUserService } from "../../../services/GroupUserService";
 
 export class AddGroupMemberUseCase implements OrganizerCreatedGroupObserver {
 
-    private readonly groupUsersService: GroupUserService;
+    private readonly groupUsersService = new GroupUserService();
+    private organizerCreatedGroupSubject = OrganizerCreatedGroupSubject.getInstance();
 
     constructor() {
-        this.groupUsersService = new GroupUserService();
-        const organizerCreatedGroupSubject = OrganizerCreatedGroupSubject.getInstance();
-        organizerCreatedGroupSubject.subscribe(this);
+        this.organizerCreatedGroupSubject.subscribe(this);
     }
 
     public async execute(groupIdPk: number, membersId: Array<number>): Promise<void> {

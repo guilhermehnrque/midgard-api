@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { schemas, handleValidationErrors } from '../../middlewares/validators/organizer/LocalValidator';
 import { LocalController } from '../../controllers/organizer/LocalController';
-import { OrganizerHandler } from "../../middlewares/access/OrganizerHandler";
+import { OrganizerHandler } from '../../middlewares/access/organizer/OrganizerHandler';
 
 export class LocalRouter {
 
