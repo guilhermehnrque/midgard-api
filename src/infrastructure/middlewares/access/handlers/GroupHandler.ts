@@ -15,7 +15,7 @@ export class GroupHandler extends BaseOrganizerHandler {
     public async handle(request: BaseOrganizer): Promise<BaseOrganizer | null> {
         const group = await this.groupService.getGroupById(request.groupId!);
 
-        if (!group || group.getOwner() !== request.userId) {
+        if (group.getOwner() !== request.userId) {
             throw new PermissionError();
         }
 
