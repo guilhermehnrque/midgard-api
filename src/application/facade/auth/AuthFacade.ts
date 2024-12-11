@@ -35,7 +35,7 @@ export class AuthFacade {
         await this.registerUserUseCase.execute(createUserDTO);
     }
 
-    public async login(request: LoginRequest): Promise<String> {
+    public async login(request: LoginRequest): Promise<string> {
         const { login, password } = request;
         return this.loginUserUseCase.execute(login, password);
     }

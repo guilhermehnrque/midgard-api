@@ -33,7 +33,7 @@ export class GroupMembershipAccessService {
 
     public async validateListAccess({ userId, listId }: { userId: number, listId?: number }) {
         const list = await this.listBaseService.getList(listId!);
-        const group = await this.groupUserService.getGroupUsersByGroupIdAndUserIdPk(userId, list.getGroupIdPk())
+        const group = await this.groupUserService.getGroupUsersByGroupIdAndUserIdPk(userId, list!.getGroupIdPk())
 
         await this.accessManagement(group);
     }

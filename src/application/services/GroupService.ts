@@ -80,6 +80,11 @@ export class GroupService {
         return group ? await this.createEntityFromPersistante(group) : null;
     }
 
+    public async getOrganizerGroupById(organizerUserIdPk: number, groupId: number): Promise<GroupEntity | null> {
+        const group = await this.groupRepository.getOrganizerGroupById(organizerUserIdPk, groupId);
+        return group ? await this.createEntityFromPersistante(group) : null;
+    }
+
     private async createEntityFromPersistante(group: Group): Promise<GroupEntity> {
         const sportTypeEnum = SportTypeHelper.fromString(group.sport_type);
         const visibilityEnum = GroupVisibilityHelper.fromString(group.visibility);

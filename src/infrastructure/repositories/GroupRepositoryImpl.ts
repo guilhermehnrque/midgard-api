@@ -78,4 +78,13 @@ export class GroupRepositoryImpl implements GroupRepositoryInterface {
         }
     }
 
+    public async getOrganizerGroupById(userIdPk: number, groupId: number): Promise<Group | null> {
+        try {
+            return await Group.findOne({ where: { users_id: userIdPk, id: groupId } });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] getOrganizerGroupById -> ${customError.message}`);
+        }
+    }
+
 }

@@ -34,6 +34,9 @@ export class JwtTokenEntity implements JwtTokenAttributes {
         return !this.revoked && this.created_at <= this.expires_at;
     }    
 
+    public getToken(): string {
+        return this.token;
+    }
 
     static async createFromPayload(payload: Partial<JwtTokenEntity>): Promise<JwtTokenEntity> {
         const jwtTokenEntityInstance = new JwtTokenEntity();

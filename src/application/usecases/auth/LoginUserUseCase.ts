@@ -14,7 +14,7 @@ export class LoginUserUseCase {
         this.userService = new UserService();
     }
 
-    public async execute(login: string, password: string): Promise<String> {
+    public async execute(login: string, password: string): Promise<string> {
         const user = await this.userService.getUserByLogin(login);
         await this.checkUser(user);
         await this.checkPassword(password, user!.getPassword());
@@ -36,17 +36,17 @@ export class LoginUserUseCase {
         }
     }
 
-    private async tokenManagement(user: UserEntity): Promise<String> {
+    private async tokenManagement(user: UserEntity): Promise<string> {
         const latestToken = await this.jwtService.getLatestValidToken(user);
     
         if (latestToken?.isValid()) {
-            return latestToken.toString();
+            return latestToken.getToken();
         }
     
         return await this.tokeGenerateManagement(user);
     }
 
-    private async tokeGenerateManagement(userEntity: UserEntity): Promise<String> {
+    private async tokeGenerateManagement(userEntity: UserEntity): Promise<string> {
         await this.jwtService.expireAllUserTokens(userEntity.getUserIdPk());
         const token = await this.jwtService.createToken(userEntity);
 

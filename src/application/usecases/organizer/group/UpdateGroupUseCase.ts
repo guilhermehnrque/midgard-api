@@ -16,7 +16,7 @@ export class UpdateGroupUseCase {
         const sportTypeEnum = SportTypeHelper.fromString(sportType);
         const visibilityEnum = GroupVisibilityHelper.fromString(visibility);
 
-        await this.checkGroup(userIdPk, description);
+        await this.checkGroup(userIdPk, groupIdPk);
 
         const groupEntity = await GroupEntity.fromUpdate({
             id: groupIdPk,
@@ -30,8 +30,8 @@ export class UpdateGroupUseCase {
         await this.groupService.updateGroup(groupEntity);
     }
 
-    private async checkGroup(userIdPk: number, description: string) {
-        const group = await this.groupService.getOrganizerGroupByDescription(userIdPk, description);
+    private async checkGroup(userIdPk: number, groupIdPk: number) {
+        const group = await this.groupService.getOrganizerGroupById(userIdPk, groupIdPk);
 
         if (group == null) {
             throw new GroupNotFoundError();
