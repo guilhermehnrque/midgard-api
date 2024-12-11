@@ -22,11 +22,10 @@ export class AddGroupMemberUseCase implements OrganizerCreatedGroupObserver {
             users_id: membersId
         })));
 
-        await this.groupUsersService.registerUserToGroup(members);
+        await this.groupUsersService.includeUserToGroup(members);
     }
 
     private async validations(membersId: Array<number>, groupIdPk: number): Promise<void> {
-
         if ((membersId.length <= 0)) {
             throw new AddMemberToGroupError();
         }

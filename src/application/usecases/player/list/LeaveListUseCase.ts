@@ -1,7 +1,10 @@
+import { ListBaseEntity } from "../../../../domain/entity/ListBaseEntity";
 import { ListPlayerEntity } from "../../../../domain/entity/ListPlayerEntity";
 import { PlayerNotFoundInListError } from "../../../erros/list/ListBaseErrors";
+import { ListNotActiveError } from "../../../erros/list/ListNotActiveError";
 import { ListBaseService } from "../../../services/ListBaseService";
 import { ListPlayerService } from "../../../services/ListPlayerService";
+import { PlayerStatusVO } from "../../../valueobjects/PlayerStatusVO";
 
 export class LeaveListUseCase {
 
@@ -15,18 +18,24 @@ export class LeaveListUseCase {
 
     public async execute(userIdPk: number, listIdPk: number): Promise<void> {
         const list = await this.listBaseService.getList(listIdPk);
-        this.listBaseService.validateEnrollmentAvailability(list);
 
+        await this.checkList(list!);
         await this.isPlayerOnList(userIdPk, listIdPk);
 
         const listPlayer = await ListPlayerEntity.fromUpdateUseCase({
             list_base_id: listIdPk,
-            player_status: 'declined',
+            player_status: PlayerStatusVO.DECLINED,
             users_id: userIdPk
         });
 
         await this.listPlayerService.removePlayerFromList(listPlayer);
-        await this.listBaseService.removeConfirmedPlayers(list);
+        await this.listBaseService.removePlayerFromConfirmedPlayers(list!);
+    }
+
+    private async checkList(list: ListBaseEntity): Promise<void> {
+        if (!list.getStatus()) {
+            throw new ListNotActiveError();
+        }
     }
 
     private async isPlayerOnList(userIdPk: number, listIdPk: number): Promise<void> {
@@ -34,10 +43,12 @@ export class LeaveListUseCase {
 
         const isPlayerOnList = listPlayers.filter(player => player.users_id == userIdPk);
 
-        if (isPlayerOnList.length <= 0) {
-            console.error(`[LeaveListUseCase] -> Player not on list`);
-            throw new PlayerNotFoundInListError();
+        if (isPlayerOnList.length > 0) {
+            return
         }
+
+        throw new PlayerNotFoundInListError();
+
 
     }
 

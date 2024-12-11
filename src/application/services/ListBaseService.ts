@@ -92,13 +92,6 @@ export class ListBaseService {
         return this.createEntityFromPersistence(list);
     }
 
-    public validateEnrollmentAvailability(list: ListBaseEntity): void {
-        if (!list.getStatus()) {
-            console.error(`[ListBaseService] -> List is not active for enrollment`);
-            throw new ListNotActiveError();
-        }
-    }
-
     private async createEntityFromPersistence(listBase: List): Promise<ListBaseEntity> {
         return await ListBaseEntity.fromPersistence({
             id: listBase.id,
