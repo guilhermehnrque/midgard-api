@@ -17,8 +17,6 @@ export class GroupService {
     }
 
     public async createGroup(group: GroupEntity): Promise<number | undefined> {
-        await this.ensureGroupNotExists(group.description);
-
         try {
             return await this.groupRepository.createGroup(group);
         } catch (error) {
@@ -28,7 +26,6 @@ export class GroupService {
     }
 
     public async updateGroup(group: GroupEntity): Promise<number> {
-        await this.ensureGroupExists(group.id!)
         try {
             return await this.groupRepository.updateGroup(group);
         } catch (error) {
@@ -78,20 +75,14 @@ export class GroupService {
         return Promise.all(groups.map(this.createEntityFromPersistante));
     }
 
-    public async ensureGroupNotExists(description: string): Promise<void> {
-        const group = await this.groupRepository.getGroupByDescription(description)
-
-        if (group || group != null) {
-            this.logAndThrowError(new GroupAlreadyExists(), `[GroupService] ensureGroupNotExists -> ${description}`);
-        }
+    public async getOrganizerGroupByDescription(organizerUserIdPk: number, description: string): Promise<GroupEntity | null> {
+        const group = await this.groupRepository.getGroupByDescriptionAndUserId(organizerUserIdPk, description);
+        return group ? await this.createEntityFromPersistante(group) : null;
     }
 
-    public async ensureGroupExists(groupIdPk: number): Promise<void> {
-        const group = await this.groupRepository.getGroupById(groupIdPk)
-
-        if (!group || group == null) {
-            this.logAndThrowError(new GroupNotFoundError(), `[GroupService] ensureGroupExists -> ${groupIdPk}`);
-        }
+    public async getOrganizerGroupById(organizerUserIdPk: number, groupId: number): Promise<GroupEntity | null> {
+        const group = await this.groupRepository.getOrganizerGroupById(organizerUserIdPk, groupId);
+        return group ? await this.createEntityFromPersistante(group) : null;
     }
 
     private async createEntityFromPersistante(group: Group): Promise<GroupEntity> {

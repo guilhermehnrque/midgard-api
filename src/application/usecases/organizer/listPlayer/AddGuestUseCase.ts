@@ -1,8 +1,8 @@
 import { ListPlayerEntity } from "../../../../domain/entity/ListPlayerEntity";
 import { PlayerAlreadyInListError } from "../../../erros/list/ListBaseErrors";
-import { LimitOfPlayersError } from "../../../erros/listPlayer/LimitOfPlayersError";
 import { ListBaseService } from "../../../services/ListBaseService";
 import { ListPlayerService } from "../../../services/ListPlayerService";
+import { PlayerStatusVO } from "../../../valueobjects/PlayerStatusVO";
 
 export class AddGuestUseCase {
 
@@ -18,35 +18,25 @@ export class AddGuestUseCase {
         const list = await this.listBaseService.getList(listIdPk);
 
         await this.isGuestAlreadyOnList(guestIdPk, listIdPk)
-        await this.validateListLimit(list.getPlayerLimit(), listIdPk)
+        await this.listPlayerService.checkListCapacity(listIdPk, list!.getPlayerLimit())
 
         const listPlayer = await ListPlayerEntity.fromCreateUseCase({
             list_base_id: listIdPk,
-            player_status: 'pending',
+            player_status: PlayerStatusVO.WAITING,
             guest_id: guestIdPk
         });
 
         await this.listPlayerService.addPlayerToList(listPlayer);
-        await this.listBaseService.addConfirmedPlayers(list);
-    }
-
-    private async validateListLimit(limitOfPlayers: number, listIdPk: number): Promise<void> {
-        const listOfPlayers = await this.listPlayerService.getListPlayersByListId(listIdPk);
-        const confirmedPlayers = listOfPlayers.filter(player => player.player_status == "confirmed");
-
-        const totalConfirmed = confirmedPlayers.length
-
-        if (totalConfirmed > limitOfPlayers) {
-            throw new LimitOfPlayersError();
-        }
+        await this.listBaseService.includePlayerInConfirmedPlayers(list!);
     }
 
     private async isGuestAlreadyOnList(guestIdPk: number, listIdPk: number): Promise<void> {
         const response = await this.listPlayerService.validateGuestIsOnList(guestIdPk, listIdPk)
 
-        if (response) {
-            console.error(`Guest already in list: ${guestIdPk})`)
-            throw new PlayerAlreadyInListError();
+        if (response == null) {
+            return 
         }
+
+        throw new PlayerAlreadyInListError();
     }
 }

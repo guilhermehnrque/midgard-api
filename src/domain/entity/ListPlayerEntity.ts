@@ -42,6 +42,10 @@ export class ListPlayerEntity implements ListPlayerAttributes {
         });
     }
 
+    public isPlayerConfirmed() {
+        return this.player_status === PlayerStatusVO.CONFIRMED;
+    }
+
     private getUserStatus(status: string): string {
         try {
             return PlayerStatusVO.fromString(status); 

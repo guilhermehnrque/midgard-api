@@ -11,12 +11,12 @@
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "typeRoots": ["./node_modules/@types", "./types"], 
+    "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["node", "express"]
   },
   "include": [
-    "src/**/*",  
-    "types/**/*" 
+    "src/**/*",
+    "types/**/*"
   ],
   "exclude": ["node_modules", "dist"]
 }

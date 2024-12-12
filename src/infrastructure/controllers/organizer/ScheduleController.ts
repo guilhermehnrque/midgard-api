@@ -14,10 +14,9 @@ export class ScheduleController {
 
     public async createSchedule(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const createScheduleRequest = request.body as CreateScheduleRequest;
 
-            await this.scheduleFacade.createSchedule(createScheduleRequest, Number(userIdPk));
+            await this.scheduleFacade.createSchedule(createScheduleRequest);
 
             return response.status(201).json();
 
@@ -29,11 +28,10 @@ export class ScheduleController {
 
     public async updateSchedule(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const { scheduleId } = request.params;
             const updateScheduleRequest = request.body as UpdateScheduleRequest;
 
-            await this.scheduleFacade.updateSchedule(updateScheduleRequest, Number(userIdPk), Number(scheduleId));
+            await this.scheduleFacade.updateSchedule(updateScheduleRequest, Number(scheduleId));
 
             return response.status(204).json();
 
@@ -45,10 +43,9 @@ export class ScheduleController {
 
     public async getSchedules(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const { groupId } = request.params;
 
-            const facade = await this.scheduleFacade.getSchedules(Number(userIdPk), Number(groupId));
+            const facade = await this.scheduleFacade.getSchedules(Number(groupId));
 
             return response.status(200).json({ data: facade });
 
@@ -59,10 +56,9 @@ export class ScheduleController {
     }
     public async getSchedule(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const { scheduleId } = request.params;
 
-            const facade = await this.scheduleFacade.getSchedule(Number(userIdPk), Number(scheduleId));
+            const facade = await this.scheduleFacade.getSchedule(Number(scheduleId));
 
             return response.status(200).json(facade);
 

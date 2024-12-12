@@ -69,4 +69,22 @@ export class GroupRepositoryImpl implements GroupRepositoryInterface {
         }
     }
 
+    public async getGroupByDescriptionAndUserId(userIdPk: number, description: string): Promise<Group | null> {
+        try {
+            return await Group.findOne({ where: { users_id: userIdPk, description: description } });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] getGroupByDescriptionAndUserId -> ${customError.message}`);
+        }
+    }
+
+    public async getOrganizerGroupById(userIdPk: number, groupId: number): Promise<Group | null> {
+        try {
+            return await Group.findOne({ where: { users_id: userIdPk, id: groupId } });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] getOrganizerGroupById -> ${customError.message}`);
+        }
+    }
+
 }

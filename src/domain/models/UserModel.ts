@@ -16,6 +16,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public status!: boolean;
     public password!: string;
     public phone_number!: number;
+    public email!: string;
     public created_at!: Date;
     public updated_at!: Date;
     public deleted_at?: Date;
@@ -60,6 +61,10 @@ User.init({
         allowNull: false,
     },
     password: {
+        type: DataTypes.STRING(150),
+        allowNull: false,
+    },
+    email: {
         type: DataTypes.STRING(150),
         allowNull: false,
     },

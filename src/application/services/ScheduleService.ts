@@ -31,16 +31,11 @@ export class SchedulesService {
         }
     }
 
-    public async getScheduleById(scheduleId: number): Promise<ScheduleEntity> {
+    public async getScheduleById(scheduleId: number): Promise<ScheduleEntity | null> {
         const schedule = await this.scheduleRepository.getScheduleById(scheduleId);
 
-        if (!schedule || schedule == null) {
-            this.logAndThrowError(new ScheduleNotFoundError(), `[SchedulesService] getScheduleById -> ${scheduleId}`);
-        }
-
-        return this.createEntityFromPersistence(schedule!);
+        return schedule ? this.createEntityFromPersistence(schedule) : null;
     }
-
 
     public async getScheduleByIdAndGroupId(scheduleId: number, groupIdPk: number): Promise<ScheduleEntity> {
         const schedule = await this.scheduleRepository.getScheduleByIdAndGroupId(scheduleId, groupIdPk);

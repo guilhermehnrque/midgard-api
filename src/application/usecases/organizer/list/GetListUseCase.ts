@@ -1,4 +1,6 @@
+import { ListBaseEntity } from "../../../../domain/entity/ListBaseEntity";
 import { ListOutputDTO } from "../../../dto/organizer/list/ListOutputDTO";
+import { ListNotFoundError } from "../../../erros/list/ListBaseErrors";
 import { ListBaseService } from "../../../services/ListBaseService";
 
 export class GetListUseCase {
@@ -12,7 +14,15 @@ export class GetListUseCase {
     public async execute(listIdPk: number): Promise<ListOutputDTO> {
         const lists = await this.listBaseService.getList(listIdPk);
 
-        return ListOutputDTO.fromEntity(lists);
+        await this.checkList(lists);
+
+        return ListOutputDTO.fromEntity(lists!);
+    }
+
+    private async checkList(list: ListBaseEntity | null): Promise<void> {
+        if (list == null) {
+            throw new ListNotFoundError();
+        }
     }
 
 }

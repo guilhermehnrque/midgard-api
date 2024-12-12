@@ -1,6 +1,7 @@
 import { GroupEntity } from "../../../../domain/entity/GroupEntity";
 import { GroupVisibilityHelper } from "../../../enums/GroupVisibilitEnum";
 import { SportTypeHelper } from "../../../enums/SportTypeEnum";
+import { GroupNotFoundError } from "../../../erros/groups/GroupNotFoundError";
 import { GroupService } from "../../../services/GroupService";
 
 export class UpdateGroupUseCase {
@@ -11,9 +12,11 @@ export class UpdateGroupUseCase {
         this.groupService = new GroupService();
     }
 
-    async execute(groupIdPk: number, description: string, status: boolean, visibility: string, sportType: string, userIdPk: number): Promise<void> {
+    public async execute(groupIdPk: number, description: string, status: boolean, visibility: string, sportType: string, userIdPk: number): Promise<void> {
         const sportTypeEnum = SportTypeHelper.fromString(sportType);
         const visibilityEnum = GroupVisibilityHelper.fromString(visibility);
+
+        await this.checkGroup(userIdPk, groupIdPk);
 
         const groupEntity = await GroupEntity.fromUpdate({
             id: groupIdPk,
@@ -25,6 +28,14 @@ export class UpdateGroupUseCase {
         })
 
         await this.groupService.updateGroup(groupEntity);
+    }
+
+    private async checkGroup(userIdPk: number, groupIdPk: number) {
+        const group = await this.groupService.getOrganizerGroupById(userIdPk, groupIdPk);
+
+        if (group == null) {
+            throw new GroupNotFoundError();
+        }
     }
 
 

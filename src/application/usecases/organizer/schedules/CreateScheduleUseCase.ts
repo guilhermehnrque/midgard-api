@@ -12,7 +12,7 @@ export class CreateScheduleUseCase {
 
     public async execute(startingTime: string, endingTime: string, dayOfWeek: string, groupIdPk: number, localIdPk: number): Promise<void> {
 
-        await this.scheduleValidation(startingTime, endingTime, dayOfWeek);
+        await this.checkScheduleConflict(startingTime, endingTime, dayOfWeek);
 
         const schedule = await ScheduleEntity.fromCreateUseCase({
             starting_time: startingTime,
@@ -25,11 +25,10 @@ export class CreateScheduleUseCase {
         await this.scheduleService.createSchedule(schedule);
     }
 
-    private async scheduleValidation(startingTime: string, endingTime: string, dayOfWeek: string) {
+    private async checkScheduleConflict(startingTime: string, endingTime: string, dayOfWeek: string) {
         const schedule = await this.scheduleService.checkScheduleConflictOnDay(dayOfWeek, startingTime, endingTime)
 
         if (schedule) {
-            console.error(`[CreateScheduleUseCase] -> Schedule already exists`);
             throw new ScheduleAlreadyExistsError();
         }
     }

@@ -7,5 +7,7 @@ export interface GroupRepositoryInterface {
     getOrganizerGroups(userIdPk: number): Promise<Group[]>;
     getGroupById(groupId: number): Promise<Group | null>;
     getGroupByDescription(groupDescription: string): Promise<Group | null>;
-    getGroupsByStatus(status: boolean): Promise<Group[]>
+    getGroupsByStatus(status: boolean): Promise<Group[]>;
+    getGroupByDescriptionAndUserId(userIdPk: number, description: string): Promise<Group | null>;
+    getOrganizerGroupById(userIdPk: number, groupId: number): Promise<Group | null>;
 }

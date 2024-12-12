@@ -68,8 +68,8 @@ export class AuthController {
 
     public async logout(request: Request, response: Response): Promise<Response> {
         try {
-            const { userId } = request;
-            await this.authFacade.logout(userId!);
+            const { userIdPk } = request.headers;
+            await this.authFacade.logout(Number(userIdPk!));
 
             return response.status(200).json({ message: "Logout efetuado" });
         } catch (error) {
@@ -80,9 +80,8 @@ export class AuthController {
 
     public async getProfile(request: Request, response: Response): Promise<Response> {
         try {
-            const { userId } = request;
-
-            const profile = await this.authFacade.profile(userId!);
+            const { userIdPk } = request.headers;
+            const profile = await this.authFacade.profile(Number(userIdPk!));
 
             return response.status(200).json({data: profile});
         } catch (error) {

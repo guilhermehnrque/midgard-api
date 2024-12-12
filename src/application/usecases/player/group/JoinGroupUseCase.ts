@@ -1,4 +1,6 @@
+import { GroupEntity } from "../../../../domain/entity/GroupEntity";
 import { GroupUserEntity } from "../../../../domain/entity/GroupUserEntity";
+import { GroupNotFoundError } from "../../../erros/groups/GroupNotFoundError";
 import { UserAlreadyInGroupError } from "../../../erros/groupUser/UserAlreadyInGroupError";
 import { GroupService } from "../../../services/GroupService";
 import { GroupUserService } from "../../../services/GroupUserService";
@@ -14,26 +16,34 @@ export class JoinGroupUseCase {
     }
 
     public async execute(userIdPk: number, groupIdPk: number): Promise<void> {
-        await this.groupService.ensureGroupExists(groupIdPk);
+        const group = await this.groupService.getGroupById(groupIdPk);
+        await this.checkGroup(group);
 
-        await this.isAlreadyGroupMember(userIdPk, groupIdPk);
+        const groupUser = await this.groupUserService.getGroupUsersByGroupIdAndUserIdPk(userIdPk, groupIdPk);
+        await this.checkAlreadyGroupMember(groupUser);
 
         const groupUserEntity = await GroupUserEntity.fromData({
             groups_id: groupIdPk,
             users_id: userIdPk
         });
 
-        await this.groupUserService.registerUserToGroup([groupUserEntity]);
+        await this.groupUserService.includeUserToGroup([groupUserEntity]);
     }
 
-    private async isAlreadyGroupMember(userIdPk: number, groupIdPk: number): Promise<void> {
-        const groupUser = await this.groupUserService.getGroupUsersByGroupIdAndUserIdPk(userIdPk, groupIdPk);
-
-        if (groupUser != null) {
-            console.error(`[JoinGroupUseCase] -> User already in group`);
-            throw new UserAlreadyInGroupError();
+    private async checkGroup(groupEntity: GroupEntity) {
+        if (groupEntity != null) {
+            return
         }
 
+        throw new GroupNotFoundError();
+    }
+
+    private async checkAlreadyGroupMember(groupUser: GroupUserEntity): Promise<void> {
+        if (groupUser == null) {
+           return
+        }
+
+        throw new UserAlreadyInGroupError();
     }
 
 }

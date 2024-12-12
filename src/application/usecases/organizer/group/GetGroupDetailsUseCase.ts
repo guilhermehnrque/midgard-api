@@ -9,7 +9,7 @@ export class GetGroupDetailsUseCase {
         this.groupService = new GroupService();
     }
 
-    async execute(groupId: number): Promise<GroupOutputDTO> {
+    public async execute(groupId: number): Promise<GroupOutputDTO> {
         const group = await this.groupService.getGroupById(groupId);
 
         return GroupOutputDTO.fromEntity(group);

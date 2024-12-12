@@ -7,9 +7,8 @@ export class JwtUtils {
 
     static async generateToken(payload: any) {
         const secrets = {
-            userId: payload.user_id,
-            type: payload.type
-        }
+            userId: payload.user_id
+}
 
         return jwt.sign(secrets, secretKey!, { expiresIn: DAYS_TO_EXPIRE_AS_HOUR! })
     }

@@ -15,29 +15,21 @@ export class ResetPasswordUseCase {
     }
 
     async execute(password: string, token: string): Promise<void> {
-        const user = await this.validateUserTokenAndReturnUser(token);
+        const user = await this.userService.getUserByResetToken(token);
+        await this.checkUser(user);
 
-        const hashPassword = await HashPassword.hashPassword(password);
-        user.setPassword(hashPassword);
-        user.cleanTokens();
+        const hashedPassword = await HashPassword.hashPassword(password);
+        user!.setPassword(hashedPassword);
+        user!.cleanTokens();
 
-        const newToken = await this.jwtService.createToken(user);
-
-        await this.userService.updateUser(user);
-
-        await this.jwtService.expireLatestToken(user.id!);
-
-        await this.jwtService.saveToken(user.id!, newToken);
+        await this.userService.updateUser(user!);
+        await this.jwtService.expireAllUserTokens(user!.getUserIdPk());
     }
 
-    private async validateUserTokenAndReturnUser(userToken: string): Promise<UserEntity> {
-        const user =  await this.userService.getUserByResetToken(userToken);
-
-        if (!user || user == null) {
+    private async checkUser(userEntity: UserEntity | null): Promise<void> {
+        if (userEntity == null) {
             throw new LoginError('Reset token not found or expired');
         }
-
-        return user;
     }
 
 }

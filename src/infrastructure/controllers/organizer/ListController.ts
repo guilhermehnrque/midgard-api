@@ -13,10 +13,9 @@ export class ListController {
 
     public async createList(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const createListRequest = request.body as CreateListRequest;
 
-            await this.listBaseFacade.createList(createListRequest, Number(userIdPk));
+            await this.listBaseFacade.createList(createListRequest);
             return response.status(201).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -26,11 +25,10 @@ export class ListController {
 
     public async updateList(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const { listId } = request.params;
             const updateListRequest = request.body;
 
-            await this.listBaseFacade.updateList(updateListRequest, Number(listId), Number(userIdPk));
+            await this.listBaseFacade.updateList(updateListRequest, Number(listId));
             return response.status(204).json();
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -40,10 +38,9 @@ export class ListController {
 
     public async getLists(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const { groupId } = request.params;
 
-            const lists = await this.listBaseFacade.getLists(Number(groupId), Number(userIdPk));
+            const lists = await this.listBaseFacade.getLists(Number(groupId));
 
             return response.status(200).json({ data: lists });
         } catch (error) {
@@ -55,10 +52,9 @@ export class ListController {
 
     public async getList(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
             const { listId } = request.params;
 
-            const list = await this.listBaseFacade.getList(Number(listId), Number(userIdPk));
+            const list = await this.listBaseFacade.getList(Number(listId));
 
             return response.status(200).json(list);
         } catch (error) {

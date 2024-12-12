@@ -12,7 +12,7 @@ export class CreateLocalUseCase {
     }
 
     async execute(localDTO: LocalDTO): Promise<void> {
-        await this.localValidation(localDTO.getDescription(), localDTO.getGroupId())
+        await this.checkLocal(localDTO.getDescription(), localDTO.getGroupId())
 
         const localEntity = await LocalEntity.fromUseCase({
             description: localDTO.getDescription(),
@@ -28,11 +28,10 @@ export class CreateLocalUseCase {
         await this.localService.createLocal(localEntity);
     }
 
-    private async localValidation(description: string, groupIdPk: number) {
+    private async checkLocal(description: string, groupIdPk: number) {
         const local = await this.localService.getLocalByDescriptionAndGroupId(description, groupIdPk)
         
         if (local) {
-            console.error(`[CreateLocalUseCase] -> Local already exists`);
             throw new LocalAlreadyExistsError('Local already exists');
         }
     }

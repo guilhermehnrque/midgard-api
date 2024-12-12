@@ -6,7 +6,8 @@ import { RegisterToGroupError } from "../erros/groupUser/RegisterToGroupError";
 import { GroupNotFoundError } from "../erros/groups/GroupNotFoundError";
 import sequelize from "../../infrastructure/database/index";
 import { UserAlreadyInGroupError } from "../erros/groupUser/UserAlreadyInGroupError";
-import { UsertNotGroupMember } from "../erros/groupUser/UsertNotGroupMember";
+import { UserNotGroupMember } from "../erros/groupUser/UserNotGroupMember";
+import { group } from "console";
 
 
 export class GroupUserService {
@@ -17,7 +18,7 @@ export class GroupUserService {
         this.groupUserRepository = new GroupUserRepositoryImpl();
     }
 
-    public async registerUserToGroup(userGroupEntity: GroupUserEntity[]): Promise<void> {
+    public async includeUserToGroup(userGroupEntity: GroupUserEntity[]): Promise<void> {
         const transaction = await sequelize.transaction();
 
         try {
@@ -86,9 +87,9 @@ export class GroupUserService {
 
     public async ensureUserIsInGroup(userId: number, groupId: number): Promise<void> {
         const groupUser = await this.groupUserRepository.getGroupUserByGroupIdAndUserIdPk(groupId, userId);
-
+        
         if (groupUser === null) {  
-            this.logAndThrowError(new UsertNotGroupMember(),
+            this.logAndThrowError(new UserNotGroupMember(),
                 `[GroupUserService] ensureUserIsInGroup -> userId: ${userId} groupId: ${groupId}: User not in group`);
         }
     }

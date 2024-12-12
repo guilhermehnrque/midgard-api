@@ -1,15 +1,12 @@
 import { OrganizerCreatedGroupObserver } from "../../domain/observers/OrganizerCreatedGroupObserver";
 
 export class OrganizerCreatedGroupSubject {
-    private static instance: OrganizerCreatedGroupSubject;
+    private static instance = (() => new OrganizerCreatedGroupSubject())();
     private observers: OrganizerCreatedGroupObserver[] = [];
 
     private constructor() { }
 
     public static getInstance(): OrganizerCreatedGroupSubject {
-        if (!OrganizerCreatedGroupSubject.instance) {
-            OrganizerCreatedGroupSubject.instance = new OrganizerCreatedGroupSubject();
-        }
         return OrganizerCreatedGroupSubject.instance;
     }
 

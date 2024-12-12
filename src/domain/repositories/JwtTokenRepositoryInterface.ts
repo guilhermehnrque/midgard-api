@@ -6,4 +6,5 @@ export interface JwtTokensRepositoryInterface {
     updateToken(token: JwtTokenEntity): Promise<number>;
     getByToken(token: string): Promise<JwtToken | null>;
     getLatestValidToken(userIdPk: number): Promise<JwtToken | null>;
+    expireAllUserTokens(userIdPk: number): Promise<number>;
 }

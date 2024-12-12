@@ -41,8 +41,8 @@ export class AuthFacade {
     }
 
     public async forgotPassword(request: ForgotPasswordRequest) {
-        const { phoneNumber } = request;
-        return this.forgotPasswordUseCase.execute(parseInt(phoneNumber!));
+        const { login } = request;
+        return this.forgotPasswordUseCase.execute(login);
     }
 
     public async resetPassword(request: ResetPasswordRequest, token: string) {
@@ -50,13 +50,12 @@ export class AuthFacade {
         return this.resetPasswordUseCase.execute(password, token);
     }
 
-    public async logout(userId: string) {
-        await this.logoutUseCase.execute(userId);
+    public async logout(userIdPk: number) {
+        await this.logoutUseCase.execute(userIdPk);
     }
 
-
-    public async profile(userId: string): Promise<string> {
-        return await this.profileUseCase.execute(userId);
+    public async profile(userIdPk: number): Promise<string> {
+        return await this.profileUseCase.execute(userIdPk);
     }
 
 }
