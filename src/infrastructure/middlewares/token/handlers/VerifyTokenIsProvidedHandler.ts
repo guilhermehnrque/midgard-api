@@ -8,7 +8,7 @@ export class VerifyTokenIsProvidedHandler extends AbstractTokenHandler {
         super();
     }
 
-    async handle(context: TokenContextDomain): Promise<any> {
+    async handle(context: TokenContextDomain): Promise<TokenContextDomain | null> {
         if (context.token == undefined || context.token == null) {
             throw new CustomError('Token not provided', 401);
         }

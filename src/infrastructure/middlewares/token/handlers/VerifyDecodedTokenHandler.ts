@@ -10,7 +10,7 @@ export class VerifyDecodedTokenHandler extends AbstractTokenHandler {
       super();
    }
 
-   async handle(context: TokenContextDomain): Promise<any> {
+   async handle(context: TokenContextDomain): Promise<TokenContextDomain | null> {
       const decoded = await JwtUtils.verifyToken(context.token!) as DecodedTokenInterface;
 
       if (!decoded) {

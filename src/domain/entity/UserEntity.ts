@@ -101,6 +101,7 @@ export class UserEntity implements UserAttributes {
         userEntity.type = payload.type!;
         userEntity.status = payload.status!;
         userEntity.phone_number = payload.phone_number!;
+        userEntity.email = payload.email!;
         userEntity.login = payload.login!;
         userEntity.password = payload.password!;
         userEntity.created_at = new Date();

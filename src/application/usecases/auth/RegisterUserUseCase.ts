@@ -26,6 +26,7 @@ export class RegisterUserUseCase {
             surname: createUserDTO.surname,
             type: userType.toString(),
             status: registerStatus,
+            email: createUserDTO.email,
             phone_number: createUserDTO.phone_number,
             login: createUserDTO.login,
             password: hashPassword

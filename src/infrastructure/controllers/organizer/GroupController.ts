@@ -14,7 +14,7 @@ export class GroupController {
 
     public async createGroup(request: Request, response: Response) {
         try {
-            const { userIdPk } = request.headers;
+            const { userIdPk } = request;
             const CreateGroupRequest = request.body as CreateGroupRequest;
 
             await this.groupFacade.createGroup(CreateGroupRequest, Number(userIdPk));
@@ -27,7 +27,7 @@ export class GroupController {
 
     public async updateGroup(request: Request, response: Response) {
         try {
-            const { userIdPk } = request.headers;
+            const { userIdPk } = request;
             const { groupId } = request.params;
             const updateGroupRequest = request.body as UpdateGroupRequest;
 
@@ -54,7 +54,7 @@ export class GroupController {
 
     public async getGroups(request: Request, response: Response) {
         try {
-            const { userIdPk } = request.headers;
+            const { userIdPk } = request;
 
             const facade = await this.groupFacade.getGroups(Number(userIdPk));
 

@@ -14,11 +14,11 @@ export class CheckRevokedTokenHandler extends AbstractTokenHandler {
     async handle(context: TokenContextDomain): Promise<any> {
         const tokenEntity = await this.jwtService.getTokenByTokenString(context.token!);
 
-        if (tokenEntity!.isRevoked()) {
+        if (tokenEntity == null || tokenEntity.isRevoked()) {
             throw new CustomError('Token revoked', 401);
         }
 
-        return context.userId
+        return super.handle(context);
     }
 
 }

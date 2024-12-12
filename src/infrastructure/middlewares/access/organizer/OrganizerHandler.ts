@@ -20,8 +20,10 @@ export class OrganizerHandler {
     }
 
     public async groupAccess(req: Request, res: Response, next: NextFunction) {
-        const userIdPkHeader = req.headers.userIdPk as string;
+        const userIdPkHeader = req.userIdPk;
         const userIdPk = Number(userIdPkHeader);
+
+        console.log(`[groupAccess] -> ${userIdPkHeader}`)
 
         let groupId = Number(req.params.groupId);
 
@@ -38,9 +40,9 @@ export class OrganizerHandler {
         }
     }
 
-    
+
     public async localAccess(req: Request, res: Response, next: NextFunction) {
-        const userIdPkHeader = req.headers.userIdPk as string;
+        const userIdPkHeader = req.userIdPk;
         const userIdPk = Number(userIdPkHeader);
         const localId = Number(req.params.localId);
 
@@ -56,7 +58,7 @@ export class OrganizerHandler {
     }
 
     public async scheduleAccess(req: Request, res: Response, next: NextFunction) {
-        const userIdPkHeader = req.headers.userIdPk as string;
+        const userIdPkHeader = req.userIdPk;
         const userIdPk = Number(userIdPkHeader);
         const scheduleId = Number(req.params.scheduleId);
 
@@ -72,7 +74,7 @@ export class OrganizerHandler {
     }
 
     public async listAccess(req: Request, res: Response, next: NextFunction) {
-        const userIdPkHeader = req.headers.userIdPk as string;
+        const userIdPkHeader = req.userIdPk;
         const userIdPk = Number(userIdPkHeader);
         const listId = this.checkListAccessParams(req);
 
