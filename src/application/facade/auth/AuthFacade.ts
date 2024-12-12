@@ -50,12 +50,12 @@ export class AuthFacade {
         return this.resetPasswordUseCase.execute(password, token);
     }
 
-    public async logout(userId: string) {
-        await this.logoutUseCase.execute(userId);
+    public async logout(userIdPk: number) {
+        await this.logoutUseCase.execute(userIdPk);
     }
 
-    public async profile(userId: string): Promise<string> {
-        return await this.profileUseCase.execute(userId);
+    public async profile(userIdPk: number): Promise<string> {
+        return await this.profileUseCase.execute(userIdPk);
     }
 
 }

@@ -20,7 +20,9 @@ export class OrganizerHandler {
     }
 
     public async groupAccess(req: Request, res: Response, next: NextFunction) {
-        const userId = Number(req.userIdPk);
+        const userIdPkHeader = req.headers.userIdPk as string;
+        const userIdPk = Number(userIdPkHeader);
+
         let groupId = Number(req.params.groupId);
 
         if (isNaN(groupId)) {
@@ -28,7 +30,7 @@ export class OrganizerHandler {
         }
 
         try {
-            await this.groupHandler.handle({ userId, groupId });
+            await this.groupHandler.handle({ userId: userIdPk, groupId });
             next();
         } catch (error) {
             const err = error as CustomError;
@@ -38,13 +40,14 @@ export class OrganizerHandler {
 
     
     public async localAccess(req: Request, res: Response, next: NextFunction) {
-        const userId = Number(req.userIdPk);
+        const userIdPkHeader = req.headers.userIdPk as string;
+        const userIdPk = Number(userIdPkHeader);
         const localId = Number(req.params.localId);
 
         this.localHandler.setNextHandler(this.groupHandler)
 
         try {
-            await this.localHandler.handle({ userId, localId });
+            await this.localHandler.handle({ userId: userIdPk, localId });
             next();
         } catch (error) {
             const err = error as CustomError;
@@ -53,13 +56,14 @@ export class OrganizerHandler {
     }
 
     public async scheduleAccess(req: Request, res: Response, next: NextFunction) {
-        const userId = Number(req.userIdPk);
+        const userIdPkHeader = req.headers.userIdPk as string;
+        const userIdPk = Number(userIdPkHeader);
         const scheduleId = Number(req.params.scheduleId);
 
         this.scheduleHandler.setNextHandler(this.groupHandler)
 
         try {
-            await this.scheduleHandler.handle({ userId, scheduleId });
+            await this.scheduleHandler.handle({ userId: userIdPk, scheduleId });
             next();
         } catch (error) {
             const err = error as CustomError;
@@ -68,13 +72,14 @@ export class OrganizerHandler {
     }
 
     public async listAccess(req: Request, res: Response, next: NextFunction) {
-        const userId = Number(req.userIdPk);
+        const userIdPkHeader = req.headers.userIdPk as string;
+        const userIdPk = Number(userIdPkHeader);
         const listId = this.checkListAccessParams(req);
 
         this.listHandler.setNextHandler(this.groupHandler)
 
         try {
-            await this.listHandler.handle({ userId, listId });
+            await this.listHandler.handle({ userId: userIdPk, listId });
             next();
         } catch (error) {
             const err = error as CustomError;

@@ -25,7 +25,7 @@ export class TokenHandler {
         
         try {
             const userId = await this.verifyTokenIsProvidedHandler.handle({ token });
-            request.userIdPk = userId;
+            request.headers.userId = userId;
 
             next();
         } catch (error) {

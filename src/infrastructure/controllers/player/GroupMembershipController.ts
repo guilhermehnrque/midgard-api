@@ -13,7 +13,7 @@ export class GroupMembershipController {
 
     public async joinGroup(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
+            const { userIdPk } = request.headers;
             const joinGroupRequest = request.body as JoinGroupRequest;
 
             await this.groupPlayerFacade.joinGroup(joinGroupRequest, Number(userIdPk));
@@ -25,7 +25,7 @@ export class GroupMembershipController {
 
     public async leaveGroup(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
+            const { userIdPk } = request.headers;
             const { groupIdPk } = request.params;
 
             await this.groupPlayerFacade.leaveGroup(Number(groupIdPk), Number(userIdPk));
@@ -49,7 +49,7 @@ export class GroupMembershipController {
 
     public async getGroupMembership(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
+            const { userIdPk } = request.headers;
 
             const group = await this.groupPlayerFacade.getGroupMemberships(Number(userIdPk));
 
@@ -63,7 +63,7 @@ export class GroupMembershipController {
 
     public async getGroupDetails(request: Request, response: Response) {
         try {
-            const { userIdPk } = request;
+            const { userIdPk } = request.headers;
             const { groupIdPk } = request.params;
 
             const group = await this.groupPlayerFacade.getGroupDetails(Number(groupIdPk), Number(userIdPk));

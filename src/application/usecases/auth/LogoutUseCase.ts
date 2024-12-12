@@ -13,8 +13,8 @@ export class LogoutUseCase {
         this.userService = new UserService();
     }
 
-    public async execute(userId: string): Promise<void> {
-        const user = await this.userService.getUserByUserId(userId);
+    public async execute(userIdPk: number): Promise<void> {
+        const user = await this.userService.getUserByIdPk(userIdPk);
 
         await this.checkUser(user);
 

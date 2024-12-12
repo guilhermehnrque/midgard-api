@@ -18,7 +18,7 @@ export class CheckRevokedTokenHandler extends AbstractTokenHandler {
             throw new CustomError('Token revoked', 401);
         }
 
-        return super.handle(context);
+        return context.userId
     }
 
 }
