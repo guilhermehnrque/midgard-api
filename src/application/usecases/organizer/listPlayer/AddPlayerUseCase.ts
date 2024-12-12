@@ -32,7 +32,7 @@ export class AddPlayerUseCase {
     }
 
     private async checkList(listEntity: ListBaseEntity | null): Promise<void> {
-        if (listEntity == null) {
+        if (listEntity != null) {
            return
         }
 
@@ -43,7 +43,7 @@ export class AddPlayerUseCase {
     private async isPlayerAlreadyOnList(memberIdPk: number, listIdPk: number): Promise<void> {
         const response = await this.listPlayerService.validatePlayerIsOnList(memberIdPk, listIdPk);
 
-        if (response == null) {
+        if (!response) {
             return
         }
 

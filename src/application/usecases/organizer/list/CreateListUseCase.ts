@@ -20,11 +20,12 @@ export class CreateListUseCase {
     }
 
     private async checkConflict(listEntity: ListBaseEntity) {
-        const list = await this.listBaseService.getListByGroupIdAndTimes(
+        const list = await this.listBaseService.getListByGroupIdTimesAndLocal(
             listEntity.getGroupId(),
             listEntity.getStartingTime(),
             listEntity.getEndingTime(),
-            listEntity.getDayOfWeek()
+            listEntity.getDayOfWeek(),
+            listEntity.getLocalId()
         );
 
         if (list != null) {

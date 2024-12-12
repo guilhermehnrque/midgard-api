@@ -140,6 +140,10 @@ export class ListBaseEntity implements ListBaseAttributes {
         return this.day_of_week;
     }
 
+    public getLocalId(): number {
+        return this.locals_id;
+    }
+
     public createPayload() {
         return {
             status: this.status,

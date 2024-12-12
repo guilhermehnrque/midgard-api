@@ -93,14 +93,15 @@ export class ListBaseRepositoryImpl implements ListBaseRepositoryInterface {
         }
     }
 
-    public async getListByGroupIdAndTimes(groupId: number, startTime: string, endTime: string, dayOfWeek: string): Promise<List | null> {
+    public async getListByGroupIdAndTimes(groupId: number, startTime: string, endTime: string, dayOfWeek: string, localId: number): Promise<List | null> {
         try {
             return await List.findOne({
                 where: {
                     groups_id: groupId,
                     starting_time: startTime,
                     ending_time: endTime,
-                    day_of_week: dayOfWeek
+                    day_of_week: dayOfWeek,
+                    locals_id: localId
                 }
             })
         } catch (error) {

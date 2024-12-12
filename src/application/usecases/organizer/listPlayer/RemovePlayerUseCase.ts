@@ -9,7 +9,6 @@ export class RemovePlayerUseCase {
 
     private readonly listBaseService: ListBaseService
     private readonly listPlayerService: ListPlayerService;
-    private readonly NUMBER_ONE: number = 1 as const;
 
     constructor() {
         this.listBaseService = new ListBaseService();
@@ -21,7 +20,7 @@ export class RemovePlayerUseCase {
         await this.checkList(list);
 
         const playerList = await this.listPlayerService.getPlayerInListByPlayerIdAndListId(playerId, listId);
-        await this.checkPlayerOnList(playerList!);
+        await this.checkPlayerOnList(playerList);
 
         const listPlayer = await ListPlayerEntity.fromUpdateUseCase({
             id: playerList!.id,
@@ -43,7 +42,7 @@ export class RemovePlayerUseCase {
     }
 
     private async checkPlayerOnList(listPlayerEntity: ListPlayerEntity | null): Promise<void> {
-        if (listPlayerEntity == null) {
+        if (listPlayerEntity != null) {
             return;
         }
 

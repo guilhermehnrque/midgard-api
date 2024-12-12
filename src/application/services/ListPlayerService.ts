@@ -72,7 +72,7 @@ export class ListPlayerService {
         return Promise.all(playerList.map(this.createListPlayerEntityFromPersistence));
     }
 
-    public async getPlayerInListByPlayerIdAndListId(playerId: number, listIdPk: number): Promise<ListPlayerEntity | null | undefined> {
+    public async getPlayerInListByPlayerIdAndListId(playerId: number, listIdPk: number): Promise<ListPlayerEntity | null> {
         const response = await this.listPlayerRepository.getPlayerInListByPlayerIdAndListId(playerId, listIdPk);
 
         if (response == null) {

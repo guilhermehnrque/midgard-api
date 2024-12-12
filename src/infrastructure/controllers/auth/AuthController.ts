@@ -9,10 +9,9 @@ import { ResetPasswordRequest } from "../../requests/auth/ResetPasswordRequest";
 
 export class AuthController {
 
-    private readonly authFacade: AuthFacade;
+    private readonly authFacade = new AuthFacade();
 
     constructor() {
-        this.authFacade = new AuthFacade();
     }
 
     public async createUser(request: Request, response: Response): Promise<Response> {

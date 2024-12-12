@@ -69,7 +69,12 @@ export class ListBaseService {
     public async getList(listIdPk: number): Promise<ListBaseEntity | null> {
         const list = await this.listBaseRepository.getList(listIdPk);
 
-        return list ? this.createEntityFromPersistence(list) : null;
+        if (!list) {
+            return null; 
+        }
+        
+        return await this.createEntityFromPersistence(list);
+
     }
 
     public async getListsByGroupId(groupIdPk: number): Promise<ListBaseEntity[]> {
@@ -82,8 +87,8 @@ export class ListBaseService {
         return Promise.all(list.map(this.createEntityFromPersistence));
     }
 
-    public async getListByGroupIdAndTimes(groupId: number, startTime: string, endTime: string, dayOfWeek: string): Promise<ListBaseEntity | null> {
-        const list = await this.listBaseRepository.getListByGroupIdAndTimes(groupId, startTime, endTime, dayOfWeek);
+    public async getListByGroupIdTimesAndLocal(groupId: number, startTime: string, endTime: string, dayOfWeek: string, localId: number): Promise<ListBaseEntity | null> {
+        const list = await this.listBaseRepository.getListByGroupIdAndTimes(groupId, startTime, endTime, dayOfWeek, localId);
 
         if (!list || list == null) {
             return null;
