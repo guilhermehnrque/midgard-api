@@ -67,7 +67,7 @@ export class AuthController {
 
     public async logout(request: Request, response: Response): Promise<Response> {
         try {
-            const { userIdPk } = request.headers;
+            const { userIdPk } = request;
             await this.authFacade.logout(Number(userIdPk!));
 
             return response.status(200).json({ message: "Logout efetuado" });
@@ -79,7 +79,7 @@ export class AuthController {
 
     public async getProfile(request: Request, response: Response): Promise<Response> {
         try {
-            const { userIdPk } = request.headers;
+            const { userIdPk } = request;
             const profile = await this.authFacade.profile(Number(userIdPk!));
 
             return response.status(200).json({data: profile});
@@ -88,5 +88,19 @@ export class AuthController {
             return response.status(statusCode).json({ error: message });
         }
     }
+
+    public async validateToken(request: Request, response: Response): Promise<Response> {
+        try {
+            const token = request.headers.authorization?.split(' ')[1];
+
+            await this.authFacade.validateToken(token);
+
+            return response.status(200).json({ message: "Token is valid" });
+        } catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
+    }
+            
 
 }

@@ -31,7 +31,7 @@ class App {
     }
 
     private initializeRoutes(): void {
-        this.app.use('/v1', authRoutes);
+        this.app.use('/v1/auth', authRoutes);
         this.app.use('/v1/organizer', [this.tokenHandler.tokenHandler.bind(this.tokenHandler)], OrganizerRoutes);
         this.app.use('/v1/player',[this.tokenHandler.tokenHandler.bind(this.tokenHandler)], PlayerRouter);
     }

@@ -9,24 +9,18 @@ import { LogoutUseCase } from "../../usecases/auth/LogoutUseCase";
 import { ProfileUseCase } from "../../usecases/auth/ProfileUseCase";
 import { RegisterUserUseCase } from "../../usecases/auth/RegisterUserUseCase";
 import { ResetPasswordUseCase } from "../../usecases/auth/ResetPasswordUseCase";
+import { ValidateTokenUseCase } from "../../usecases/auth/ValidateTokenUseCase";
 
 export class AuthFacade {
 
-    private readonly loginUserUseCase: LoginUserUseCase;
-    private readonly registerUserUseCase: RegisterUserUseCase;
-    private readonly forgotPasswordUseCase: ForgotPasswordUseCase;
-    private readonly resetPasswordUseCase: ResetPasswordUseCase;
-    private readonly logoutUseCase: LogoutUseCase;
-    private readonly profileUseCase: ProfileUseCase;
+    private readonly loginUserUseCase = new LoginUserUseCase();
+    private readonly registerUserUseCase = new RegisterUserUseCase();
+    private readonly forgotPasswordUseCase = new ForgotPasswordUseCase();
+    private readonly resetPasswordUseCase = new ResetPasswordUseCase();
+    private readonly logoutUseCase = new LogoutUseCase();
+    private readonly profileUseCase = new ProfileUseCase();
+    private readonly validateTokenUseCase = new ValidateTokenUseCase();
 
-    constructor() {
-        this.loginUserUseCase = new LoginUserUseCase();
-        this.registerUserUseCase = new RegisterUserUseCase();
-        this.forgotPasswordUseCase = new ForgotPasswordUseCase();
-        this.resetPasswordUseCase = new ResetPasswordUseCase();
-        this.logoutUseCase = new LogoutUseCase();
-        this.profileUseCase = new ProfileUseCase();
-    }
 
     public async registerUser(request: RegisterRequest): Promise<void> {
         const { name, surname, email, type, login, password, phoneNumber } = request;
@@ -56,6 +50,10 @@ export class AuthFacade {
 
     public async profile(userIdPk: number): Promise<string> {
         return await this.profileUseCase.execute(userIdPk);
+    }
+
+    public async validateToken(token: string | undefined): Promise<boolean> {
+        return await this.validateTokenUseCase.execute(token);
     }
 
 }

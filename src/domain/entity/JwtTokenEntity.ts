@@ -31,8 +31,11 @@ export class JwtTokenEntity implements JwtTokenAttributes {
     }
 
     public isValid(): boolean {
-        return !this.revoked && this.created_at <= this.expires_at;
-    }    
+        if (!this.revoked && this.expires_at) {
+            return Date.now() <= new Date(this.expires_at).getTime();
+        }
+        return false;
+    }
 
     public getToken(): string {
         return this.token;

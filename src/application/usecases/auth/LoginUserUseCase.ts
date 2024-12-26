@@ -38,6 +38,7 @@ export class LoginUserUseCase {
 
     private async tokenManagement(user: UserEntity): Promise<string> {
         const latestToken = await this.jwtService.getLatestValidToken(user);
+        console.log(latestToken?.isValid());
     
         if (latestToken?.isValid()) {
             return latestToken.getToken();
