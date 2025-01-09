@@ -1,4 +1,4 @@
-export type BaseOrganizer = {
+export type OrganizerDomain = {
     userId?: number;
     groupId?: number;
     listId?: number;

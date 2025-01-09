@@ -14,17 +14,18 @@ export class CreateListUseCase {
     public async execute(listDTO: ListDTO): Promise<void> {
         const listEntity = ListBaseEntity.fromCreateUseCase(listDTO);
 
-        await this.validateListExists(listEntity);
+        await this.checkConflict(listEntity);
 
         await this.listBaseService.createList(listEntity);
     }
 
-    private async validateListExists(listEntity: ListBaseEntity) {
-        const list = await this.listBaseService.getListByGroupIdAndTimes(
-            listEntity.groups_id,
-            listEntity.starting_time,
-            listEntity.ending_time,
-            listEntity.day_of_week
+    private async checkConflict(listEntity: ListBaseEntity) {
+        const list = await this.listBaseService.getListByGroupIdTimesAndLocal(
+            listEntity.getGroupId(),
+            listEntity.getStartingTime(),
+            listEntity.getEndingTime(),
+            listEntity.getDayOfWeek(),
+            listEntity.getLocalId()
         );
 
         if (list != null) {

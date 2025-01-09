@@ -21,7 +21,7 @@ export class ListBaseFacade {
         this.getListUseCase = new GetListUseCase();
     }
 
-    public async createList(request: CreateListRequest, userId: number): Promise<void> {
+    public async createList(request: CreateListRequest): Promise<void> {
         const { groupId, status, limitOfPlayers, startingTime, endingTime, dayOfWeek, localId } = request;
 
         const listDTO = new ListDTO(status, limitOfPlayers, startingTime, endingTime, dayOfWeek, groupId, localId);
@@ -29,7 +29,7 @@ export class ListBaseFacade {
         await this.createListUseCase.execute(listDTO);
     }
 
-    public async updateList(request: UpdateListRequest, listIdPk: number, userId: number): Promise<void> {
+    public async updateList(request: UpdateListRequest, listIdPk: number): Promise<void> {
         const { groupId, status, limitOfPlayers, startingTime, endingTime, dayOfWeek, localId } = request;
 
         const listDTO = new ListDTO(status, limitOfPlayers, startingTime, endingTime, dayOfWeek, groupId, localId);
@@ -37,11 +37,11 @@ export class ListBaseFacade {
         await this.updateListUseCase.execute(listIdPk, listDTO);
     }
 
-    public async getLists(groupId: number, userId: number): Promise<ListOutputDTO[]> {
+    public async getLists(groupId: number): Promise<ListOutputDTO[]> {
         return await this.getListsUseCase.execute(groupId);
     }
 
-    public async getList(listId: number, userId: number): Promise<ListOutputDTO> {
+    public async getList(listId: number): Promise<ListOutputDTO> {
         return await this.getListUseCase.execute(listId);
     }
 

@@ -14,20 +14,7 @@ export class UserService {
         this.userRepository = new UserRepositoryImpl();
     }
 
-    async createUser(user: UserEntity): Promise<void> {
-        await this.ensureUserNotExists(user.phone_number);
-
-        try {
-            await this.userRepository.createUser(user);
-        } catch (error) {
-            const customError = error as CustomError;
-            this.logAndThrowError(new InternalError(), `[UserService] createUser -> ${customError.message}`);
-        }
-    }
-
     async updateUser(user: UserEntity): Promise<number> {
-        await this.ensureUserExists(user.phone_number)
-
         try {
             return await this.userRepository.updateUser(user);
         } catch (error) {
@@ -35,26 +22,6 @@ export class UserService {
             this.logAndThrowError(new InternalError(), `[UserService] updateUser -> ${customError.message}`);
             return 0;
         }
-    }
-
-    public async getUserByLogin(login: string): Promise<UserEntity | null> {
-        const user = await this.userRepository.getUserByLogin(login);
-
-        if (!user || user == null) {    
-            return null;
-        }
-
-        return await this.createEntityFromPersistance(user);
-    }
-
-    async getUserByPhone(phone: number): Promise<UserEntity | null> {
-        const user = await this.userRepository.getUserByPhone(phone);
-
-        if (!user || user == null) {
-            return null;
-        }
-
-        return await this.createEntityFromPersistance(user);
     }
 
     async getUserByUserId(userId: string): Promise<UserEntity> {
@@ -88,26 +55,6 @@ export class UserService {
         return await this.createEntityFromPersistance(user);
     }
 
-    private async getUserByPhoneNumber(phoneNumber: number): Promise<User | null> {
-        return await this.userRepository.getUserByPhone(phoneNumber);
-    }
-
-    private async ensureUserNotExists(phoneNumber: number): Promise<void> {
-        const user = await this.getUserByPhoneNumber(phoneNumber);
-
-        if (user || user != null) {
-            this.logAndThrowError(new UserAlreadyExistsError(), `[UserService] ensureUserExists -> ${phoneNumber}`);
-        }
-    }
-
-    private async ensureUserExists(phoneNumber: number): Promise<void> {
-        const user = await this.getUserByPhoneNumber(phoneNumber);
-
-        if (!user || user == null) {
-            this.logAndThrowError(new UserNotFoundError(), `[UserService] ensureUserExists -> ${phoneNumber}`);
-        }
-    }
-
     public async validateArrayOfUsers(users: Array<number>): Promise<void> {
         const usersPromises = users.map(async user => {
             const usr = await this.getUserByIdPk(user);
@@ -121,6 +68,27 @@ export class UserService {
         await Promise.all(usersPromises);
     }
 
+    public async getUserByEmailOrLogin(userEmail: string, userLogin: string): Promise<UserEntity | null> {
+        const user = await this.userRepository.getUserByEmailOrLogin(userEmail, userLogin);
+
+        return user != null ? await this.createEntityFromPersistance(user) : null;
+    }
+
+    public async getUserByLogin(login: string): Promise<UserEntity | null> {
+        const user = await this.userRepository.getUserByLogin(login);
+
+        return user != null ? await this.createEntityFromPersistance(user) : null;
+    }
+
+    public async createUser(user: UserEntity): Promise<void> {
+        try {
+            await this.userRepository.createUser(user);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[UserService] createUser -> ${customError.message}`);
+        }
+    }
+
     private async createEntityFromPersistance(user: User): Promise<UserEntity> {
         return await UserEntity.fromUseCase({
             name: user.name,
@@ -130,6 +98,7 @@ export class UserService {
             user_id: user.user_id,
             status: user.status,
             phone_number: user.phone_number,
+            email: user.email,
             password: user.password,
             created_at: user.created_at,
             updated_at: user?.updated_at,

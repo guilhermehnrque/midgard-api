@@ -8,8 +8,8 @@ export class ProfileUseCase {
         this.userService = new UserService();
     }
 
-    public async execute(userId: string): Promise<string> {
-        const user = await this.userService.getUserByUserId(userId);
+    public async execute(userIdPk: number): Promise<string> {
+        const user = await this.userService.getUserByIdPk(userIdPk);
 
         return user.getUserType();
     }

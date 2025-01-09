@@ -9,6 +9,7 @@ import { ListNotActiveError } from "../erros/list/ListNotActiveError";
 export class ListBaseService {
 
     private readonly listBaseRepository: ListBaseRepositoryImpl;
+    private readonly NUMBER_ONE: number = 1 as const;
 
     constructor() {
         this.listBaseRepository = new ListBaseRepositoryImpl();
@@ -43,14 +44,37 @@ export class ListBaseService {
         }
     }
 
-    public async getList(listIdPk: number): Promise<ListBaseEntity> {
+    public async includePlayerInConfirmedPlayers(listEntity: ListBaseEntity): Promise<void> {
+        const updatedNumber = listEntity.getConfirmedPlayers() + this.NUMBER_ONE;
+
+        try {
+            await this.updateConfirmedPlayers(listEntity.getListIdPk(), updatedNumber);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[ListBaseService] includePlayerInList -> ${customError.message}`);
+        }
+    }
+
+    public async removePlayerFromConfirmedPlayers(listEntity: ListBaseEntity): Promise<void> {
+        const updatedNumber = listEntity.getConfirmedPlayers() - this.NUMBER_ONE;
+
+        try {
+            await this.updateConfirmedPlayers(listEntity.getListIdPk(), updatedNumber);
+        } catch (error) {
+            const customError = error as CustomError;
+            this.logAndThrowError(new InternalError(), `[ListBaseService] removePlayerFromList -> ${customError.message}`);
+        }
+    }
+
+    public async getList(listIdPk: number): Promise<ListBaseEntity | null> {
         const list = await this.listBaseRepository.getList(listIdPk);
 
-        if (!list || list == null) {
-            this.logAndThrowError(new ListNotFoundError(), `[ListBaseService] getList -> ${listIdPk}`);
+        if (!list) {
+            return null; 
         }
+        
+        return await this.createEntityFromPersistence(list);
 
-        return this.createEntityFromPersistence(list!);
     }
 
     public async getListsByGroupId(groupIdPk: number): Promise<ListBaseEntity[]> {
@@ -63,33 +87,14 @@ export class ListBaseService {
         return Promise.all(list.map(this.createEntityFromPersistence));
     }
 
-    public async getListByGroupIdAndTimes(groupId: number, startTime: string, endTime: string, dayOfWeek: string): Promise<ListBaseEntity | null> {
-        const list = await this.listBaseRepository.getListByGroupIdAndTimes(groupId, startTime, endTime, dayOfWeek);
+    public async getListByGroupIdTimesAndLocal(groupId: number, startTime: string, endTime: string, dayOfWeek: string, localId: number): Promise<ListBaseEntity | null> {
+        const list = await this.listBaseRepository.getListByGroupIdAndTimes(groupId, startTime, endTime, dayOfWeek, localId);
 
         if (!list || list == null) {
             return null;
         }
 
         return this.createEntityFromPersistence(list);
-    }
-
-    public validateEnrollmentAvailability(list: ListBaseEntity): void {
-        if (!list.getStatus()) {
-            console.error(`[ListBaseService] -> List is not active for enrollment`);
-            throw new ListNotActiveError();
-        }
-    }
-
-     public async addConfirmedPlayers(listEntity: ListBaseEntity): Promise<number> {
-        const listIdPk = listEntity.id;
-        const quantity = listEntity.getConfirmedPlayers();
-        return this.updateConfirmedPlayers(listIdPk!, quantity + 1);
-    }
-
-    public async removeConfirmedPlayers(listEntity: ListBaseEntity): Promise<number> {
-        const listIdPk = listEntity.id;
-        const quantity = listEntity.getConfirmedPlayers();
-        return this.updateConfirmedPlayers(listIdPk!, quantity - 1); 
     }
 
     private async createEntityFromPersistence(listBase: List): Promise<ListBaseEntity> {

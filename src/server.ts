@@ -18,9 +18,7 @@ class Application {
     private async syncDatabase(): Promise<void> {
         try {
             await sequelize.sync();
-            console.log('Modelos sincronizados com o banco de dados.');
         } catch (error) {
-            console.error('Erro ao sincronizar modelos:', error);
             process.exit(1);
         }
     }

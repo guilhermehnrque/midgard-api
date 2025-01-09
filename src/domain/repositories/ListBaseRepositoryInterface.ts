@@ -9,5 +9,5 @@ export interface ListBaseRepositoryInterface {
     getList(idPk: number): Promise<List | null>;
     getListByGroupId(groupId: number): Promise<List[] | null> 
     getListsByGroupsIds(groupsIds: number[]): Promise<List[]>;
-    getListByGroupIdAndTimes(groupId: number, startTime: string, endTime: string, dayOfWeek: string): Promise<List | null>
+    getListByGroupIdAndTimes(groupId: number, startTime: string, endTime: string, dayOfWeek: string, localId: number): Promise<List | null>
 }

@@ -23,8 +23,8 @@ export class JoinedListsUseCase {
         return this.prepareOutput(listsMapped);
     }
 
-    private prepareOutput(lists: ListBaseEntity[]) {
-        return lists.map((list) => this.toDTO(list));
+    private prepareOutput(lists: (ListBaseEntity | null)[]): ListsOutputDTO[] {
+        return lists.filter((list) => list !== null).map((list) => this.toDTO(list));
     }
 
     private toDTO(list: ListBaseEntity): ListsOutputDTO {

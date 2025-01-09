@@ -1,4 +1,3 @@
-import { GroupMembershipAccessService } from "../../services/validation/player/GroupMembershipAccessService";
 import { JoinGroupUseCase } from "../../usecases/player/group/JoinGroupUseCase";
 import { GroupDetailsUseCase } from "../../usecases/player/group/GroupDetailsUseCase";
 import { LeaveGroupUseCase } from "../../usecases/player/group/LeaveGroupUseCase";
@@ -9,7 +8,6 @@ import { GroupsOutputDTO } from "../../dto/player/group/GroupsOutputDTO";
 
 export class GroupPlayerFacade {
 
-    private readonly groupMembershipAccessService: GroupMembershipAccessService;
     private readonly joinGroupUseCase: JoinGroupUseCase;
     private readonly leaveGroupUseCase: LeaveGroupUseCase;
     private readonly groupMembershipUseCase: GroupMembershipsUseCase;
@@ -17,7 +15,6 @@ export class GroupPlayerFacade {
     private readonly groupDetailsUseCase: GroupDetailsUseCase;
 
     constructor() {
-        this.groupMembershipAccessService = new GroupMembershipAccessService();
         this.joinGroupUseCase = new JoinGroupUseCase();
         this.leaveGroupUseCase = new LeaveGroupUseCase();
         this.groupMembershipUseCase = new GroupMembershipsUseCase();
@@ -34,17 +31,14 @@ export class GroupPlayerFacade {
     }
 
     public async getGroupMemberships(userIdPk: number): Promise<GroupsOutputDTO[]> {
-        await this.groupMembershipAccessService.validateAccess({ userId: userIdPk });
         return await this.groupMembershipUseCase.execute(userIdPk);
     }
 
     public async getGroupDetails(groupIdPk: number, userIdPk: number): Promise<Object> {
-        await this.groupMembershipAccessService.validateAccess({ userId: userIdPk });
         return await this.groupDetailsUseCase.execute(groupIdPk);
     }
 
     public async leaveGroup(groupIdPk: number, userIdPk: number): Promise<void> {
-        await this.groupMembershipAccessService.validateAccess({ userId: userIdPk });
         await this.leaveGroupUseCase.execute(userIdPk, groupIdPk);
     }
 

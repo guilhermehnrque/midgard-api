@@ -9,10 +9,9 @@ import { ResetPasswordRequest } from "../../requests/auth/ResetPasswordRequest";
 
 export class AuthController {
 
-    private readonly authFacade: AuthFacade;
+    private readonly authFacade = new AuthFacade();
 
     constructor() {
-        this.authFacade = new AuthFacade();
     }
 
     public async createUser(request: Request, response: Response): Promise<Response> {
@@ -68,8 +67,8 @@ export class AuthController {
 
     public async logout(request: Request, response: Response): Promise<Response> {
         try {
-            const { userId } = request;
-            await this.authFacade.logout(userId!);
+            const { userIdPk } = request;
+            await this.authFacade.logout(Number(userIdPk!));
 
             return response.status(200).json({ message: "Logout efetuado" });
         } catch (error) {
@@ -80,9 +79,8 @@ export class AuthController {
 
     public async getProfile(request: Request, response: Response): Promise<Response> {
         try {
-            const { userId } = request;
-
-            const profile = await this.authFacade.profile(userId!);
+            const { userIdPk } = request;
+            const profile = await this.authFacade.profile(Number(userIdPk!));
 
             return response.status(200).json({data: profile});
         } catch (error) {
@@ -90,5 +88,19 @@ export class AuthController {
             return response.status(statusCode).json({ error: message });
         }
     }
+
+    public async validateToken(request: Request, response: Response): Promise<Response> {
+        try {
+            const token = request.headers.authorization?.split(' ')[1];
+
+            await this.authFacade.validateToken(token);
+
+            return response.status(200).json({ message: "Token is valid" });
+        } catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
+    }
+            
 
 }

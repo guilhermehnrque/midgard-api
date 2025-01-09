@@ -6,12 +6,11 @@ import { GroupUserService } from "../../../services/GroupUserService";
 
 export class AddGroupMemberUseCase implements OrganizerCreatedGroupObserver {
 
-    private readonly groupUsersService: GroupUserService;
+    private readonly groupUsersService = new GroupUserService();
+    private organizerCreatedGroupSubject = OrganizerCreatedGroupSubject.getInstance();
 
     constructor() {
-        this.groupUsersService = new GroupUserService();
-        const organizerCreatedGroupSubject = OrganizerCreatedGroupSubject.getInstance();
-        organizerCreatedGroupSubject.subscribe(this);
+        this.organizerCreatedGroupSubject.subscribe(this);
     }
 
     public async execute(groupIdPk: number, membersId: Array<number>): Promise<void> {
@@ -22,20 +21,18 @@ export class AddGroupMemberUseCase implements OrganizerCreatedGroupObserver {
             users_id: membersId
         })));
 
-        await this.groupUsersService.registerUserToGroup(members);
+        await this.groupUsersService.includeUserToGroup(members);
     }
 
     private async validations(membersId: Array<number>, groupIdPk: number): Promise<void> {
-
         if ((membersId.length <= 0)) {
-            console.error(`[AddMemberToGroupUseCase] -> empty array of members`);
             throw new AddMemberToGroupError();
         }
 
-        await this.isUserAlreadyInGroup(membersId, groupIdPk);
+        await this.checkAnyMemberAlreadyInGroup(membersId, groupIdPk);
     }
 
-    private async isUserAlreadyInGroup(membersId: Array<number>, groupIdPk: number): Promise<void> {
+    private async checkAnyMemberAlreadyInGroup(membersId: Array<number>, groupIdPk: number): Promise<void> {
         await Promise.all(membersId.map(async memberId => await this.groupUsersService.ensureUserIsNotInGroup(memberId, groupIdPk)));
     }
 

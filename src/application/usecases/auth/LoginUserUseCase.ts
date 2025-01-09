@@ -1,5 +1,6 @@
 import { UserEntity } from "../../../domain/entity/UserEntity";
 import { LoginError } from "../../erros/LoginError";
+import { UserNotFoundError } from "../../erros/UserNotFoundError";
 import { JwtService } from "../../services/JwtService";
 import { UserService } from "../../services/UserService";
 
@@ -14,45 +15,45 @@ export class LoginUserUseCase {
     }
 
     public async execute(login: string, password: string): Promise<string> {
-        const user = await this.validateUserLoginAndReturnUser(login);
-        await this.validateUserPassword(password, user.password);
-
-        const latestToken = await this.retriveLatestToken(user);
-
-        return latestToken?.toString() ?? await this.createTokenAndGetNewToken(user);
-    }
-
-    private async validateUserLoginAndReturnUser(login: string): Promise<UserEntity> {
         const user = await this.userService.getUserByLogin(login);
+        await this.checkUser(user);
+        await this.checkPassword(password, user!.getPassword());
 
-        if (user == null) {
-            console.error(`User not found: ${login}`);
-            throw new LoginError();
-        }
-
-        return user;
+        return await this.tokenManagement(user!);
     }
 
-    private async validateUserPassword(password: string, hash: string): Promise<void> {
+    private async checkUser(user: UserEntity | null): Promise<void> {
+        if(user == null) {
+            throw new UserNotFoundError();
+        }
+    }
+
+    private async checkPassword(password: string, hash: string): Promise<void> {
         const isValid = await this.jwtService.checkPassword(password, hash);
-
+    
         if (!isValid) {
-            console.error(`Invalid password`);
             throw new LoginError();
         }
     }
 
-    private async retriveLatestToken(user: UserEntity): Promise<string | null> {
+    private async tokenManagement(user: UserEntity): Promise<string> {
         const latestToken = await this.jwtService.getLatestValidToken(user);
-        return latestToken;
+        console.log(latestToken?.isValid());
+    
+        if (latestToken?.isValid()) {
+            return latestToken.getToken();
+        }
+    
+        return await this.tokeGenerateManagement(user);
     }
 
-    private async createTokenAndGetNewToken(user: UserEntity): Promise<string> {
-        await this.jwtService.expireLatestToken(user.id!);
-        const token = await this.jwtService.createToken(user);
-        await this.jwtService.saveToken(user.id!, token);
+    private async tokeGenerateManagement(userEntity: UserEntity): Promise<string> {
+        await this.jwtService.expireAllUserTokens(userEntity.getUserIdPk());
+        const token = await this.jwtService.createToken(userEntity);
 
-        return token.toString();
+        await this.jwtService.saveToken(userEntity.getUserIdPk(), token);
+        
+        return token;
     }
 
 }

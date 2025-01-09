@@ -10,13 +10,17 @@ export class GetGroupsUseCase {
         this.groupService = new GroupService();
     }
 
-    async execute(userIdPk: number): Promise<{ active: GroupOutputDTO[], inactive: GroupOutputDTO[] }> {
+    public async execute(userIdPk: number): Promise<{ active: GroupOutputDTO[], inactive: GroupOutputDTO[] }> {
         const groups = await this.groupService.getOrganizerGroupsByUserIdPk(userIdPk);
+
+        if (groups.length == 0) {
+            return { active: [], inactive: [] };
+        }
 
         return this.categorizeGroupsByStatus(groups);
     }
 
-    async categorizeGroupsByStatus(groups: GroupEntity[]): Promise<{ active: GroupOutputDTO[], inactive: GroupOutputDTO[] }> {
+    private async categorizeGroupsByStatus(groups: GroupEntity[]): Promise<{ active: GroupOutputDTO[], inactive: GroupOutputDTO[] }> {
         const activeGroups = groups.filter(group => group.is_active);
         const inactiveGroups = groups.filter(group => !group.is_active);
 

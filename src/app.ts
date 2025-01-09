@@ -5,19 +5,20 @@ import YAML from 'yaml'
 import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
-import BearerToken from "./infrastructure/middlewares/BearerToken";
-import OrganizerMiddleware from './infrastructure/middlewares/OrganizerMiddleware';
-import PlayerMiddleware from './infrastructure/middlewares/PlayerMiddleware';
 
 import authRoutes from "./infrastructure/routes/AuthRoutes";
 import OrganizerRoutes from './infrastructure/routes/OrganizerRoutes';
 import PlayerRouter from "./infrastructure/routes/PlayerRoutes";
+import { TokenHandler } from "./infrastructure/middlewares/token/TokenHandler";
 
 class App {
     public app: Application;
+    private readonly tokenHandler: TokenHandler;
 
     constructor() {
         this.app = express();
+        this.tokenHandler = new TokenHandler();
+
         this.initializeMiddlewares();
         this.initializeRoutes();
         this.initializeSwagger();
@@ -30,9 +31,9 @@ class App {
     }
 
     private initializeRoutes(): void {
-        this.app.use('/v1', authRoutes);
-        this.app.use('/v1/organizer', [BearerToken.validate, OrganizerMiddleware.validate], OrganizerRoutes);
-        this.app.use('/v1/player', [BearerToken.validate, PlayerMiddleware.validate], PlayerRouter);
+        this.app.use('/v1/auth', authRoutes);
+        this.app.use('/v1/organizer', [this.tokenHandler.tokenHandler.bind(this.tokenHandler)], OrganizerRoutes);
+        this.app.use('/v1/player',[this.tokenHandler.tokenHandler.bind(this.tokenHandler)], PlayerRouter);
     }
 
     private initializeSwagger(): void {

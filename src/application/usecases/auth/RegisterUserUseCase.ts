@@ -4,6 +4,7 @@ import { CreateUserDTO } from '../../dto/common/CreateUserDTO';
 import { UserAlreadyExistsError } from '../../erros/UserAlreadyExistsError';
 import { HashPassword } from '../../utils/HashPassword';
 import { UserTypesHelper } from '../../enums/UserTypes';
+import { User } from '../../../domain/models/UserModel';
 
 export class RegisterUserUseCase {
 
@@ -14,7 +15,7 @@ export class RegisterUserUseCase {
     }
 
     public async execute(createUserDTO: CreateUserDTO): Promise<void> {
-        await this.validations(createUserDTO.phone_number);
+        await this.validations(createUserDTO);
 
         const hashPassword = await HashPassword.hashPassword(createUserDTO.password);
         const userType = UserTypesHelper.fromString(createUserDTO.type);
@@ -25,6 +26,7 @@ export class RegisterUserUseCase {
             surname: createUserDTO.surname,
             type: userType.toString(),
             status: registerStatus,
+            email: createUserDTO.email,
             phone_number: createUserDTO.phone_number,
             login: createUserDTO.login,
             password: hashPassword
@@ -33,8 +35,8 @@ export class RegisterUserUseCase {
         await this.userService.createUser(userEntity);
     }
 
-    private async validations(phoneNumber: number): Promise<void> {
-        const user = await this.userService.getUserByPhone(phoneNumber);
+    private async validations(createUserDTO: CreateUserDTO): Promise<void> {
+        const user = await this.userService.getUserByEmailOrLogin(createUserDTO.email, createUserDTO.login);
 
         if (user != null) {
             throw new UserAlreadyExistsError();

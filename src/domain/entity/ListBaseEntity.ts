@@ -124,6 +124,26 @@ export class ListBaseEntity implements ListBaseAttributes {
         return this.status;
     }
 
+    public getGroupId(): number {
+        return this.groups_id;
+    }
+
+    public getStartingTime(): string {
+        return this.starting_time;
+    }
+
+    public getEndingTime(): string {
+        return this.ending_time;
+    }
+
+    public getDayOfWeek(): string {
+        return this.day_of_week;
+    }
+
+    public getLocalId(): number {
+        return this.locals_id;
+    }
+
     public createPayload() {
         return {
             status: this.status,

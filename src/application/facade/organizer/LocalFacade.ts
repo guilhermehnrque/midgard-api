@@ -20,25 +20,25 @@ export class LocalFacade {
         this.getLocalsUseCase = new GetLocalsUseCase();
     }
 
-    public async createLocal(request: CreateLocalRequest, userId: number): Promise<void> {
+    public async createLocal(request: CreateLocalRequest): Promise<void> {
         const { description, country, state, city, street, zipCode, number, groupId } = request;
         const localDTO = new LocalDTO({ description, country, state, city, street, zipCode, number, groupsId: groupId });
 
         await this.createLocalUseCase.execute(localDTO);
     }
 
-    public async updateLocal(request: UpdateLocalRequest, userId: number, localIdPk: number): Promise<void> {
+    public async updateLocal(request: UpdateLocalRequest, localIdPk: number): Promise<void> {
         const { description, country, state, city, street, zipCode, number, groupId } = request;
         const localDTO = new LocalDTO({ description, country, state, city, street, zipCode, number, groupsId: groupId });
 
         await this.updateLocalUseCase.execute(localDTO, localIdPk);
     }
 
-    public async getLocals(groupIdPk: number, userId: number): Promise<any[]> {
+    public async getLocals(groupIdPk: number): Promise<any[]> {
         return await this.getLocalsUseCase.execute(groupIdPk);
     }
 
-    public async getLocal(localIdPk: number, userId: number): Promise<any> {
+    public async getLocal(localIdPk: number): Promise<any> {
         return await this.getLocalUseCase.execute(localIdPk);
     }
 

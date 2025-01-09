@@ -11,7 +11,7 @@ export class JwtTokensRepositoryImpl implements JwtTokensRepositoryInterface {
             return await JwtToken.create(jwtTokenEntity.registerPayload())
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[JwtTokensRepositoryImpl] saveToken -> ${customError.message}`);
+            throw new DatabaseError(`[JwtTokensRepositoryImpl] createToken -> ${customError.message}`);
         }
     }
 
@@ -56,6 +56,16 @@ export class JwtTokensRepositoryImpl implements JwtTokensRepositoryInterface {
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[JwtTokensRepositoryImpl] updateToken -> ${customError.message}`);
+        }
+    }
+
+    public async expireAllUserTokens(userIdPk: number): Promise<number>{
+        try {
+            const [affectedCount] = await JwtToken.update({ revoked: true, revoked_at: new Date() }, { where: { users_id: userIdPk} });
+            return affectedCount;
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[JwtTokensRepositoryImpl] expireAllUserTokens -> ${customError.message}`);
         }
     }
 

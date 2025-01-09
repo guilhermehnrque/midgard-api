@@ -1,3 +1,5 @@
+import { UserEntity } from "../../../domain/entity/UserEntity";
+import { LoginError } from "../../erros/LoginError";
 import { JwtService } from "../../services/JwtService";
 import { UserService } from "../../services/UserService";
 
@@ -11,9 +13,18 @@ export class LogoutUseCase {
         this.userService = new UserService();
     }
 
-    public async execute(userId: string): Promise<void> {
-        const user = await this.userService.getUserByUserId(userId);
+    public async execute(userIdPk: number): Promise<void> {
+        const user = await this.userService.getUserByIdPk(userIdPk);
 
-        await this.jwtService.expireLatestToken(user.id!);
+        await this.checkUser(user);
+
+        await this.jwtService.expireAllUserTokens(user.getUserIdPk());
     }
+
+    private async checkUser(user: UserEntity | null): Promise<void> {
+        if (user == null) {
+            throw new LoginError();
+        }
+    }
+
 }
