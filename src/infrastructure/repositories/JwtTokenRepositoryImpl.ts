@@ -11,7 +11,7 @@ export class JwtTokensRepositoryImpl implements JwtTokensRepositoryInterface {
             return await JwtToken.create(jwtTokenEntity.registerPayload())
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[JwtTokensRepositoryImpl] saveToken -> ${customError.message}`);
+            throw new DatabaseError(`[JwtTokensRepositoryImpl] createToken -> ${customError.message}`);
         }
     }
 
