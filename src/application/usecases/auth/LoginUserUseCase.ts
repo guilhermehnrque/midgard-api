@@ -23,14 +23,14 @@ export class LoginUserUseCase {
     }
 
     private async checkUser(user: UserEntity | null): Promise<void> {
-        if(user == null) {
+        if (user == null) {
             throw new UserNotFoundError();
         }
     }
 
     private async checkPassword(password: string, hash: string): Promise<void> {
         const isValid = await this.jwtService.checkPassword(password, hash);
-    
+
         if (!isValid) {
             throw new LoginError();
         }
@@ -38,12 +38,11 @@ export class LoginUserUseCase {
 
     private async tokenManagement(user: UserEntity): Promise<string> {
         const latestToken = await this.jwtService.getLatestValidToken(user);
-        console.log(latestToken?.isValid());
-    
+
         if (latestToken?.isValid()) {
             return latestToken.getToken();
         }
-    
+
         return await this.tokeGenerateManagement(user);
     }
 
@@ -52,7 +51,7 @@ export class LoginUserUseCase {
         const token = await this.jwtService.createToken(userEntity);
 
         await this.jwtService.saveToken(userEntity.getUserIdPk(), token);
-        
+
         return token;
     }
 

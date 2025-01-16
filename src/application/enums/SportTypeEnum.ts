@@ -23,4 +23,17 @@ export class SportTypeHelper {
 
         throw new EnumValidatorError(`InvalidSportType "${sport}"`);
     }
+
+    public static parseSportName(sport: SportTypesEnum): string {
+        switch (sport) {
+            case SportTypesEnum.VOLLEYBALL:
+                return 'Vôlei';
+
+            case SportTypesEnum.SOCCER:
+                return 'Futebol';
+            default:
+                return sport;
+        }
+    }
+
 }

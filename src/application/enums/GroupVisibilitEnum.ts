@@ -23,4 +23,16 @@ export class GroupVisibilityHelper {
 
         throw new EnumValidatorError(`Invalid Group Visibilit "${visibility}"`);
     }
+
+    public static parseVisibilityName(visibility: GroupVisibilityEnum): string {
+        switch (visibility) {
+            case GroupVisibilityEnum.PUBLIC:
+                return 'Público';
+
+            case GroupVisibilityEnum.PRIVATE:
+                return 'Privado';
+            default:
+                return visibility;
+        }
+    }
 }

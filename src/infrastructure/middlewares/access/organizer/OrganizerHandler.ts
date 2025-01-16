@@ -23,9 +23,8 @@ export class OrganizerHandler {
         const userIdPkHeader = req.userIdPk;
         const userIdPk = Number(userIdPkHeader);
 
-        console.log(`[groupAccess] -> ${userIdPkHeader}`)
-
         let groupId = Number(req.params.groupId);
+
 
         if (isNaN(groupId)) {
             groupId = Number(req.body.groupId);

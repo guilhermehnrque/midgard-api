@@ -6,7 +6,7 @@ export class GroupOrganizerService {
 
     constructor() {}
 
-    public async isGroupOrganizer(userIdPk: number, groupId: number): Promise<boolean> {
+    public async isGroupOrganizer(groupId: number, userIdPk: number): Promise<boolean> {
         const group = await this.groupOrganizerRepository.getOrganizerByGroupId(groupId, userIdPk);
 
         return group !== null;

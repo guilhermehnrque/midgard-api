@@ -17,7 +17,7 @@ export class TokenHandler {
 
     public async tokenHandler(request: Request, response: Response, next: NextFunction) {
         const token = request.headers.authorization?.split(' ')[1];
-
+        
         this.verifyTokenIsProvidedHandler
             .setNextHandler(this.verifyDecodedTokenHandler)
             .setNextHandler(this.checkRevokedTokenHandler)
