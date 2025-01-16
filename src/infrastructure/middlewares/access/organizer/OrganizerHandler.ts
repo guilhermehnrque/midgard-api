@@ -25,7 +25,6 @@ export class OrganizerHandler {
 
         let groupId = Number(req.params.groupId);
 
-
         if (isNaN(groupId)) {
             groupId = Number(req.body.groupId);
         }
