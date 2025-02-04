@@ -24,6 +24,7 @@ export class UpdateLocalUseCase {
             city: localDTO.getCity(),
             street: localDTO.getStreet(),
             zip_code: localDTO.getZipCode(),
+            district: localDTO.getDistrict(),
             number: localDTO.getNumber(),
             groups_id: localDTO.getGroupId(),
         })

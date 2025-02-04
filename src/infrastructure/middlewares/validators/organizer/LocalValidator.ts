@@ -31,10 +31,6 @@ const schemas = {
             .notEmpty().withMessage('CEP é obrigatório')
             .isNumeric().withMessage('CEP deve ser um número'),
 
-        body('number')
-            .notEmpty().withMessage('Número é obrigatório')
-            .isNumeric().withMessage('Número deve ser um número'),
-
         body('groupId')
             .isNumeric().withMessage('GroupId deve ser tdo tipo Inteiro')
             .notEmpty().withMessage('GroupId deve ser declarado no body'),

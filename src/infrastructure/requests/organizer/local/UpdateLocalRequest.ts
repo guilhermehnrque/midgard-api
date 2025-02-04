@@ -6,5 +6,6 @@ export interface UpdateLocalRequest {
     street: string;
     zipCode: number;
     number: number;
+    district: string;
     groupId: number;
 }

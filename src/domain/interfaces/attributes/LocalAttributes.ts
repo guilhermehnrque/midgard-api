@@ -7,6 +7,7 @@ export interface LocalAttributes {
     zip_code: number;
     number: number | null;
     description: string;
+    district: string;
     groups_id: number;
     created_at: Date;
     updated_at: Date;

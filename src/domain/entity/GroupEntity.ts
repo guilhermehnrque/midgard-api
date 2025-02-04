@@ -87,7 +87,6 @@ export class GroupEntity implements GroupAttributes {
 
     toUpdatePayload() {
         return {
-            id: this.id!,
             description: this.description,
             is_active: this.is_active,
             sport_type: this.sport_type.toString(),

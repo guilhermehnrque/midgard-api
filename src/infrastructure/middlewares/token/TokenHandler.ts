@@ -12,8 +12,6 @@ export class TokenHandler {
     private readonly verifyTokenIsProvidedHandler = new VerifyTokenIsProvidedHandler();
     private readonly userHandler = new UserHandler();
 
-    constructor() {
-    }
 
     public async tokenHandler(request: Request, response: Response, next: NextFunction) {
         const token = request.headers.authorization?.split(' ')[1];

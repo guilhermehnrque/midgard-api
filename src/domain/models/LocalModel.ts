@@ -14,10 +14,10 @@ class Local extends Model<LocalAttributes, LocalCreationAttributes> implements L
     public zip_code!: number;
     public number!: number | null;
     public description!: string;
+    public district!: string;
     public groups_id!: number;
     public created_at!: Date;
     public updated_at!: Date;
-
 }
 
 Local.init({
@@ -52,6 +52,10 @@ Local.init({
         allowNull: true,
     },
     description: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    district: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },

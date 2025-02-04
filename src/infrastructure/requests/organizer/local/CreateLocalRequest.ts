@@ -3,6 +3,7 @@ export interface CreateLocalRequest {
     country: string;
     state: string;
     city: string;
+    district: string;
     street: string;
     zipCode: number;
     number: number;

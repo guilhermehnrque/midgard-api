@@ -22,6 +22,7 @@ export class CreateLocalUseCase {
             street: localDTO.getStreet(),
             zip_code: localDTO.getZipCode(),
             number: localDTO.getNumber(),
+            district: localDTO.getDistrict(),
             groups_id: localDTO.getGroupId(),
         })
 

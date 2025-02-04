@@ -6,6 +6,7 @@ export class LocalDTO {
     public street: string;
     public number: number;
     public zipCode: number;
+    public district: string;
     public description: string;
     public groupsId: number;
 
@@ -16,6 +17,7 @@ export class LocalDTO {
         street: string;
         number: number;
         zipCode: number;
+        district: string;
         description: string ;
         groupsId: number;
     }) {
@@ -25,6 +27,7 @@ export class LocalDTO {
         this.street = payload.street;
         this.number = payload.number;
         this.zipCode = payload.zipCode;
+        this.district = payload.district;
         this.description = payload.description;
         this.groupsId = payload.groupsId;
     }
@@ -62,6 +65,10 @@ export class LocalDTO {
         return this.groupsId;
     }
 
+    public getDistrict(): string {  
+        return this.district;
+    }
+
     // Setter
     public setGroupId(groupsId: number) {
         this.groupsId = groupsId;
@@ -76,6 +83,7 @@ export class LocalDTO {
             number: this.number,
             zip_code: this.zipCode,
             description: this.description,
+            district: this.district,
             groups_id: this.groupsId
         };
     }

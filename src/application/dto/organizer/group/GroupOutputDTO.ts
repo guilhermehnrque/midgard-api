@@ -1,6 +1,4 @@
 import { GroupEntity } from "../../../../domain/entity/GroupEntity";
-import { GroupVisibilityHelper } from "../../../enums/GroupVisibilitEnum";
-import { SportTypeHelper } from "../../../enums/SportTypeEnum";
 
 export class GroupOutputDTO {
 
@@ -37,14 +35,12 @@ export class GroupOutputDTO {
     }
 
     toJSON(){
-        const sportType = SportTypeHelper.fromString(this.sportType);
-        const visibility = GroupVisibilityHelper.fromString(this.visibility);
         
         return {
             id: this.id,
             description: this.description,
-            sportType: SportTypeHelper.parseSportName(sportType),
-            visibility: GroupVisibilityHelper.parseVisibilityName(visibility),
+            sportType: this.sportType,
+            visibility: this.visibility,
             isActive: this.isActive,
             createdAt: this.formatDate(this.createdAt)
         }

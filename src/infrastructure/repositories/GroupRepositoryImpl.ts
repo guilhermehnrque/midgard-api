@@ -20,11 +20,13 @@ export class GroupRepositoryImpl implements GroupRepositoryInterface {
         try {
             const [affectedCount] = await Group.update(groupEntity.toUpdatePayload(), {
                 where: {
-                    users_id: groupEntity.users_id
+                    users_id: groupEntity.users_id,
+                    id: groupEntity.id
                 }
             });
             return affectedCount;
         } catch (error) {
+            console.error(error);
             const customError = error as CustomError;
             throw new DatabaseError(`[GroupRepositoryImpl] updateGroup -> ${customError.message}`);
         }

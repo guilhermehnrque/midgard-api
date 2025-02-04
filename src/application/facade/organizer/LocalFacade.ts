@@ -21,15 +21,15 @@ export class LocalFacade {
     }
 
     public async createLocal(request: CreateLocalRequest): Promise<void> {
-        const { description, country, state, city, street, zipCode, number, groupId } = request;
-        const localDTO = new LocalDTO({ description, country, state, city, street, zipCode, number, groupsId: groupId });
+        const { description, country, state, city, street, zipCode, number, groupId, district } = request;
+        const localDTO = new LocalDTO({ description, country, state, city, street, zipCode, number, district, groupsId: groupId });
 
         await this.createLocalUseCase.execute(localDTO);
     }
 
     public async updateLocal(request: UpdateLocalRequest, localIdPk: number): Promise<void> {
-        const { description, country, state, city, street, zipCode, number, groupId } = request;
-        const localDTO = new LocalDTO({ description, country, state, city, street, zipCode, number, groupsId: groupId });
+        const { description, country, state, city, street, zipCode, number, district, groupId } = request;
+        const localDTO = new LocalDTO({ description, country, state, city, street, zipCode, number, district, groupsId: groupId });
 
         await this.updateLocalUseCase.execute(localDTO, localIdPk);
     }

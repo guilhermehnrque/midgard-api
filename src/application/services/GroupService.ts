@@ -30,7 +30,7 @@ export class GroupService {
             return await this.groupRepository.updateGroup(group);
         } catch (error) {
             const customError = error as CustomError;
-            this.logAndThrowError(new InternalError(), `[GroupService] updateGroupByI -> ${customError.message}`);
+            this.logAndThrowError(new InternalError(), `[GroupService] updateGroupByID -> ${customError.message}`);
             return 0;
         }
     }

@@ -15,7 +15,6 @@ export class LocalController {
     public async createLocal(request: Request, response: Response) {
         try {
             const createLocalRequest = request.body as CreateLocalRequest;
-
             await this.localFacade.createLocal(createLocalRequest);
             return response.status(200).json();
         } catch (error) {

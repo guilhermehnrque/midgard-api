@@ -9,6 +9,7 @@ export class LocalEntity implements LocalAttributes {
     public city: string;
     public street: string;
     public zip_code: number;
+    public district: string;
     public number: number | null;
     public groups_id: number;
     public created_at: Date;
@@ -21,6 +22,7 @@ export class LocalEntity implements LocalAttributes {
         this.city = payload.city!;
         this.street = payload.street!;
         this.zip_code = payload.zip_code!;
+        this.district = payload.district!;
         this.number = payload.number!;
         this.groups_id = payload.groups_id!;
         this.created_at = payload.created_at!;
@@ -56,6 +58,7 @@ export class LocalEntity implements LocalAttributes {
             street: this.street,
             zip_code: this.zip_code,
             number: this.number,
+            district: this.district,
             groups_id: this.groups_id,
         }
     }
@@ -70,6 +73,7 @@ export class LocalEntity implements LocalAttributes {
             street: this.street,
             zip_code: this.zip_code,
             number: this.number,
+            district: this.district,
             groups_id: this.groups_id,
             updated_at: this.updated_at,
         }
