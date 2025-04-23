@@ -9,6 +9,7 @@ export class LocalOutputDTO {
     public number: number;
     public zipCode: number;
     public description: string;
+    public district: string;
     public groupsId: number;
     public createdAt: Date;
 
@@ -21,6 +22,7 @@ export class LocalOutputDTO {
         this.number = payload.number!;
         this.zipCode = payload.zip_code!;
         this.description = payload.description!;
+        this.district = payload.district!;
         this.groupsId = payload.groups_id!;
         this.createdAt = payload.created_at!;
     }

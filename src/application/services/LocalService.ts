@@ -82,6 +82,7 @@ export class LocalService {
             street: local.street,
             zip_code: local.zip_code,
             number: local.number,
+            district: local.district,
             groups_id: local.groups_id,
             created_at: local.created_at,
             updated_at: local.updated_at
